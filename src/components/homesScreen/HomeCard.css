@@ -1,0 +1,10 @@
+@media only screen and (max-width: 600px) {
+  .imageContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .imageContainer {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
