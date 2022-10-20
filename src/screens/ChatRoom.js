@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { selectChatRooms, selectChats } from "../features/chatsSlice";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { StyledBadge } from "../components/StyledBadge";
 
 function ChatRoom() {
   const imageRef = useRef(null);
@@ -192,10 +193,27 @@ function ChatRoom() {
         >
           <WestIcon />
         </div>
-        <Avatar
-          src={chats[chatRoomID]?.messagingUser.image}
-          className="mr-2 ml-2"
-        />
+        <div>
+          {chats[chatRoomID]?.messagingUser.lastSeen < dayjs().unix() - 70 ? (
+            <Avatar
+              src={chats[chatRoomID]?.messagingUser.image}
+              className="mr-2 ml-2"
+              alt={chats[chatRoomID]?.messagingUser.username}
+            />
+          ) : (
+            <StyledBadge
+              className="mr-2 ml-2"
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar
+                alt={chats[chatRoomID]?.messagingUser.username}
+                src={chats[chatRoomID]?.messagingUser.image}
+              />
+            </StyledBadge>
+          )}
+        </div>
         <div className="flex-1 truncate">
           <p className="font-[600] text-lg -mt-[2px] truncate">
             {chats[chatRoomID]?.messagingUser.username}
@@ -205,9 +223,11 @@ function ChatRoom() {
               ? dayjs
                   .unix(chats[chatRoomID]?.messagingUser.lastSeen)
                   .format("MM/DD/YYYY")
-              : dayjs
+              : chats[chatRoomID]?.messagingUser.lastSeen < dayjs().unix() - 70
+              ? dayjs
                   .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                  .format("HH:mm")}
+                  .format("HH:mm")
+              : "online"}
           </p>
         </div>
         <div className="cursor-pointer w-12 h-14 flex items-center justify-center">

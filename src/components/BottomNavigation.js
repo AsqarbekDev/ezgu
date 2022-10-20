@@ -76,7 +76,7 @@ function BottomNavigation() {
           <div className="relative">
             {newMessages.length > 0 && (
               <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                <p className="text-xs text-white px-[5.1px] py-[1px]">
+                <p className="text-xs text-white px-[5.1px] py-[1px] -mb-1px">
                   {newMessages.length}
                 </p>
               </div>
@@ -87,7 +87,7 @@ function BottomNavigation() {
           <div className="relative">
             {newMessages.length > 0 && (
               <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                <p className="text-xs text-white px-[5.1px] py-[1px]">
+                <p className="text-xs text-white px-[5.1px] py-[1px] -mb-1px">
                   {newMessages.length}
                 </p>
               </div>

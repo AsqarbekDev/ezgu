@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { selectChats } from "../../features/chatsSlice";
 import { selectUser } from "../../features/userSlice";
 import { useState } from "react";
+import { StyledBadge } from "../StyledBadge";
 
 function ChatCard({
   id,
@@ -20,6 +21,7 @@ function ChatCard({
   lastImage,
   seen,
   mine,
+  lastSeen,
 }) {
   const navigate = useNavigate();
   const chats = useSelector(selectChats);
@@ -45,7 +47,25 @@ function ChatCard({
       className="bg-white border-b m-1 flex justify-between px-2 py-2 rounded-lg cursor-pointer"
     >
       <div className="flex items-center">
-        <Avatar src={userImage} style={{ width: 50, height: 50 }} />
+        {lastSeen < dayjs().unix() - 70 ? (
+          <Avatar
+            src={userImage}
+            style={{ width: 50, height: 50 }}
+            alt={username}
+          />
+        ) : (
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant="dot"
+          >
+            <Avatar
+              src={userImage}
+              style={{ width: 50, height: 50 }}
+              alt={username}
+            />
+          </StyledBadge>
+        )}
       </div>
       <div className="ml-2 mr-1 mt-[5px] truncate flex-1">
         <p className="font-[700] -mt-[5px] text-lg truncate flex-1">
@@ -76,7 +96,7 @@ function ChatCard({
         </p>
         {newMessages.length > 0 && (
           <div className="bg-blue-500 rounded-full flex items-center justify-center m-1">
-            <p className="text-xs text-white -mt-[0.5px] -ml-[0.1px] px-[6.1px] py-[2px]">
+            <p className="text-xs text-white -ml-[0.1px] px-[6.1px] py-[2px]">
               {newMessages.length}
             </p>
           </div>

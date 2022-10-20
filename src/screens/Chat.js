@@ -61,6 +61,7 @@ function Chat() {
               ? true
               : false
           }
+          lastSeen={chats[key].messagingUser.lastSeen}
         />
       ))}
       <BottomNavigation />

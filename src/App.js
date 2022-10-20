@@ -56,7 +56,6 @@ function App() {
         await updateDoc(doc(db, "users", user.uid), {
           lastSeen: dayjs().unix(),
         });
-        console.log("working");
       }, 60000);
 
       return () => {
