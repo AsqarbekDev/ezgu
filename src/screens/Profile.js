@@ -31,6 +31,7 @@ import PhoneInput from "react-phone-number-input";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import BottomNavigation from "../components/BottomNavigation";
 
 function Profile() {
   const user = useSelector(selectUser);
@@ -620,6 +621,7 @@ function Profile() {
           </div>
         </div>
       </div>
+      <BottomNavigation />
     </div>
   );
 }

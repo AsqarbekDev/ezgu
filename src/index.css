@@ -4,7 +4,7 @@
 
 @layer components {
   .iconContainer {
-    @apply flex justify-center w-full py-2;
+    @apply flex justify-center items-center w-full;
   }
   .jobCardHr {
     @apply h-[0.1px] w-full bg-gray-400;

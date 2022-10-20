@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import BottomNavigation from "../components/BottomNavigation";
 import ChatCard from "../components/chatsScreen/ChatCard";
 import { selectChats } from "../features/chatsSlice";
 import { selectUser } from "../features/userSlice";
@@ -43,6 +44,7 @@ function Chat() {
       {chatsArray.map((key, index) => (
         <ChatCard
           key={index}
+          id={key}
           uid={chats[key].messagingUser.uid}
           username={chats[key].messagingUser.username}
           userImage={chats[key].messagingUser.image}
@@ -61,6 +63,7 @@ function Chat() {
           }
         />
       ))}
+      <BottomNavigation />
     </div>
   );
 }

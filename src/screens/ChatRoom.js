@@ -43,7 +43,6 @@ function ChatRoom() {
         !chats[chatRoomID]?.messages[i].seen
       ) {
         setNewMessageID(chats[chatRoomID]?.messages[i].id);
-        console.log("working");
         break;
       }
     }
@@ -185,11 +184,11 @@ function ChatRoom() {
   }, [newMessageID]);
 
   return (
-    <div className="pb-24">
-      <div className="sticky top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
+    <div className="pb-14">
+      <div className="fixed top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
         <div
           onClick={() => navigate("/chats")}
-          className="cursor-pointer w-12 h-12 flex items-center justify-center"
+          className="cursor-pointer w-12 h-14 flex items-center justify-center"
         >
           <WestIcon />
         </div>
@@ -203,7 +202,7 @@ function ChatRoom() {
           </p>
           <p className="text-xs text-gray-600 -mt-[2px]">22:00 da chiqgan</p>
         </div>
-        <div className="cursor-pointer w-12 h-12 flex items-center justify-center">
+        <div className="cursor-pointer w-12 h-14 flex items-center justify-center">
           <MoreVertIcon />
         </div>
       </div>
@@ -216,7 +215,7 @@ function ChatRoom() {
                   ref={newMessageRef}
                   className="border-b-8 border-violet-700 flex justify-center mt-4 mb-7"
                 >
-                  <p className="bg-violet-700 w-max -mb-[22px] text-white rounded-2xl px-6 pt-1 pb-2">
+                  <p className="bg-violet-700 w-max -mb-[20px] text-white rounded-2xl px-6 pt-1 pb-1">
                     Yangi xabarlar
                   </p>
                 </div>
@@ -239,7 +238,7 @@ function ChatRoom() {
                   ref={newMessageRef}
                   className="border-b-8 border-violet-700 flex justify-center mt-4 mb-7"
                 >
-                  <p className="bg-violet-700 w-max -mb-[22px] text-white rounded-2xl px-6 pt-1 pb-2">
+                  <p className="bg-violet-700 w-max -mb-[20px] text-white rounded-2xl px-6 pt-1 pb-1">
                     Yangi xabarlar
                   </p>
                 </div>
@@ -257,7 +256,7 @@ function ChatRoom() {
           )
         )}
       </div>
-      <div className="fixed overflow-hidden bottom-12 right-2 left-2 bg-gray-300 flex items-center rounded-2xl">
+      <div className="fixed overflow-hidden bottom-2 right-2 left-2 bg-gray-300 flex items-center rounded-2xl">
         {image ? (
           <button
             onClick={() => setImage(null)}

@@ -4,6 +4,7 @@ import addjobicon from "../assets/addjobicon.jpg";
 import addhomeicon from "../assets/addhomeicon.jpg";
 import MyJobAddsCard from "../components/addScreen/MyJobAddsCard";
 import MyHomeAddsCard from "../components/addScreen/MyHomeAddsCard";
+import BottomNavigation from "../components/BottomNavigation";
 
 function Add() {
   return (
@@ -22,6 +23,7 @@ function Add() {
       </div>
       <MyJobAddsCard />
       <MyHomeAddsCard />
+      <BottomNavigation />
     </div>
   );
 }

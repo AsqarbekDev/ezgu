@@ -12,26 +12,50 @@ import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
+import { selectChats } from "../features/chatsSlice";
 
 function BottomNavigation() {
   const [currentScreen, setCurrentScreen] = useState("/");
+  const [newMessages, setNewMessages] = useState([]);
   const location = useLocation();
   const user = useSelector(selectUser);
+  const chats = useSelector(selectChats);
+
+  useEffect(() => {
+    const newMessagesArray = [];
+    Object.keys(chats).map((key) => {
+      for (let i = 0; i < chats[key]?.messages.length; i++) {
+        if (
+          chats[key]?.messages[i].uid !== user?.uid &&
+          !chats[key]?.messages[i].seen
+        ) {
+          newMessagesArray.push(key);
+          break;
+        }
+      }
+      return null;
+    });
+    setNewMessages(newMessagesArray);
+  }, [chats, user?.uid]);
 
   useEffect(() => {
     setCurrentScreen(location.pathname);
   }, [location]);
 
   return (
-    <div className="fixed bottom-0 z-50 w-full flex items-center justify-between bg-white border-t">
+    <div className="fixed h-14 bottom-0 z-50 w-full flex items-center justify-between bg-white border-t">
       <Link className="iconContainer" to="/">
-        {currentScreen === "/" ? <WorkIcon /> : <WorkOutlineIcon />}
+        {currentScreen === "/" ? (
+          <WorkIcon style={{ fontSize: 30 }} />
+        ) : (
+          <WorkOutlineIcon style={{ fontSize: 30 }} />
+        )}
       </Link>
       <Link className="iconContainer" to="/homes">
         {currentScreen === "/homes" ? (
-          <AddHomeWorkIcon />
+          <AddHomeWorkIcon style={{ fontSize: 30 }} />
         ) : (
-          <AddHomeWorkOutlinedIcon />
+          <AddHomeWorkOutlinedIcon style={{ fontSize: 30 }} />
         )}
       </Link>
       <Link
@@ -39,9 +63,9 @@ function BottomNavigation() {
         to={user?.emailVerified ? "/add" : "/loading/add"}
       >
         {currentScreen === "/add" ? (
-          <AddCircleIcon />
+          <AddCircleIcon style={{ fontSize: 30 }} />
         ) : (
-          <AddCircleOutlineIcon />
+          <AddCircleOutlineIcon style={{ fontSize: 30 }} />
         )}
       </Link>
       <Link
@@ -49,9 +73,18 @@ function BottomNavigation() {
         to={user?.emailVerified ? "/chats" : "/loading/chats"}
       >
         {currentScreen === "/chats" ? (
-          <QuestionAnswerIcon />
+          <QuestionAnswerIcon style={{ fontSize: 30 }} />
         ) : (
-          <QuestionAnswerOutlinedIcon />
+          <div className="relative">
+            {newMessages.length > 0 && (
+              <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
+                <p className="text-xs text-white -mt-[1px] px-[5.1px] py-[1px]">
+                  {newMessages.length}
+                </p>
+              </div>
+            )}
+            <QuestionAnswerOutlinedIcon style={{ fontSize: 30 }} />
+          </div>
         )}
       </Link>
       <Link
@@ -59,9 +92,9 @@ function BottomNavigation() {
         to={user?.emailVerified ? "/profile" : "/loading/profile"}
       >
         {currentScreen === "/profile" ? (
-          <AccountCircleIcon />
+          <AccountCircleIcon style={{ fontSize: 30 }} />
         ) : (
-          <AccountCircleOutlinedIcon />
+          <AccountCircleOutlinedIcon style={{ fontSize: 30 }} />
         )}
       </Link>
     </div>

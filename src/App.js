@@ -6,7 +6,6 @@ import Homes from "./screens/Homes";
 import Add from "./screens/Add";
 import Chat from "./screens/Chat";
 import Profile from "./screens/Profile";
-import BottomNavigation from "./components/BottomNavigation";
 import Header from "./components/Header";
 import AddNewJob from "./screens/AddNewJob";
 import AddNewHome from "./screens/AddNewHome";
@@ -243,7 +242,6 @@ function App() {
           {!user && <Route path="/signUp" element={<SignUp />} />}
           <Route path="/loading/:path" element={<Loading />} />
         </Routes>
-        <BottomNavigation />
       </LocalizationProvider>
     </div>
   );
