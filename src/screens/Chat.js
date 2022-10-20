@@ -40,7 +40,7 @@ function Chat() {
   }, [chats]);
 
   return (
-    <div className="pb-10">
+    <div className="">
       {chatsArray.map((key, index) => (
         <ChatCard
           key={index}

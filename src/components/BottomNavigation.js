@@ -43,7 +43,7 @@ function BottomNavigation() {
   }, [location]);
 
   return (
-    <div className="fixed h-14 bottom-0 z-50 w-full flex items-center justify-between bg-white border-t">
+    <div className="fixed h-[52px] bottom-0 z-50 w-full flex items-center justify-between bg-white border-t">
       <Link className="iconContainer" to="/">
         {currentScreen === "/" ? (
           <WorkIcon style={{ fontSize: 30 }} />
@@ -73,12 +73,21 @@ function BottomNavigation() {
         to={user?.emailVerified ? "/chats" : "/loading/chats"}
       >
         {currentScreen === "/chats" ? (
-          <QuestionAnswerIcon style={{ fontSize: 30 }} />
+          <div className="relative">
+            {newMessages.length > 0 && (
+              <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
+                <p className="text-xs text-white px-[5.1px] py-[1px]">
+                  {newMessages.length}
+                </p>
+              </div>
+            )}
+            <QuestionAnswerIcon style={{ fontSize: 30 }} />
+          </div>
         ) : (
           <div className="relative">
             {newMessages.length > 0 && (
               <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                <p className="text-xs text-white -mt-[1px] px-[5.1px] py-[1px]">
+                <p className="text-xs text-white px-[5.1px] py-[1px]">
                   {newMessages.length}
                 </p>
               </div>

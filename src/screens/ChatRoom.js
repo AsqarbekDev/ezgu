@@ -200,7 +200,15 @@ function ChatRoom() {
           <p className="font-[600] text-lg -mt-[2px] truncate">
             {chats[chatRoomID]?.messagingUser.username}
           </p>
-          <p className="text-xs text-gray-600 -mt-[2px]">22:00 da chiqgan</p>
+          <p className="text-xs text-gray-600 -mt-[2px]">
+            {chats[chatRoomID]?.messagingUser.lastSeen < dayjs().unix() - 86400
+              ? dayjs
+                  .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                  .format("MM/DD/YYYY")
+              : dayjs
+                  .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                  .format("HH:mm")}
+          </p>
         </div>
         <div className="cursor-pointer w-12 h-14 flex items-center justify-center">
           <MoreVertIcon />

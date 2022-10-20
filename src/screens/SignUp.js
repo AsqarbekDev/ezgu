@@ -6,6 +6,7 @@ import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import LoadingModul from "../components/LoadingModul";
+import dayjs from "dayjs";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -41,6 +42,7 @@ function SignUp() {
             jobAdds: 0,
             workedJobs: 0,
             bgImage: "",
+            lastSeen: dayjs().unix(),
           });
         }
       })

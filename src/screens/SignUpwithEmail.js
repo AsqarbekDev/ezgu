@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, db, storage } from "../firebase";
 import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
+import dayjs from "dayjs";
 
 function SignUpwithEmail() {
   const avatarRef = useRef(null);
@@ -83,6 +84,7 @@ function SignUpwithEmail() {
             jobAdds: 0,
             workedJobs: 0,
             bgImage: "",
+            lastSeen: dayjs().unix(),
           }).then(async () => {
             if (image) {
               const storageRef = ref(storage, `users/${user.uid}/image`);

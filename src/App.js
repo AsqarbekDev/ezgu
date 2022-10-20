@@ -51,6 +51,21 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (user) {
+      const interval = setInterval(async () => {
+        await updateDoc(doc(db, "users", user.uid), {
+          lastSeen: dayjs().unix(),
+        });
+        console.log("working");
+      }, 60000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (chatRooms) {
       chatRooms.map((chatRoom) => {
         const unsubscribe = onSnapshot(
@@ -64,6 +79,7 @@ function App() {
                     uid: docSnap.id,
                     image: docSnap.data().image,
                     username: docSnap.data().username,
+                    lastSeen: docSnap.data().lastSeen,
                   },
                 })
               );
