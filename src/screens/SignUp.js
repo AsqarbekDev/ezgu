@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
+import ExitHeader from "../components/ExitHeader";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -58,9 +59,10 @@ function SignUp() {
 
   return (
     <>
+      <ExitHeader path="/" screenName="Ro'yxatdan o'tish" />
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>Xatolik yuz berdi! Qayta urinib ko'ring.</p>
             <div className="flex items-center justify-center mt-6">

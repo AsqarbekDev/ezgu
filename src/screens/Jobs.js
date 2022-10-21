@@ -14,7 +14,6 @@ import { db } from "../firebase";
 import { selectUser, selectWaiting } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import BottomNavigation from "../components/BottomNavigation";
 
 function Jobs() {
   const user = useSelector(selectUser);
@@ -152,7 +151,6 @@ function Jobs() {
           )}
         </div>
       )}
-      <BottomNavigation />
     </div>
   );
 }

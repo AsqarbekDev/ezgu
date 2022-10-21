@@ -31,7 +31,6 @@ import PhoneInput from "react-phone-number-input";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import BottomNavigation from "../components/BottomNavigation";
 
 function Profile() {
   const user = useSelector(selectUser);
@@ -253,7 +252,7 @@ function Profile() {
     <div className="pb-11">
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>Xatolik yuz berdi! Qayta urinib ko'ring.</p>
             <div className="flex items-center justify-center mt-6">
@@ -268,7 +267,7 @@ function Profile() {
         </div>
       )}
       {showUsernameModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-md bg-white border-2 border-black text-lg p-6">
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.username}
@@ -304,7 +303,7 @@ function Profile() {
         </div>
       )}
       {showNumberModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-md bg-white border-2 border-black text-lg p-6">
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.number}
@@ -342,7 +341,7 @@ function Profile() {
         </div>
       )}
       {showRegionModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-md bg-white border-2 border-black text-lg p-6">
             <p className="text-red-600 font-[700] text-xs ml-1">
               {formErrors.country}
@@ -392,7 +391,7 @@ function Profile() {
         </div>
       )}
       {showLogOutModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>Tizimdan chiqishni xoxlaysizmi?</p>
             <div className="flex items-center justify-around mt-6">
@@ -621,7 +620,6 @@ function Profile() {
           </div>
         </div>
       </div>
-      <BottomNavigation />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import ExitHeader from "../components/ExitHeader";
 import JobCard from "../components/jobsScreen/JobCard";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
@@ -57,6 +58,7 @@ function JobsHistory() {
 
   return (
     <div className="pb-10">
+      <ExitHeader screenName="Ishlar tarixi" />
       <div className="fixed w-full z-30 flex items-center">
         <button
           onClick={() => setShowMyAdds(false)}

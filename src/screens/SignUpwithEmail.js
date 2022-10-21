@@ -9,6 +9,7 @@ import { auth, db, storage } from "../firebase";
 import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
+import ExitHeader from "../components/ExitHeader";
 
 function SignUpwithEmail() {
   const avatarRef = useRef(null);
@@ -147,6 +148,7 @@ function SignUpwithEmail() {
 
   return (
     <>
+      <ExitHeader path="/signUp" screenName="Email orqali ro'yxatdan o'tish" />
       {loading && <LoadingModul />}
       <div className="max-w-md -mt-11 mx-auto bg-gray-50 h-screen px-4 flex items-center justify-center">
         <div className="shadow-lg w-full bg-white flex flex-col items-center justify-center py-4 px-6 rounded-lg">

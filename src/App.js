@@ -9,6 +9,7 @@ import Profile from "./screens/Profile";
 import Header from "./components/Header";
 import AddNewJob from "./screens/AddNewJob";
 import AddNewHome from "./screens/AddNewHome";
+import Notifications from "./screens/Notifications";
 import SignUp from "./screens/SignUp";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -38,17 +39,17 @@ import dayjs from "dayjs";
 import ChatRoom from "./screens/ChatRoom";
 import {
   selectChatRooms,
-  selectMessagingUsers,
   setChatRooms,
   setChats,
   setMessagingUsers,
 } from "./features/chatsSlice";
+import BottomNavigation from "./components/BottomNavigation";
 
 function App() {
   const user = useSelector(selectUser);
   const chatRooms = useSelector(selectChatRooms);
-  const messagingUsers = useSelector(selectMessagingUsers);
   const dispatch = useDispatch();
+  const UserCurrent = auth?.currentUser;
 
   useEffect(() => {
     if (user) {
@@ -94,10 +95,10 @@ function App() {
   }, [chatRooms, dispatch]);
 
   useEffect(() => {
-    if (messagingUsers) {
-      Object.keys(messagingUsers).map((key) => {
+    if (chatRooms) {
+      chatRooms.map((chatRoom) => {
         const q = query(
-          collection(db, "chats", key, "messages"),
+          collection(db, "chats", chatRoom.id, "messages"),
           orderBy("timestamp", "asc")
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -112,8 +113,7 @@ function App() {
 
           dispatch(
             setChats({
-              id: key,
-              messagingUser: messagingUsers[key],
+              id: chatRoom.id,
               messages: allMessages,
             })
           );
@@ -124,13 +124,13 @@ function App() {
         };
       });
     }
-  }, [dispatch, messagingUsers]);
+  }, [dispatch, chatRooms]);
 
   useEffect(() => {
-    if (user) {
+    if (auth?.currentUser?.uid) {
       const q = query(
         collection(db, "chats"),
-        where("users", "array-contains", user.uid)
+        where("users", "array-contains", auth.currentUser.uid)
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -141,7 +141,7 @@ function App() {
             id: doc.id,
             messagingUser: doc
               .data()
-              .users.filter((dbUser) => dbUser !== user.uid)[0],
+              .users.filter((dbUser) => dbUser !== auth.currentUser.uid)[0],
           });
         });
 
@@ -152,7 +152,7 @@ function App() {
         unsubscribe();
       };
     }
-  }, [user, dispatch]);
+  }, [dispatch, UserCurrent]);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (userInfo) => {
@@ -237,6 +237,7 @@ function App() {
           <Route path="/" element={<Jobs />} />
           <Route path="/jobs/:jobId" element={<JobInfo />} />
           <Route path="/homes" element={<Homes />} />
+          {user && <Route path="/notifications" element={<Notifications />} />}
           {user && <Route path="/add" element={<Add />} />}
           {user && <Route path="/add/newjob" element={<AddNewJob />} />}
           {user && <Route path="/add/newhome" element={<AddNewHome />} />}
@@ -258,6 +259,7 @@ function App() {
           <Route path="/loading/:path" element={<Loading />} />
         </Routes>
       </LocalizationProvider>
+      <BottomNavigation />
     </div>
   );
 }

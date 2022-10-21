@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import DefaultLoadingModul from "../components/DefaultLoadingModul";
+import ExitHeader from "../components/ExitHeader";
 import HomeCard from "../components/homesScreen/HomeCard";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
@@ -52,6 +53,7 @@ function HomesHistory() {
   }, [user.uid]);
   return (
     <div>
+      <ExitHeader screenName="Uy ijaralari tarixi" />
       {!homes ? (
         <DefaultLoadingModul />
       ) : (

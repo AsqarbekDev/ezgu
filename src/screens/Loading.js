@@ -26,7 +26,11 @@ function Loading() {
     }
   }, [user, waiting, location.pathname, navigate]);
 
-  return <DefaultLoadingModul />;
+  return (
+    <div>
+      <DefaultLoadingModul />
+    </div>
+  );
 }
 
 export default Loading;

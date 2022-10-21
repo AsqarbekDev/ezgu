@@ -7,7 +7,6 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { selectUser, selectWaiting } from "../features/userSlice";
 import dayjs from "dayjs";
-import BottomNavigation from "../components/BottomNavigation";
 
 function Homes() {
   const user = useSelector(selectUser);
@@ -145,7 +144,6 @@ function Homes() {
           )}
         </div>
       )}
-      <BottomNavigation />
     </div>
   );
 }

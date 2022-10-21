@@ -43,7 +43,20 @@ function BottomNavigation() {
   }, [location]);
 
   return (
-    <div className="fixed h-[52px] bottom-0 z-50 w-full flex items-center justify-between bg-white border-t">
+    <div
+      className={`${
+        currentScreen === "/" ||
+        currentScreen === "/homes" ||
+        currentScreen === "/add" ||
+        currentScreen === "/loading/add" ||
+        currentScreen === "/chats" ||
+        currentScreen === "/loading/chats" ||
+        currentScreen === "/profile" ||
+        currentScreen === "/loading/profile"
+          ? ""
+          : "hidden"
+      } fixed bottom-0 z-50 w-full flex items-center justify-between bg-white border-t`}
+    >
       <Link className="iconContainer" to="/">
         {currentScreen === "/" ? (
           <WorkIcon style={{ fontSize: 30 }} />
@@ -62,7 +75,7 @@ function BottomNavigation() {
         className="iconContainer"
         to={user?.emailVerified ? "/add" : "/loading/add"}
       >
-        {currentScreen === "/add" ? (
+        {currentScreen === "/add" || currentScreen === "/loading/add" ? (
           <AddCircleIcon style={{ fontSize: 30 }} />
         ) : (
           <AddCircleOutlineIcon style={{ fontSize: 30 }} />
@@ -72,11 +85,11 @@ function BottomNavigation() {
         className="iconContainer"
         to={user?.emailVerified ? "/chats" : "/loading/chats"}
       >
-        {currentScreen === "/chats" ? (
+        {currentScreen === "/chats" || currentScreen === "/loading/chats" ? (
           <div className="relative">
             {newMessages.length > 0 && (
               <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                <p className="text-xs text-white px-[5.1px] py-[1px] -mb-1px">
+                <p className="text-xs text-white px-[5.1px] py-[1px] -mb-[1px]}">
                   {newMessages.length}
                 </p>
               </div>
@@ -87,7 +100,7 @@ function BottomNavigation() {
           <div className="relative">
             {newMessages.length > 0 && (
               <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                <p className="text-xs text-white px-[5.1px] py-[1px] -mb-1px">
+                <p className="text-xs text-white px-[5.1px] py-[1px] -mb-[1px]">
                   {newMessages.length}
                 </p>
               </div>
@@ -100,7 +113,8 @@ function BottomNavigation() {
         className="iconContainer"
         to={user?.emailVerified ? "/profile" : "/loading/profile"}
       >
-        {currentScreen === "/profile" ? (
+        {currentScreen === "/profile" ||
+        currentScreen === "/loading/profile" ? (
           <AccountCircleIcon style={{ fontSize: 30 }} />
         ) : (
           <AccountCircleOutlinedIcon style={{ fontSize: 30 }} />

@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   value: {},
   chatRooms: null,
-  messagingUsers: {},
 };
 
 export const chatsSlice = createSlice({
@@ -12,12 +11,16 @@ export const chatsSlice = createSlice({
   reducers: {
     setChatRooms: (state, action) => {
       state.chatRooms = action.payload;
+      action.payload.map((chatRoom) => {
+        return (state.value[chatRoom.id] = { messagingUser: {}, messages: [] });
+      });
     },
     setMessagingUsers: (state, action) => {
-      state.messagingUsers[action.payload.id] = action.payload.messagingUser;
+      state.value[action.payload.id].messagingUser =
+        action.payload.messagingUser;
     },
     setChats: (state, action) => {
-      state.value[action.payload.id] = action.payload;
+      state.value[action.payload.id].messages = action.payload.messages;
     },
   },
 });

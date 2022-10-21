@@ -188,19 +188,13 @@ function ChatRoom() {
     <div className="pb-14">
       <div className="fixed top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
         <div
-          onClick={() => navigate("/chats")}
+          onClick={() => navigate(-1)}
           className="cursor-pointer w-12 h-14 flex items-center justify-center"
         >
           <WestIcon />
         </div>
         <div>
-          {chats[chatRoomID]?.messagingUser.lastSeen < dayjs().unix() - 70 ? (
-            <Avatar
-              src={chats[chatRoomID]?.messagingUser.image}
-              className="mr-2 ml-2"
-              alt={chats[chatRoomID]?.messagingUser.username}
-            />
-          ) : (
+          {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 80 ? (
             <StyledBadge
               className="mr-2 ml-2"
               overlap="circular"
@@ -212,6 +206,12 @@ function ChatRoom() {
                 src={chats[chatRoomID]?.messagingUser.image}
               />
             </StyledBadge>
+          ) : (
+            <Avatar
+              src={chats[chatRoomID]?.messagingUser.image}
+              className="mr-2 ml-2"
+              alt={chats[chatRoomID]?.messagingUser.username}
+            />
           )}
         </div>
         <div className="flex-1 truncate">
@@ -223,11 +223,11 @@ function ChatRoom() {
               ? dayjs
                   .unix(chats[chatRoomID]?.messagingUser.lastSeen)
                   .format("MM/DD/YYYY")
-              : chats[chatRoomID]?.messagingUser.lastSeen < dayjs().unix() - 70
-              ? dayjs
+              : chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 80
+              ? "online"
+              : dayjs
                   .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                  .format("HH:mm")
-              : "online"}
+                  .format("HH:mm")}
           </p>
         </div>
         <div className="cursor-pointer w-12 h-14 flex items-center justify-center">

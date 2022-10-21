@@ -2,6 +2,7 @@ import { Alert } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ExitHeader from "../components/ExitHeader";
 import { auth } from "../firebase";
 
 function SignInwithEmail() {
@@ -67,54 +68,59 @@ function SignInwithEmail() {
   };
 
   return (
-    <div className="max-w-md -mt-11 mx-auto bg-gray-50 h-screen px-4 flex items-center justify-center">
-      <div className="shadow-lg w-full bg-white flex flex-col items-center justify-center py-4 px-6 rounded-lg">
-        {showError && (
-          <Alert
-            className="mb-4"
-            variant="filled"
-            severity="error"
-            onClose={() => setShowError(false)}
+    <div>
+      <ExitHeader path="/signUp" screenName="Tizimga kirish" />
+      <div className="max-w-md -mt-11 mx-auto bg-gray-50 h-screen px-4 flex items-center justify-center">
+        <div className="shadow-lg w-full bg-white flex flex-col items-center justify-center py-4 px-6 rounded-lg">
+          {showError && (
+            <Alert
+              className="mb-4"
+              variant="filled"
+              severity="error"
+              onClose={() => setShowError(false)}
+            >
+              {loginError}
+            </Alert>
+          )}
+          <h2 className="mb-6 text-center font-bold tracking-tight leading-5">
+            Tizimga kirish uchun Email va Parolingizni kiriting!
+          </h2>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Emailingizni kiriting!"
+            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            type="email"
+            disabled={formDisabled}
+            maxLength={50}
+          />
+          <p className="text-red-600 font-[600] text-xs">{formErrors.email}</p>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Parol kiriting!"
+            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            type="password"
+            disabled={formDisabled}
+            maxLength={20}
+          />
+          <p className="text-red-600 font-[600] text-xs">
+            {formErrors.password}
+          </p>
+          <button
+            disabled={formDisabled}
+            onClick={handleSubmit}
+            className="logButton mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
-            {loginError}
-          </Alert>
-        )}
-        <h2 className="mb-6 text-center font-bold tracking-tight leading-5">
-          Tizimga kirish uchun Email va Parolingizni kiriting!
-        </h2>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Emailingizni kiriting!"
-          className="logInput p-1 m-1 border outline-black rounded-md w-full"
-          type="email"
-          disabled={formDisabled}
-          maxLength={50}
-        />
-        <p className="text-red-600 font-[600] text-xs">{formErrors.email}</p>
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Parol kiriting!"
-          className="logInput p-1 m-1 border outline-black rounded-md w-full"
-          type="password"
-          disabled={formDisabled}
-          maxLength={20}
-        />
-        <p className="text-red-600 font-[600] text-xs">{formErrors.password}</p>
-        <button
-          disabled={formDisabled}
-          onClick={handleSubmit}
-          className="logButton mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
-        >
-          Kirish
-        </button>
-        <p className="text-xs">
-          Xali ro'yxatdan o'tmaganmisiz?
-          <Link to="/signUpwithEmail" className="text-blue-400 ml-1">
-            Ro'yxatdan o'tish
-          </Link>
-        </p>
+            Kirish
+          </button>
+          <p className="text-xs">
+            Xali ro'yxatdan o'tmaganmisiz?
+            <Link to="/signUpwithEmail" className="text-blue-400 ml-1">
+              Ro'yxatdan o'tish
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

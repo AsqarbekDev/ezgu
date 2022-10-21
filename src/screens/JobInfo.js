@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentShowing } from "../features/jobsSlice";
 import {
+  addDoc,
   arrayRemove,
   arrayUnion,
   collection,
@@ -30,6 +31,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
+import ExitHeader from "../components/ExitHeader";
 
 function JobInfo() {
   const [job, setJob] = useState(null);
@@ -242,6 +244,17 @@ function JobInfo() {
       disabled: true,
       deleted: true,
     });
+    workers.map(async (worker) => {
+      await addDoc(collection(db, "notifications"), {
+        userID: user.uid,
+        userImage: user.image,
+        userName: user.username,
+        notifyName: job.jobName,
+        message:
+          "Foydalanuvchi! Siz olgan ishingiz e'lon beruvchi tomonidan o'chirib tashlandi!",
+        to: worker.uid,
+      });
+    });
     setLoading(false);
     navigate("/");
   };
@@ -262,9 +275,10 @@ function JobInfo() {
 
   return (
     <div>
+      <ExitHeader screenName="Ish haqida malumotlar" />
       {loading && <LoadingModul />}
       {showModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>
               {job?.userID === user?.uid
@@ -297,7 +311,7 @@ function JobInfo() {
         </div>
       )}
       {showBanErrorModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black border border-red-600 text-white text-lg p-6">
             <p className="text-red-600">Ish beruvchi sizni ban qilgan!</p>
             <div className="flex items-center justify-center mt-6">
@@ -371,7 +385,7 @@ function JobInfo() {
               {user?.currentJob === job?.id &&
               job?.endingTime > dayjs().unix() ? (
                 <div className="flex items-start font-bold">
-                  <h4 className="">Telefon Raqarmi:</h4>
+                  <h4 className="">Telefon:</h4>
                   <p className="ml-2 text-[#4a4847]">{job?.userPhoneNumber}</p>
                   <button
                     onClick={handleCopyClick}
@@ -384,7 +398,7 @@ function JobInfo() {
                 </div>
               ) : job?.userID === user?.uid ? (
                 <div className="flex items-start font-bold">
-                  <h4 className="">Telefon Raqarmi:</h4>
+                  <h4 className="">Telefon:</h4>
                   <p className="ml-2 text-[#4a4847] truncate">
                     {job?.userPhoneNumber}
                   </p>

@@ -30,6 +30,7 @@ import "react-phone-number-input/style.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
+import ExitHeader from "../components/ExitHeader";
 
 function AddNewJob() {
   const [jobName, setJobName] = useState("");
@@ -185,9 +186,10 @@ function AddNewJob() {
 
   return (
     <div>
+      <ExitHeader screenName="E'lonni to'ldiring" />
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] flex items-center -mt-11 justify-center w-full h-screen">
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6 mx-6">
             <p className="text-center">{showErrorModul}</p>
             <div className="flex items-center justify-center mt-6">

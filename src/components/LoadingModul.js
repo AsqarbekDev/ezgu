@@ -27,7 +27,7 @@ function LoadingModul() {
           <p className="text-white text-sm -ml-1 mt-3">Yuklanyabdi...</p>
         </div>
       </div>
-      <div className="fixed z-[99] flex items-center -mt-[41px] justify-center w-full h-screen bg-black opacity-20"></div>
+      <div className="fixed z-[99] flex items-center top-0 justify-center w-full h-screen bg-black opacity-20"></div>
     </>
   );
 }

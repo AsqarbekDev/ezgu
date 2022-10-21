@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
+import ExitHeader from "../components/ExitHeader";
 
 function AddNewHome() {
   const image1Ref = useRef(null);
@@ -334,6 +335,7 @@ function AddNewHome() {
 
   return (
     <div>
+      <ExitHeader screenName="E'lonni to'ldiring" />
       {loading && <LoadingModul />}
       <div className="p-2 pb-12">
         <div className="bg-white shadow-xl rounded-lg px-2 py-4">
