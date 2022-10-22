@@ -255,6 +255,7 @@ function JobInfo() {
         to: worker.uid,
         from: "jobs",
         messageType: "failed",
+        seen: false,
         timestamp: dayjs().unix(),
       });
     });
@@ -493,6 +494,7 @@ function JobInfo() {
                         uid={item.uid}
                         jobId={job.id}
                         jobEndingTime={job.endingTime}
+                        jobName={job.jobName}
                       />
                     ))
                   : job?.userID === user?.uid && !showBan
@@ -505,6 +507,7 @@ function JobInfo() {
                         phoneNumber={item.phoneNumber}
                         jobId={job.id}
                         jobEndingTime={job.endingTime}
+                        jobName={job.jobName}
                       />
                     ))
                   : workers.map((item, index) => (

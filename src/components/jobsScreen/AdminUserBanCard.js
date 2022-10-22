@@ -1,18 +1,41 @@
 import { Avatar } from "@mui/material";
 import dayjs from "dayjs";
-import { deleteDoc, doc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 import { db } from "../../firebase";
 
-function AdminUserBanCard({ image, username, uid, jobId, jobEndingTime }) {
+function AdminUserBanCard({
+  image,
+  username,
+  uid,
+  jobId,
+  jobEndingTime,
+  jobName,
+}) {
   const [showUnbanUserModul, setShowUnbanUserModul] = useState(false);
   const [loading, setLoading] = useState(false);
+  const user = useSelector(selectUser);
 
   const unbanWorker = async () => {
     setShowUnbanUserModul(false);
     setLoading(true);
     await deleteDoc(doc(db, "jobs", jobId, "bannedWorkers", uid));
+    await addDoc(collection(db, "notifications"), {
+      userID: user.uid,
+      userImage: user.image,
+      userName: user.username,
+      notifyName: jobName,
+      message:
+        "Ish beruvchi tomonidan joriy ish uchun bandan chiqarildingiz! Agar xoxlasangiz ushbu ishni qayta olishingiz mumkin!",
+      to: uid,
+      from: "jobs",
+      messageType: "",
+      seen: false,
+      timestamp: dayjs().unix(),
+    });
     setLoading(false);
   };
 

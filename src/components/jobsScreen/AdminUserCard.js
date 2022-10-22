@@ -2,7 +2,9 @@ import { Avatar } from "@mui/material";
 import React, { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import {
+  addDoc,
   arrayRemove,
+  collection,
   deleteDoc,
   doc,
   setDoc,
@@ -11,6 +13,8 @@ import {
 import { db } from "../../firebase";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
 function AdminUserCard({
   image,
@@ -19,11 +23,13 @@ function AdminUserCard({
   jobId,
   phoneNumber,
   jobEndingTime,
+  jobName,
 }) {
   const [showRemoveUserModul, setShowRemoveUserModul] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   const removeWorker = async () => {
     setShowRemoveUserModul(false);
@@ -32,6 +38,19 @@ function AdminUserCard({
       currentWorkers: arrayRemove(uid),
     });
     await deleteDoc(doc(db, "jobs", jobId, "workers", uid));
+    await addDoc(collection(db, "notifications"), {
+      userID: user.uid,
+      userImage: user.image,
+      userName: user.username,
+      notifyName: jobName,
+      message:
+        "Foydalanuvchi! Siz ish beruvchi tomonidan ishdan chetlashtirildingiz!",
+      to: uid,
+      from: "jobs",
+      messageType: "failed",
+      seen: false,
+      timestamp: dayjs().unix(),
+    });
     setLoading(false);
   };
 
@@ -46,6 +65,19 @@ function AdminUserCard({
       currentWorkers: arrayRemove(uid),
     });
     await deleteDoc(doc(db, "jobs", jobId, "workers", uid));
+    await addDoc(collection(db, "notifications"), {
+      userID: user.uid,
+      userImage: user.image,
+      userName: user.username,
+      notifyName: jobName,
+      message:
+        "Foydalanuvchi! Siz ish beruvchi tomonidan joriy ish uchun ban qilindingiz! Endi ushbu ishni qayta ololmaysiz!",
+      to: uid,
+      from: "jobs",
+      messageType: "failed",
+      seen: false,
+      timestamp: dayjs().unix(),
+    });
     setLoading(false);
   };
 

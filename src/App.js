@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, selectUser, setWaiting } from "./features/userSlice";
 import SignUpwithEmail from "./screens/SignUpwithEmail";
 import { useEffect } from "react";
+import { setNotifications } from "./features/notificationsSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
 import {
@@ -52,9 +53,9 @@ function App() {
   const UserCurrent = auth?.currentUser;
 
   useEffect(() => {
-    if (user) {
+    if (auth?.currentUser?.uid) {
       const interval = setInterval(async () => {
-        await updateDoc(doc(db, "users", user.uid), {
+        await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
           lastSeen: dayjs().unix(),
         });
       }, 60000);
@@ -63,7 +64,7 @@ function App() {
         clearInterval(interval);
       };
     }
-  }, [user]);
+  }, [UserCurrent]);
 
   useEffect(() => {
     if (chatRooms) {
@@ -189,7 +190,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (auth.currentUser) {
+    if (auth?.currentUser?.uid) {
       const getTimedOutJobs = async () => {
         const q = query(
           collection(db, "jobs"),
@@ -226,7 +227,31 @@ function App() {
       getTimedOutJobs();
       getTimedOutHomes();
     }
-  }, [user?.workedWith]);
+  }, [user?.workedWith, UserCurrent]);
+
+  useEffect(() => {
+    if (auth?.currentUser?.uid) {
+      const q = query(
+        collection(db, "notifications"),
+        where("to", "==", auth.currentUser.uid)
+      );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        let allNotifications = [];
+        snapshot.forEach((doc) => {
+          allNotifications.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        dispatch(setNotifications(allNotifications));
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [dispatch, UserCurrent]);
 
   return (
     <div className="app">

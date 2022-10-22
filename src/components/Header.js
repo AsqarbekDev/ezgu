@@ -5,13 +5,30 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
+import { selectNotifications } from "../features/notificationsSlice";
 
 function Header() {
   const location = useLocation();
   const user = useSelector(selectUser);
+  const notifications = useSelector(selectNotifications);
   const navigate = useNavigate();
 
   const [currentScreen, setCurrentScreen] = useState("/");
+
+  const [newNotifications, setNewNotifications] = useState([]);
+
+  useEffect(() => {
+    const newMessagesArray = [];
+
+    notifications.map((item) => {
+      if (!item.seen) {
+        newMessagesArray.push(item.id);
+      }
+      return null;
+    });
+
+    setNewNotifications(newMessagesArray);
+  }, [notifications]);
 
   useEffect(() => {
     setCurrentScreen(location.pathname);
@@ -42,9 +59,11 @@ function Header() {
         >
           <div className="relative">
             <CircleNotificationsIcon style={{ fontSize: 30 }} />
-            <div className="absolute -right-1 -top-1 bg-red-500 rounded-full px-[5px]">
-              <p className="text-white text-xs">2</p>
-            </div>
+            {newNotifications.length > 0 && (
+              <div className="absolute -right-1 -top-1 bg-red-500 rounded-full px-[5px]">
+                <p className="text-white text-xs">{newNotifications.length}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
