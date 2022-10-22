@@ -21,6 +21,7 @@ import { setNotifications } from "./features/notificationsSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
 import {
+  addDoc,
   collection,
   doc,
   getDocs,
@@ -206,6 +207,19 @@ function App() {
           await updateDoc(doc(db, "users", auth.currentUser.uid), {
             workedWith: user.workedWith + docSnap.data().currentWorkers.length,
           });
+          await addDoc(collection(db, "notifications"), {
+            userID: docSnap.data().userID,
+            userImage: docSnap.data().userImage,
+            userName: docSnap.data().userName,
+            notifyName: docSnap.data().jobName,
+            notifyID: docSnap.id,
+            message: "Bergan e'loningiz muvaffaqiyat tugatildi!",
+            to: docSnap.data().userID,
+            from: "jobs",
+            messageType: "mySuccess",
+            seen: false,
+            timestamp: dayjs().unix(),
+          });
         });
       };
 
@@ -222,6 +236,20 @@ function App() {
             disabled: true,
             deleted: true,
           });
+          await addDoc(collection(db, "notifications"), {
+            userID: docSnap.data().userID,
+            userImage: docSnap.data().userImage,
+            userName: docSnap.data().userName,
+            notifyName: docSnap.data().location,
+            notifyID: docSnap.id,
+            message:
+              "E'lon berganingizga 30 kun bo'lganligi sababli ushbu e'lon o'chirib tashlandi!",
+            to: docSnap.data().userID,
+            from: "homes",
+            messageType: "deletedHome",
+            seen: false,
+            timestamp: dayjs().unix(),
+          });
         });
       };
       getTimedOutJobs();
@@ -233,7 +261,8 @@ function App() {
     if (auth?.currentUser?.uid) {
       const q = query(
         collection(db, "notifications"),
-        where("to", "==", auth.currentUser.uid)
+        where("to", "==", auth.currentUser.uid),
+        orderBy("timestamp", "desc")
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         let allNotifications = [];

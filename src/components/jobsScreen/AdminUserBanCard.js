@@ -28,11 +28,11 @@ function AdminUserBanCard({
       userImage: user.image,
       userName: user.username,
       notifyName: jobName,
-      message:
-        "Ish beruvchi tomonidan joriy ish uchun bandan chiqarildingiz! Agar xoxlasangiz ushbu ishni qayta olishingiz mumkin!",
+      notifyID: jobId,
+      message: "Ish beruvchi tomonidan joriy ish uchun bandan chiqarildingiz!",
       to: uid,
       from: "jobs",
-      messageType: "",
+      messageType: "unbanned",
       seen: false,
       timestamp: dayjs().unix(),
     });

@@ -43,11 +43,12 @@ function AdminUserCard({
       userImage: user.image,
       userName: user.username,
       notifyName: jobName,
+      notifyID: jobId,
       message:
         "Foydalanuvchi! Siz ish beruvchi tomonidan ishdan chetlashtirildingiz!",
       to: uid,
       from: "jobs",
-      messageType: "failed",
+      messageType: "removed",
       seen: false,
       timestamp: dayjs().unix(),
     });
@@ -70,11 +71,12 @@ function AdminUserCard({
       userImage: user.image,
       userName: user.username,
       notifyName: jobName,
+      notifyID: jobId,
       message:
         "Foydalanuvchi! Siz ish beruvchi tomonidan joriy ish uchun ban qilindingiz! Endi ushbu ishni qayta ololmaysiz!",
       to: uid,
       from: "jobs",
-      messageType: "failed",
+      messageType: "banned",
       seen: false,
       timestamp: dayjs().unix(),
     });

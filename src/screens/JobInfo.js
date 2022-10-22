@@ -75,6 +75,19 @@ function JobInfo() {
                 await updateDoc(doc(db, "users", user.uid), {
                   currentJob: "",
                 });
+                await addDoc(collection(db, "notifications"), {
+                  userID: docSnap.data().userID,
+                  userImage: docSnap.data().userImage,
+                  userName: docSnap.data().userName,
+                  notifyName: docSnap.data().jobName,
+                  notifyID: docSnap.id,
+                  message: "Ishni muvaffaqiyat tamomladingiz!",
+                  to: user.uid,
+                  from: "jobs",
+                  messageType: "success",
+                  seen: false,
+                  timestamp: dayjs().unix(),
+                });
                 navigate("/");
               }
             } else {
@@ -250,11 +263,12 @@ function JobInfo() {
         userImage: user.image,
         userName: user.username,
         notifyName: job.jobName,
+        notifyID: job.id,
         message:
           "Foydalanuvchi! Siz olgan ishingiz e'lon beruvchi tomonidan o'chirib tashlandi!",
         to: worker.uid,
         from: "jobs",
-        messageType: "failed",
+        messageType: "deleted",
         seen: false,
         timestamp: dayjs().unix(),
       });

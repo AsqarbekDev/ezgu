@@ -23,6 +23,7 @@ function Notifications() {
           timestamp={item.timestamp}
           from={item.from}
           seen={item.seen}
+          notifyID={item.notifyID}
         />
       ))}
     </div>
