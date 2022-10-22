@@ -253,6 +253,9 @@ function JobInfo() {
         message:
           "Foydalanuvchi! Siz olgan ishingiz e'lon beruvchi tomonidan o'chirib tashlandi!",
         to: worker.uid,
+        from: "jobs",
+        messageType: "failed",
+        timestamp: dayjs().unix(),
       });
     });
     setLoading(false);

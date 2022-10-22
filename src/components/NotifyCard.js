@@ -4,7 +4,16 @@ import SendIcon from "@mui/icons-material/Send";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 // import DomainAddIcon from "@mui/icons-material/DomainAdd";
 
-function NotifyCard() {
+function NotifyCard({
+  userID,
+  userImage,
+  userName,
+  notifyName,
+  message,
+  messageType,
+  timestamp,
+  from,
+}) {
   return (
     <div className="bg-white m-1 p-3 rounded-lg shadow-lg">
       <div className="flex items-center">
@@ -28,10 +37,15 @@ function NotifyCard() {
       </div>
       <div className="h-[0.1px] w-full bg-red-700 mt-2 mb-1"></div>
       <div>
-        <h2 className="font-bold">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque,
-          pariatur!
-        </h2>
+        <div className="flex items-start">
+          <h2 className="font-bold">
+            Lorem ipsum dolor sit amet consecteturas adipisicing elit. Cumque,
+            pariatur!
+          </h2>
+          <p className="mt-[2px] ml-3 text-sm font-bold text-[#4a4847]">
+            07:00
+          </p>
+        </div>
         <p className="text-sm text-red-600">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
           reiciendis ipsa nisi magnam consectetur ipsum blanditiis, recusandae

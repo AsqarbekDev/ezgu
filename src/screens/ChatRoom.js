@@ -24,6 +24,7 @@ function ChatRoom() {
   const imageRef = useRef(null);
   const bottomRef = useRef(null);
   const newMessageRef = useRef(null);
+  const messageRef = useRef(null);
   const user = useSelector(selectUser);
   const chats = useSelector(selectChats);
   const chatRooms = useSelector(selectChatRooms);
@@ -31,7 +32,6 @@ function ChatRoom() {
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
-  const [message, setMessage] = useState("");
   const [isChatRoomExists, setIsChatRoomExists] = useState(false);
   const [chatRoomID, setChatRoomID] = useState(null);
   const [newMessageID, setNewMessageID] = useState(null);
@@ -62,9 +62,9 @@ function ChatRoom() {
   };
 
   const sendMessage = () => {
-    if (message.replace(/\s/g, "").length > 0 || image) {
-      const sendingMessage = message;
-      setMessage("");
+    if (messageRef.current.value.replace(/\s/g, "").length > 0 || image) {
+      const sendingMessage = messageRef.current.value;
+      messageRef.current.value = "";
       setImage(null);
       if (isChatRoomExists) {
         bottomRef.current.scrollIntoView();
@@ -305,8 +305,7 @@ function ChatRoom() {
           </button>
         )}
         <TextField
-          onChange={(e) => setMessage(e.target.value)}
-          value={message}
+          inputRef={messageRef}
           multiline
           maxRows={4}
           variant="standard"
