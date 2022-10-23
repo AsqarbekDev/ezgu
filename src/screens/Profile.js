@@ -233,6 +233,12 @@ function Profile() {
     }
   };
 
+  const deleteImage = () => {
+    setUImage(null);
+    setBackgroundImage(null);
+    setShowSaveImageBtn(false);
+  };
+
   const signOutUser = () => {
     setShowLogOutModul(false);
     setLoading(true);
@@ -440,6 +446,14 @@ function Profile() {
             className="bottom-2 absolute z-20 right-2 bg-black text-white opacity-80 rounded-lg px-2 pb-[2px]"
           >
             Saqlash
+          </button>
+        )}
+        {showSaveImageBtn && (
+          <button
+            onClick={deleteImage}
+            className="bottom-2 absolute z-20 left-2 bg-black text-white opacity-80 rounded-lg px-2 pb-[2px]"
+          >
+            Bekor qilish
           </button>
         )}
         <input

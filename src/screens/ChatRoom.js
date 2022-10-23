@@ -61,6 +61,10 @@ function ChatRoom() {
     };
   };
 
+  const deleteImage = () => {
+    setImage(null);
+  };
+
   const sendMessage = () => {
     if (messageRef.current.value.replace(/\s/g, "").length > 0 || image) {
       const sendingMessage = messageRef.current.value;
@@ -177,12 +181,14 @@ function ChatRoom() {
       setTimeout(() => {
         newMessageRef.current.scrollIntoView();
       }, 10);
-    } else {
-      setTimeout(() => {
-        bottomRef.current.scrollIntoView();
-      }, 10);
     }
   }, [newMessageID]);
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      bottomRef.current.scrollIntoView();
+    }, 10);
+  };
 
   return (
     <div className="pb-14">
@@ -286,10 +292,7 @@ function ChatRoom() {
       </div>
       <div className="fixed overflow-hidden bottom-2 right-2 left-2 bg-gray-300 flex items-center rounded-2xl">
         {image ? (
-          <button
-            onClick={() => setImage(null)}
-            className="relative h-12 w-[70px] pr-1"
-          >
+          <button onClick={deleteImage} className="relative h-12 w-[70px] pr-1">
             <img className="object-cover h-12 w-[70px]" src={image} alt="" />
             <CloseIcon
               style={{ fontSize: 16, color: "white" }}
@@ -311,11 +314,18 @@ function ChatRoom() {
           variant="standard"
           className="w-full"
           autoFocus
+          onFocus={scrollToBottom}
         />
         <button onClick={sendMessage} className="px-3 h-12 outline-none">
           <SendIcon style={{ fontSize: 26 }} />
         </button>
-        <input type="file" ref={imageRef} hidden onChange={addImage} />
+        <input
+          type="file"
+          ref={imageRef}
+          hidden
+          onChange={addImage}
+          accept="image/*"
+        />
       </div>
       <div ref={bottomRef}></div>
     </div>

@@ -16,49 +16,10 @@ function Homes() {
 
   useEffect(() => {
     if ((!waiting && !user) || (!waiting && !user?.country)) {
-      const q = query(collection(db, "homes"), where("disabled", "==", false));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        let allHomes = [];
-
-        snapshot.forEach((doc) => {
-          allHomes.push({
-            id: doc.id,
-            rent: doc.data().rent,
-            location: doc.data().location,
-            comment: doc.data().comment,
-            image1: doc.data().image1,
-            image2: doc.data().image2,
-            image3: doc.data().image3,
-            image4: doc.data().image4,
-            line: doc.data().line,
-            station: doc.data().station,
-            userID: doc.data().userID,
-            userName: doc.data().userName,
-            userImage: doc.data().userImage,
-            userEmail: doc.data().userEmail,
-            userPhoneNumber: doc.data().userPhoneNumber,
-            country: doc.data().country,
-            region: doc.data().region,
-            uploadedTime: doc.data().uploadedTime,
-            deleted: doc.data().deleted,
-            disabled: doc.data().disabled,
-          });
-        });
-
-        allHomes = allHomes.filter(
-          (home) => home.uploadedTime > dayjs().unix() - 2592000
-        );
-        dispatch(setHomes(allHomes));
-      });
-      return () => {
-        unsubscribe();
-      };
-    } else if (!waiting && user?.country) {
       const q = query(
         collection(db, "homes"),
-        where("country", "==", user.country),
-        where("region", "==", user.region),
-        where("disabled", "==", false)
+        where("disabled", "==", false),
+        where("uploadedTime", ">", dayjs().unix() - 2592000)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         let allHomes = [];
@@ -88,10 +49,98 @@ function Homes() {
           });
         });
 
-        allHomes = allHomes.filter(
-          (home) => home.uploadedTime > dayjs().unix() - 2592000
-        );
-        dispatch(setHomes(allHomes));
+        let highKeyArray = [];
+        for (let i = 0; i < allHomes.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allHomes.map((home, index) => {
+            if (highest) {
+              if (
+                home.uploadedTime > highest &&
+                !highKeyArray.includes(index)
+              ) {
+                highKey = index;
+                highest = home.uploadedTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = home.uploadedTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allHomesFiltered = [];
+        highKeyArray.map((index) => allHomesFiltered.push(allHomes[index]));
+
+        dispatch(setHomes(allHomesFiltered));
+      });
+      return () => {
+        unsubscribe();
+      };
+    } else if (!waiting && user?.country) {
+      const q = query(
+        collection(db, "homes"),
+        where("country", "==", user.country),
+        where("region", "==", user.region),
+        where("disabled", "==", false),
+        where("uploadedTime", ">", dayjs().unix() - 2592000)
+      );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        let allHomes = [];
+
+        snapshot.forEach((doc) => {
+          allHomes.push({
+            id: doc.id,
+            rent: doc.data().rent,
+            location: doc.data().location,
+            comment: doc.data().comment,
+            image1: doc.data().image1,
+            image2: doc.data().image2,
+            image3: doc.data().image3,
+            image4: doc.data().image4,
+            line: doc.data().line,
+            station: doc.data().station,
+            userID: doc.data().userID,
+            userName: doc.data().userName,
+            userImage: doc.data().userImage,
+            userEmail: doc.data().userEmail,
+            userPhoneNumber: doc.data().userPhoneNumber,
+            country: doc.data().country,
+            region: doc.data().region,
+            uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
+          });
+        });
+
+        let highKeyArray = [];
+        for (let i = 0; i < allHomes.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allHomes.map((home, index) => {
+            if (highest) {
+              if (
+                home.uploadedTime > highest &&
+                !highKeyArray.includes(index)
+              ) {
+                highKey = index;
+                highest = home.uploadedTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = home.uploadedTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allHomesFiltered = [];
+        highKeyArray.map((index) => allHomesFiltered.push(allHomes[index]));
+
+        dispatch(setHomes(allHomesFiltered));
       });
       return () => {
         unsubscribe();

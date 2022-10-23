@@ -46,7 +46,29 @@ function HomesHistory() {
         });
       });
 
-      setHomes(allHomes);
+      let highKeyArray = [];
+      for (let i = 0; i < allHomes.length; i++) {
+        let highest = null;
+        let highKey = null;
+        allHomes.map((home, index) => {
+          if (highest) {
+            if (home.uploadedTime > highest && !highKeyArray.includes(index)) {
+              highKey = index;
+              highest = home.uploadedTime;
+            }
+          } else if (!highKeyArray.includes(index)) {
+            highKey = index;
+            highest = home.uploadedTime;
+          }
+          return null;
+        });
+        highKeyArray.push(highKey);
+      }
+
+      const allHomesFiltered = [];
+      highKeyArray.map((index) => allHomesFiltered.push(allHomes[index]));
+
+      setHomes(allHomesFiltered);
     };
 
     getHomesHistory();

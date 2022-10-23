@@ -46,7 +46,30 @@ function JobsHistory() {
           ...doc.data(),
         });
       });
-      setIAddedJobs(allJobs);
+
+      let highKeyArray = [];
+      for (let i = 0; i < allJobs.length; i++) {
+        let highest = null;
+        let highKey = null;
+        allJobs.map((job, index) => {
+          if (highest) {
+            if (job.startingTime > highest && !highKeyArray.includes(index)) {
+              highKey = index;
+              highest = job.startingTime;
+            }
+          } else if (!highKeyArray.includes(index)) {
+            highKey = index;
+            highest = job.startingTime;
+          }
+          return null;
+        });
+        highKeyArray.push(highKey);
+      }
+
+      const allJobsFiltered = [];
+      highKeyArray.map((index) => allJobsFiltered.push(allJobs[index]));
+
+      setIAddedJobs(allJobsFiltered);
     };
 
     const getIWorkedJobs = async () => {
@@ -81,7 +104,29 @@ function JobsHistory() {
         });
       });
 
-      setIWorkedJobs(allJobs);
+      let highKeyArray = [];
+      for (let i = 0; i < allJobs.length; i++) {
+        let highest = null;
+        let highKey = null;
+        allJobs.map((job, index) => {
+          if (highest) {
+            if (job.startingTime > highest && !highKeyArray.includes(index)) {
+              highKey = index;
+              highest = job.startingTime;
+            }
+          } else if (!highKeyArray.includes(index)) {
+            highKey = index;
+            highest = job.startingTime;
+          }
+          return null;
+        });
+        highKeyArray.push(highKey);
+      }
+
+      const allJobsFiltered = [];
+      highKeyArray.map((index) => allJobsFiltered.push(allJobs[index]));
+
+      setIWorkedJobs(allJobsFiltered);
     };
 
     getIAddedJobs();

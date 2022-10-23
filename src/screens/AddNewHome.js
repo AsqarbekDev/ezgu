@@ -379,7 +379,7 @@ function AddNewHome() {
                 borderWidth: 3,
                 borderColor: "black",
               }}
-              alt="Avatar"
+              alt={user.username}
               src={user.image}
             />
           </div>
@@ -495,6 +495,7 @@ function AddNewHome() {
               hidden
               onChange={addImage1}
               disabled={formDisabled}
+              accept="image/*"
             />
             <input
               type="file"
@@ -502,6 +503,7 @@ function AddNewHome() {
               hidden
               onChange={addImage2}
               disabled={formDisabled}
+              accept="image/*"
             />
             <input
               type="file"
@@ -509,6 +511,7 @@ function AddNewHome() {
               hidden
               onChange={addImage3}
               disabled={formDisabled}
+              accept="image/*"
             />
             <input
               type="file"
@@ -516,6 +519,7 @@ function AddNewHome() {
               hidden
               onChange={addImage4}
               disabled={formDisabled}
+              accept="image/*"
             />
           </div>
           <p className="ml-3 text-red-600 font-[600] text-sm">

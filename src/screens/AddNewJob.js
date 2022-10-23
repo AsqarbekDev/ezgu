@@ -222,7 +222,7 @@ function AddNewJob() {
                 borderWidth: 3,
                 borderColor: "black",
               }}
-              alt="Avatar"
+              alt={user.username}
               src={user.image}
             />
           </div>

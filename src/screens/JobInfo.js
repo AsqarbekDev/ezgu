@@ -351,7 +351,7 @@ function JobInfo() {
             <div className="flex items-center m-1">
               <Avatar
                 src={job?.userImage}
-                alt="Avatar"
+                alt={job?.userName}
                 style={{ height: 44, width: 44 }}
               />
               <div className="ml-2 flex-1 truncate">

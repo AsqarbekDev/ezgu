@@ -43,7 +43,7 @@ function JobCard({
         className="bg-white m-1 px-3 pt-2 rounded-lg shadow-lg cursor-pointer"
       >
         <div className="flex items-center">
-          <Avatar alt="Avatar" src={userImage} />
+          <Avatar alt={userName} src={userImage} />
           <div className="ml-2 truncate flex-1">
             <h5 className="font-bold text-md -mt-1 ml-[1px] truncate flex-1">
               {userName}

@@ -208,7 +208,7 @@ function HomeCard({
         <div className="flex items-center p-2">
           <Avatar
             style={{ height: 32, width: 32 }}
-            alt="Avatar"
+            alt={userName}
             src={userImage}
           />
           <h2 className="font-bold mx-2 flex-1 truncate">{userName}</h2>

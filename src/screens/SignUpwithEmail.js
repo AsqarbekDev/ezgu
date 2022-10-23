@@ -221,6 +221,7 @@ function SignUpwithEmail() {
             hidden
             onChange={addImage}
             disabled={formDisabled}
+            accept="image/*"
           />
           <button
             disabled={formDisabled}

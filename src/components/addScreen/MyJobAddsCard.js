@@ -19,7 +19,8 @@ function MyJobAddsCard() {
       const q = query(
         collection(db, "jobs"),
         where("userID", "==", user.uid),
-        where("disabled", "==", false)
+        where("disabled", "==", false),
+        where("endingTime", ">", dayjs().unix())
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         let allJobs = [];
@@ -30,8 +31,29 @@ function MyJobAddsCard() {
           });
         });
 
-        allJobs = allJobs.filter((job) => job.endingTime > dayjs().unix());
-        setJobs(allJobs);
+        let highKeyArray = [];
+        for (let i = 0; i < allJobs.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allJobs.map((job, index) => {
+            if (highest) {
+              if (job.startingTime < highest && !highKeyArray.includes(index)) {
+                highKey = index;
+                highest = job.startingTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = job.startingTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allJobsFiltered = [];
+        highKeyArray.map((index) => allJobsFiltered.push(allJobs[index]));
+
+        setJobs(allJobsFiltered);
       });
 
       return () => {
