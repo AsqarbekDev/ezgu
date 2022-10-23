@@ -9,7 +9,15 @@ import PublicIcon from "@mui/icons-material/Public";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { moscowMetroList } from "../assets/moscowMetroList";
 import { Avatar } from "@mui/material";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -39,9 +47,10 @@ function AddNewHome() {
   const [station, setStation] = useState(moscowMetroList[0].stations[0]);
   const [lineIndex, setLineIndex] = useState(0);
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formDisabled, setFormDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showErrorModul, setShowErrorModul] = useState("");
+  const [addedHomes, setAddedHomes] = useState([]);
 
   const user = useSelector(selectUser);
 
@@ -50,6 +59,23 @@ function AddNewHome() {
   const [region, setRegion] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkLimit = async () => {
+      const q = query(
+        collection(db, "homes"),
+        where("userID", "==", user.uid),
+        where("uploadedTime", ">", dayjs().unix() - 86400)
+      );
+      const querySnapshot = await getDocs(q);
+      const allHomes = [];
+      querySnapshot.forEach((doc) => {
+        allHomes.push(doc.id);
+      });
+      setAddedHomes(allHomes);
+    };
+    checkLimit();
+  }, [user.uid]);
 
   useEffect(() => {
     setLine(moscowMetroList[lineIndex].line);
@@ -86,17 +112,19 @@ function AddNewHome() {
       errors.number = "Telefon raqamingizni kiriting!";
     }
 
+    if (Object.keys(errors).length === 0) {
+      setFormDisabled(true);
+      uploadToDB();
+    }
     return errors;
   };
 
   const handleSubmit = () => {
-    setFormDisabled(true);
     setFormErrors(checkForm());
-    setIsSubmitted(true);
   };
 
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmitted) {
+  const uploadToDB = () => {
+    if (addedHomes.length < 4) {
       setLoading(true);
       addDoc(collection(db, "homes"), {
         rent: salary,
@@ -247,30 +275,9 @@ function AddNewHome() {
           console.log(e);
         });
     } else {
-      setFormDisabled(false);
+      setShowErrorModul("Kuniga faqat 4ta e'lon berishingiz mumkin!");
     }
-  }, [
-    formErrors,
-    isSubmitted,
-    salary,
-    workingPlace,
-    comment,
-    line,
-    station,
-    navigate,
-    image1,
-    image2,
-    image3,
-    image4,
-    country,
-    region,
-    phoneNumber,
-    user.uid,
-    user.email,
-    user.image,
-    user.username,
-    user.homeAdds,
-  ]);
+  };
 
   const addImage1 = (e) => {
     const reader = new FileReader();
@@ -337,6 +344,31 @@ function AddNewHome() {
     <div>
       <ExitHeader screenName="E'lonni to'ldiring" />
       {loading && <LoadingModul />}
+      {showErrorModul && (
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+          <div className="rounded-xl bg-black text-white text-lg p-6 mx-6">
+            <p className="text-center">{showErrorModul}</p>
+            <div className="flex items-center justify-center mt-6">
+              {showErrorModul ===
+              "Kuniga faqat 4ta e'lon berishingiz mumkin!" ? (
+                <button
+                  onClick={() => navigate("/")}
+                  className="border border-white px-4 pb-[2px] rounded-lg"
+                >
+                  Chiqish
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate(`/jobs/${user.currentJob}`)}
+                  className="border border-white px-4 pb-[2px] rounded-lg"
+                >
+                  Ishni ko'rish
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       <div className="p-2 pb-12">
         <div className="bg-white shadow-xl rounded-lg px-2 py-4">
           <div className="flex flex-col items-center">

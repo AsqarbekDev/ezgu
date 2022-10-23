@@ -138,8 +138,8 @@ function AddNewJob() {
   };
 
   const uploadToDB = () => {
-    setLoading(true);
     if (addedJobs.length < 4) {
+      setLoading(true);
       addDoc(collection(db, "jobs"), {
         jobName,
         salary,
@@ -179,7 +179,6 @@ function AddNewJob() {
           console.log(e);
         });
     } else {
-      setLoading(false);
       setShowErrorModul("Kuniga faqat 4ta e'lon berishingiz mumkin!");
     }
   };

@@ -442,12 +442,19 @@ function Profile() {
             Saqlash
           </button>
         )}
-        <input type="file" ref={bImageRef} hidden onChange={addBImageToState} />
+        <input
+          type="file"
+          ref={bImageRef}
+          hidden
+          onChange={addBImageToState}
+          accept="image/*"
+        />
         <input
           type="file"
           ref={userImageRef}
           hidden
           onChange={addUserImageToState}
+          accept="image/*"
         />
       </div>
       <div className="px-3">

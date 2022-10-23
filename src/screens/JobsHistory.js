@@ -17,15 +17,30 @@ function JobsHistory() {
 
   useEffect(() => {
     const getIAddedJobs = async () => {
-      const q = query(
+      const q1 = query(
         collection(db, "jobs"),
         where("userID", "==", user.uid),
+        where("deleted", "==", true)
+      );
+
+      const q2 = query(
+        collection(db, "jobs"),
+        where("userID", "==", user.uid),
+        where("deleted", "==", false),
         where("endingTime", "<", dayjs().unix())
       );
-      const querySnapshot = await getDocs(q);
+      const querySnapshotDeleted = await getDocs(q1);
+      const querySnapshotTimeOuted = await getDocs(q2);
 
       const allJobs = [];
-      querySnapshot.forEach((doc) => {
+
+      querySnapshotDeleted.forEach((doc) => {
+        allJobs.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      querySnapshotTimeOuted.forEach((doc) => {
         allJobs.push({
           id: doc.id,
           ...doc.data(),
@@ -35,20 +50,37 @@ function JobsHistory() {
     };
 
     const getIWorkedJobs = async () => {
-      const q = query(
+      const q1 = query(
         collection(db, "jobs"),
         where("currentWorkers", "array-contains", user.uid),
+        where("deleted", "==", true)
+      );
+
+      const q2 = query(
+        collection(db, "jobs"),
+        where("currentWorkers", "array-contains", user.uid),
+        where("deleted", "==", false),
         where("endingTime", "<", dayjs().unix())
       );
-      const querySnapshot = await getDocs(q);
+
+      const querySnapshotDeleted = await getDocs(q1);
+      const querySnapshotTimeOuted = await getDocs(q2);
 
       const allJobs = [];
-      querySnapshot.forEach((doc) => {
+
+      querySnapshotDeleted.forEach((doc) => {
         allJobs.push({
           id: doc.id,
           ...doc.data(),
         });
       });
+      querySnapshotTimeOuted.forEach((doc) => {
+        allJobs.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
       setIWorkedJobs(allJobs);
     };
 

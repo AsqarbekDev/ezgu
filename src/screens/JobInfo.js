@@ -533,7 +533,7 @@ function JobInfo() {
                       />
                     ))}
               </div>
-              {job?.endingTime > dayjs().unix() && (
+              {job?.endingTime > dayjs().unix() && job?.deleted === false && (
                 <div className="flex items-center justify-center mb-4 mt-6">
                   <button
                     disabled={loading}

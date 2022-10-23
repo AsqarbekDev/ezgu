@@ -60,6 +60,8 @@ function Jobs() {
             region: doc.data().region,
             userWorkedWith: doc.data().userWorkedWith,
             uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
           });
         });
         dispatch(setJobs(allJobs));
@@ -96,6 +98,8 @@ function Jobs() {
               region: doc.data().region,
               userWorkedWith: doc.data().userWorkedWith,
               uploadedTime: doc.data().uploadedTime,
+              deleted: doc.data().deleted,
+              disabled: doc.data().disabled,
             });
           });
 

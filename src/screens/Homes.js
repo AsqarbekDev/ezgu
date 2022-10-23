@@ -40,6 +40,8 @@ function Homes() {
             country: doc.data().country,
             region: doc.data().region,
             uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
           });
         });
 
@@ -81,6 +83,8 @@ function Homes() {
             country: doc.data().country,
             region: doc.data().region,
             uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
           });
         });
 
