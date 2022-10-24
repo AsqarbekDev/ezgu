@@ -204,7 +204,7 @@ function ChatRoom() {
           <WestIcon />
         </div>
         <div>
-          {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 80 ? (
+          {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 ? (
             <StyledBadge
               className="mr-2 ml-2"
               overlap="circular"
@@ -233,7 +233,7 @@ function ChatRoom() {
               ? dayjs
                   .unix(chats[chatRoomID]?.messagingUser.lastSeen)
                   .format("MM/DD/YYYY")
-              : chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 80
+              : chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70
               ? "online"
               : dayjs
                   .unix(chats[chatRoomID]?.messagingUser.lastSeen)

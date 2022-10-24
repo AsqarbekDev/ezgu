@@ -319,7 +319,7 @@ function HomeCard({
               style={{
                 fontSize: 16,
                 marginLeft: -3,
-                marginTop: 2,
+                marginTop: 1.4,
                 marginRight: 3,
               }}
             />

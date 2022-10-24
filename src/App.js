@@ -55,6 +55,12 @@ function App() {
 
   useEffect(() => {
     if (auth?.currentUser?.uid) {
+      const updateSeen = async () => {
+        await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
+          lastSeen: dayjs().unix(),
+        });
+      };
+      updateSeen();
       const interval = setInterval(async () => {
         await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
           lastSeen: dayjs().unix(),
