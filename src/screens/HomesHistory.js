@@ -79,7 +79,7 @@ function HomesHistory() {
       {!homes ? (
         <DefaultLoadingModul />
       ) : (
-        <div className="pb-12">
+        <div className="pb-1">
           {homes?.map(
             (
               {

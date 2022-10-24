@@ -8,7 +8,7 @@ function Notifications() {
   const notifications = useSelector(selectNotifications);
 
   return (
-    <div>
+    <div className="pb-1">
       <ExitHeader screenName="Bildirishnomalar" />
       {notifications.map((item, index) => (
         <NotifyCard

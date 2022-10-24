@@ -134,7 +134,7 @@ function JobsHistory() {
   }, [user]);
 
   return (
-    <div className="pb-10">
+    <div className="pb-1">
       <ExitHeader screenName="Ishlar tarixi" />
       <div className="fixed w-full z-30 flex items-center">
         <button

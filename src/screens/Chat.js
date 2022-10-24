@@ -39,7 +39,7 @@ function Chat() {
   }, [chats]);
 
   return (
-    <div>
+    <div className="pb-12">
       {chatsArray.map((key, index) => (
         <ChatCard
           key={index}

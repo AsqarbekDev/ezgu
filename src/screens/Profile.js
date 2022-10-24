@@ -255,7 +255,7 @@ function Profile() {
   };
 
   return (
-    <div className="pb-11">
+    <div className="pb-[50px]">
       {loading && <LoadingModul />}
       {showErrorModul && (
         <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
@@ -294,13 +294,13 @@ function Profile() {
                   setUsername(user.username);
                   setFormErrors({});
                 }}
-                className="text-sm bg-black text-white px-2 pb-[2px] rounded-lg"
+                className="text-sm bg-black text-white px-2 py-[2px] rounded-lg"
               >
                 Qaytish
               </button>
               <button
                 onClick={changeUsername}
-                className="text-sm bg-black text-white px-2 pb-[2px] rounded-lg"
+                className="text-sm bg-black text-white px-2 py-[2px] rounded-lg"
               >
                 Saqlash
               </button>
@@ -332,13 +332,13 @@ function Profile() {
                   setPhoneNumber(user.phoneNumber || "");
                   setFormErrors({});
                 }}
-                className="border text-sm text-white px-2 bg-black pb-[2px] rounded-lg"
+                className="border text-sm text-white px-2 bg-black py-[2px] rounded-lg"
               >
                 Qaytish
               </button>
               <button
                 onClick={changePhoneNumber}
-                className="border text-sm text-white bg-black px-2 pb-[2px] rounded-lg"
+                className="border text-sm text-white bg-black px-2 py-[2px] rounded-lg"
               >
                 Saqlash
               </button>
@@ -382,13 +382,13 @@ function Profile() {
                   setRegion(user.region || "");
                   setFormErrors({});
                 }}
-                className="border text-sm text-white px-2 bg-black pb-[2px] rounded-lg"
+                className="border text-sm text-white px-2 bg-black py-[2px] rounded-lg"
               >
                 Qaytish
               </button>
               <button
                 onClick={changeRegion}
-                className="border text-sm text-white bg-black px-2 pb-[2px] rounded-lg"
+                className="border text-sm text-white bg-black px-2 py-[2px] rounded-lg"
               >
                 Saqlash
               </button>

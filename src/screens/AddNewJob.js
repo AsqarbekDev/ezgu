@@ -212,7 +212,7 @@ function AddNewJob() {
           </div>
         </div>
       )}
-      <div className="p-2 pb-12">
+      <div className="p-2">
         <div className="bg-white shadow-xl rounded-lg px-2 py-4">
           <div className="flex flex-col items-center">
             <Avatar

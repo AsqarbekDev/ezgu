@@ -181,13 +181,17 @@ function ChatRoom() {
       setTimeout(() => {
         newMessageRef.current.scrollIntoView();
       }, 10);
+    } else {
+      setTimeout(() => {
+        bottomRef.current.scrollIntoView();
+      }, 10);
     }
   }, [newMessageID]);
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      bottomRef.current.scrollIntoView();
-    }, 10);
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }, 1000);
   };
 
   return (

@@ -346,7 +346,7 @@ function JobInfo() {
       {!job ? (
         <DefaultLoadingModul />
       ) : (
-        <div className="p-2 pb-12">
+        <div className="p-2">
           <div className="bg-white p-2 rounded-lg shadow-lg">
             <div className="flex items-center m-1">
               <Avatar
