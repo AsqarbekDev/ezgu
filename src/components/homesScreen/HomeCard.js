@@ -276,12 +276,12 @@ function HomeCard({
             <div className="flex items-center font-bold text-lg">
               <p className="text-[#34b804]">{rent}</p>
               <CurrencyRubleIcon
-                style={{ fontSize: 16, marginBottom: -2, color: "#c7a10a" }}
+                style={{ fontSize: 16, marginTop: -1, color: "#c7a10a" }}
               />
             </div>
             <div className="flex items-center font-bold text-sm">
               <WatchLaterIcon
-                style={{ fontSize: 16, marginBottom: -2, color: "#4a4847" }}
+                style={{ fontSize: 16, marginTop: -1, color: "#4a4847" }}
               />
               <p className="text-[#4a4847] ml-1">
                 {dayjs.unix(uploadedTime).format("HH:mm")}
@@ -296,7 +296,7 @@ function HomeCard({
               style={{
                 fontSize: 14,
                 marginLeft: -2,
-                marginTop: 4,
+                marginTop: 2,
                 marginRight: 3,
               }}
             />
@@ -307,7 +307,7 @@ function HomeCard({
                 isCopied ? "bg-gray-300" : "bg-white"
               } ml-2 border ${
                 !isCopied && "hover:bg-gray-200"
-              } border-black rounded-lg px-2 pb-[1px] text-xs`}
+              } border-black rounded-lg px-2 text-xs`}
             >
               {isCopied ? "Nusxalandi!" : "Nusxalash"}
             </button>
@@ -317,7 +317,7 @@ function HomeCard({
               style={{
                 fontSize: 16,
                 marginLeft: -3,
-                marginTop: 3,
+                marginTop: 2,
                 marginRight: 3,
               }}
             />
@@ -328,7 +328,7 @@ function HomeCard({
               <DirectionsTransitIcon
                 style={{
                   fontSize: 16,
-                  marginTop: 3,
+                  marginTop: 2,
                   marginLeft: -3,
                   marginRight: 3,
                 }}
