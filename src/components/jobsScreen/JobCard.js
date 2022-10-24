@@ -51,7 +51,7 @@ function JobCard({
             <div className="flex items-center -mt-[1px]">
               <PersonAddAlt1Icon style={{ fontSize: 14, color: "green" }} />
               <p className="text-xs ml-[2px] ">
-                {userWorkedWith}ta odamlarga ish bergan
+                {userWorkedWith}ta odamga ish bergan
               </p>
             </div>
           </div>
@@ -71,7 +71,9 @@ function JobCard({
         <div className="flex items-end justify-between ">
           <div className="flex items-end">
             <LocationCityIcon style={{ fontSize: 28, color: "#4a4847" }} />
-            <p className="font-bold text-sm text-[#4a4847]">{region}</p>
+            <p className="font-bold -mb-[0.6px] text-sm text-[#4a4847]">
+              {region}
+            </p>
           </div>
           <div className="flex flex-col items-center">
             <GroupsIcon style={{ fontSize: 28, color: "#4a4847" }} />
@@ -84,7 +86,7 @@ function JobCard({
               <AccessTimeFilledIcon
                 style={{ fontSize: 16, color: "#4a4847" }}
               />
-              <p className="text-sm font-bold text-[#4a4847]">
+              <p className="text-sm mt-[1px] font-bold text-[#4a4847]">
                 {dayjs.unix(startingTime).format("D/M/YYYY")}
               </p>
             </div>
