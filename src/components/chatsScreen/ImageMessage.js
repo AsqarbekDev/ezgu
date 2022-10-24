@@ -73,7 +73,7 @@ function ImageMessage({
               style={{ fontSize: 40, color: "white" }}
               className="absolute z-10 right-2 top-2 cursor-pointer"
             />
-            <img src={image} alt="object-contain" />
+            <img src={image} alt="" className="object-contain w-full h-full" />
           </div>
         </div>
       )}
