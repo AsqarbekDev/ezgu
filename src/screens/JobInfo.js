@@ -361,7 +361,7 @@ function JobInfo() {
                 <div className="flex items-center -mt-[4px]">
                   <PersonAddAlt1Icon style={{ fontSize: 14, color: "green" }} />
                   <p className="text-xs ml-[2px] ">
-                    {job?.userWorkedWith}ta odamlarga ish bergan
+                    {job?.userWorkedWith}ta odamga ish bergan
                   </p>
                 </div>
               </div>
@@ -388,7 +388,7 @@ function JobInfo() {
                 <CurrencyRubleIcon
                   style={{
                     fontSize: 18,
-                    marginTop: 2,
+                    marginTop: -1,
                     color: "#c7a10a",
                   }}
                 />

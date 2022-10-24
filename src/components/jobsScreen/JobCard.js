@@ -84,9 +84,9 @@ function JobCard({
           <div className="flex items-center">
             <div className="flex flex-col items-end mr-2 mt-1">
               <AccessTimeFilledIcon
-                style={{ fontSize: 16, color: "#4a4847", marginTop: -1 }}
+                style={{ fontSize: 16, color: "#4a4847", marginTop: -2 }}
               />
-              <p className="text-sm mt-[1px] font-bold text-[#4a4847]">
+              <p className="text-sm mt-[2px] font-bold text-[#4a4847]">
                 {dayjs.unix(startingTime).format("D/M/YYYY")}
               </p>
             </div>

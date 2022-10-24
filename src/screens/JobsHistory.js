@@ -139,7 +139,7 @@ function JobsHistory() {
       <div className="fixed w-full z-30 flex items-center">
         <button
           onClick={() => setShowMyAdds(false)}
-          className={`flex-1 pb-1 pt-2 bg-gray-200 -mt-1 ${
+          className={`flex-1 pb-3 pt-4 font-bold bg-gray-200 -mt-1 ${
             showMyAdds
               ? "border-gray-200 border-b-2"
               : "border-gray-400 border-b-2"
@@ -149,7 +149,7 @@ function JobsHistory() {
         </button>
         <button
           onClick={() => setShowMyAdds(true)}
-          className={`flex-1 pb-1 pt-2 bg-gray-200 -mt-1 ${
+          className={`flex-1 pb-3 pt-4 font-bold bg-gray-200 -mt-1 ${
             showMyAdds
               ? "border-gray-400 border-b-2"
               : "border-gray-200 border-b-2"
@@ -158,7 +158,7 @@ function JobsHistory() {
           Bergan e'lonlarim
         </button>
       </div>
-      <div className="pt-[34px]">
+      <div className="pt-[50px]">
         {showMyAdds
           ? iAddedJobs?.map(
               (

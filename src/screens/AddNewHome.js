@@ -528,7 +528,7 @@ function AddNewHome() {
           <div className="flex items-center mt-4">
             <CurrencyRubleIcon style={{ fontSize: 18 }} />
             <input
-              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Oylik to'lov narxini kiriting..."
               type="number"
               value={salary}
@@ -544,7 +544,7 @@ function AddNewHome() {
           <div className="flex items-center mt-4">
             <PinDropIcon style={{ fontSize: 20 }} />
             <input
-              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Uy manzilini kiriting..."
               type="text"
               maxLength={100}
@@ -559,7 +559,7 @@ function AddNewHome() {
           <div className="flex items-center mt-4">
             <MessageOutlinedIcon style={{ fontSize: 18 }} />
             <textarea
-              className="ml-2 text-sm border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 text-sm border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Kommentariya qoldiring..."
               type="text"
               maxLength={300}
@@ -664,7 +664,7 @@ function AddNewHome() {
               </p>
             </>
           )}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-6 mb-2">
             <button
               onClick={handleSubmit}
               className="bg-black text-white my-2 text-sm py-1 rounded-lg w-[60%]"

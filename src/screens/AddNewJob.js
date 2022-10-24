@@ -230,7 +230,7 @@ function AddNewJob() {
           <div className="flex items-center mt-4">
             <DriveFileRenameOutlineIcon style={{ fontSize: 20 }} />
             <input
-              className="ml-2 border border-black outline-[#0fdbff] rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 border border-black outline-[#0fdbff] rounded-lg py-1 px-2 w-full"
               placeholder="Ish nomini kiriting..."
               type="text"
               maxLength={100}
@@ -245,7 +245,7 @@ function AddNewJob() {
           <div className="flex items-center mt-4">
             <CurrencyRubleIcon style={{ fontSize: 18 }} />
             <input
-              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="2000..."
               type="number"
               value={salary}
@@ -261,7 +261,7 @@ function AddNewJob() {
           <div className="flex items-center mt-4">
             <GroupsIcon style={{ fontSize: 20 }} />
             <input
-              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Nechta ishchi kerak?..."
               type="number"
               value={workersCount}
@@ -277,7 +277,7 @@ function AddNewJob() {
           <div className="flex items-center mt-4">
             <PinDropIcon style={{ fontSize: 20 }} />
             <input
-              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Ishlash manzilini kiriting..."
               type="text"
               maxLength={100}
@@ -292,7 +292,7 @@ function AddNewJob() {
           <div className="flex items-center mt-4">
             <MessageOutlinedIcon style={{ fontSize: 18 }} />
             <textarea
-              className="ml-2 text-sm border border-black outline-[#0fdbff]  rounded-lg pt-[1px] pb-1 px-2 w-full"
+              className="ml-2 text-sm border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Ish haqida kommentariya qoldiring..."
               type="text"
               maxLength={300}
@@ -428,7 +428,7 @@ function AddNewJob() {
               </p>
             </>
           )}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-6 mb-2">
             <button
               onClick={handleSubmit}
               className="bg-black text-white my-2 text-sm py-1 rounded-lg w-[60%]"

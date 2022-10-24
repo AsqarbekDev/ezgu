@@ -68,7 +68,7 @@ function MyJobAddsCard() {
         onClick={() => setOpen(!open)}
         className="cursor-pointer flex items-center pt-1 pb-2 justify-center bg-gray-200"
       >
-        <p className="font-[700] text-sm">
+        <p className="font-[700] text-sm -mb-[2px]">
           Ish berish uchun e'lonlaringiz soni {jobs.length}ta
         </p>
         {open ? (

@@ -345,7 +345,7 @@ function HomeCard({
             <MessageIcon
               style={{
                 fontSize: 13,
-                marginTop: 3.6,
+                marginTop: 2,
                 marginLeft: -1,
                 marginRight: 4,
               }}
