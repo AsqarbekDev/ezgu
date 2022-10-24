@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { selectChats } from "../features/chatsSlice";
 
-function BottomNavigation() {
+function BottomNavigation({ jobId }) {
   const [currentScreen, setCurrentScreen] = useState("/");
   const [newMessages, setNewMessages] = useState([]);
   const location = useLocation();
@@ -46,6 +46,7 @@ function BottomNavigation() {
     <div
       className={`${
         currentScreen === "/" ||
+        currentScreen === `/jobs/${jobId}` ||
         currentScreen === "/homes" ||
         currentScreen === "/add" ||
         currentScreen === "/loading/add" ||
@@ -57,8 +58,11 @@ function BottomNavigation() {
           : "hidden"
       } fixed bottom-0 z-50 w-full flex items-center justify-between bg-white border-t`}
     >
-      <Link className="iconContainer" to="/">
-        {currentScreen === "/" ? (
+      <Link
+        className="iconContainer"
+        to={user?.currentJob ? `/jobs/${user.currentJob}` : "/"}
+      >
+        {currentScreen === "/" || currentScreen === `/jobs/${jobId}` ? (
           <WorkIcon style={{ fontSize: 30 }} />
         ) : (
           <WorkOutlineIcon style={{ fontSize: 30 }} />

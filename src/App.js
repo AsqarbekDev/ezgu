@@ -14,7 +14,12 @@ import SignUp from "./screens/SignUp";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useDispatch, useSelector } from "react-redux";
-import { login, selectUser, setWaiting } from "./features/userSlice";
+import {
+  login,
+  selectUser,
+  selectWaiting,
+  setWaiting,
+} from "./features/userSlice";
 import SignUpwithEmail from "./screens/SignUpwithEmail";
 import { useEffect } from "react";
 import { setNotifications } from "./features/notificationsSlice";
@@ -46,14 +51,18 @@ import {
   setMessagingUsers,
 } from "./features/chatsSlice";
 import BottomNavigation from "./components/BottomNavigation";
+import { setJobs, setMyAddedJobs } from "./features/jobsSlice";
+import { setHomes, setMyAddedHomes } from "./features/homesSlice";
 
 function App() {
   const user = useSelector(selectUser);
   const chatRooms = useSelector(selectChatRooms);
+  const waiting = useSelector(selectWaiting);
   const dispatch = useDispatch();
   const UserCurrent = auth?.currentUser;
 
   useEffect(() => {
+    //Updating User LastSeen
     if (auth?.currentUser?.uid) {
       const updateSeen = async () => {
         await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
@@ -74,6 +83,330 @@ function App() {
   }, [UserCurrent]);
 
   useEffect(() => {
+    // Getting Jobs
+    async function getDataFromDB() {
+      if (
+        (!waiting && !auth?.currentUser?.uid) ||
+        (!waiting && !user?.country && !user?.currentJob)
+      ) {
+        const q = query(
+          collection(db, "jobs"),
+          where("disabled", "==", false),
+          where("startingTime", ">", dayjs().unix() + 3600)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const allJobs = [];
+        querySnapshot.forEach((doc) => {
+          allJobs.push({
+            id: doc.id,
+            jobName: doc.data().jobName,
+            salary: doc.data().salary,
+            workersCount: doc.data().workersCount,
+            currentWorkers: doc.data().currentWorkers,
+            workingPlace: doc.data().workingPlace,
+            comment: doc.data().comment,
+            startingTime: doc.data().startingTime,
+            endingTime: doc.data().endingTime,
+            line: doc.data().line,
+            station: doc.data().station,
+            userID: doc.data().userID,
+            userName: doc.data().userName,
+            userImage: doc.data().userImage,
+            userEmail: doc.data().userEmail,
+            userPhoneNumber: doc.data().userPhoneNumber,
+            country: doc.data().country,
+            region: doc.data().region,
+            userWorkedWith: doc.data().userWorkedWith,
+            uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
+          });
+        });
+        dispatch(setJobs(allJobs));
+      } else if (!waiting && user?.country && !user?.currentJob) {
+        const q = query(
+          collection(db, "jobs"),
+          where("country", "==", user.country),
+          where("region", "==", user.region),
+          where("startingTime", ">", dayjs().unix() + 3600),
+          where("disabled", "==", false)
+        );
+        const querySnapshot = await getDocs(q);
+        const allJobs = [];
+
+        querySnapshot.forEach((doc) => {
+          allJobs.push({
+            id: doc.id,
+            jobName: doc.data().jobName,
+            salary: doc.data().salary,
+            workersCount: doc.data().workersCount,
+            currentWorkers: doc.data().currentWorkers,
+            workingPlace: doc.data().workingPlace,
+            comment: doc.data().comment,
+            startingTime: doc.data().startingTime,
+            endingTime: doc.data().endingTime,
+            line: doc.data().line,
+            station: doc.data().station,
+            userID: doc.data().userID,
+            userName: doc.data().userName,
+            userImage: doc.data().userImage,
+            userEmail: doc.data().userEmail,
+            userPhoneNumber: doc.data().userPhoneNumber,
+            country: doc.data().country,
+            region: doc.data().region,
+            userWorkedWith: doc.data().userWorkedWith,
+            uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
+          });
+        });
+
+        dispatch(setJobs(allJobs));
+      }
+    }
+
+    getDataFromDB();
+  }, [user?.region, user?.country, user?.currentJob, dispatch, waiting]);
+
+  useEffect(() => {
+    // Getting Homes
+    async function getDataFromDB() {
+      if (
+        (!waiting && !auth?.currentUser?.uid) ||
+        (!waiting && !user?.country)
+      ) {
+        const q = query(
+          collection(db, "homes"),
+          where("disabled", "==", false),
+          where("uploadedTime", ">", dayjs().unix() - 2592000)
+        );
+        const querySnapshot = await getDocs(q);
+        let allHomes = [];
+
+        querySnapshot.forEach((doc) => {
+          allHomes.push({
+            id: doc.id,
+            rent: doc.data().rent,
+            location: doc.data().location,
+            comment: doc.data().comment,
+            image1: doc.data().image1,
+            image2: doc.data().image2,
+            image3: doc.data().image3,
+            image4: doc.data().image4,
+            line: doc.data().line,
+            station: doc.data().station,
+            userID: doc.data().userID,
+            userName: doc.data().userName,
+            userImage: doc.data().userImage,
+            userEmail: doc.data().userEmail,
+            userPhoneNumber: doc.data().userPhoneNumber,
+            userRegion: doc.data().userRegion,
+            country: doc.data().country,
+            region: doc.data().region,
+            uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
+          });
+        });
+
+        let highKeyArray = [];
+        for (let i = 0; i < allHomes.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allHomes.map((home, index) => {
+            if (highest) {
+              if (
+                home.uploadedTime > highest &&
+                !highKeyArray.includes(index)
+              ) {
+                highKey = index;
+                highest = home.uploadedTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = home.uploadedTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allHomesFiltered = [];
+        highKeyArray.map((index) => allHomesFiltered.push(allHomes[index]));
+
+        dispatch(setHomes(allHomesFiltered));
+      } else if (!waiting && user?.country) {
+        const q = query(
+          collection(db, "homes"),
+          where("country", "==", user.country),
+          where("region", "==", user.region),
+          where("disabled", "==", false),
+          where("uploadedTime", ">", dayjs().unix() - 2592000)
+        );
+        const querySnapshot = await getDocs(q);
+        let allHomes = [];
+
+        querySnapshot.forEach((doc) => {
+          allHomes.push({
+            id: doc.id,
+            rent: doc.data().rent,
+            location: doc.data().location,
+            comment: doc.data().comment,
+            image1: doc.data().image1,
+            image2: doc.data().image2,
+            image3: doc.data().image3,
+            image4: doc.data().image4,
+            line: doc.data().line,
+            station: doc.data().station,
+            userID: doc.data().userID,
+            userName: doc.data().userName,
+            userImage: doc.data().userImage,
+            userEmail: doc.data().userEmail,
+            userPhoneNumber: doc.data().userPhoneNumber,
+            userRegion: doc.data().userRegion,
+            country: doc.data().country,
+            region: doc.data().region,
+            uploadedTime: doc.data().uploadedTime,
+            deleted: doc.data().deleted,
+            disabled: doc.data().disabled,
+          });
+        });
+
+        let highKeyArray = [];
+        for (let i = 0; i < allHomes.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allHomes.map((home, index) => {
+            if (highest) {
+              if (
+                home.uploadedTime > highest &&
+                !highKeyArray.includes(index)
+              ) {
+                highKey = index;
+                highest = home.uploadedTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = home.uploadedTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allHomesFiltered = [];
+        highKeyArray.map((index) => allHomesFiltered.push(allHomes[index]));
+
+        dispatch(setHomes(allHomesFiltered));
+      }
+    }
+
+    getDataFromDB();
+  }, [user?.region, user?.country, dispatch, waiting]);
+
+  useEffect(() => {
+    //Listening for My Added Jobs
+    if (auth?.currentUser?.uid) {
+      const q = query(
+        collection(db, "jobs"),
+        where("userID", "==", auth?.currentUser?.uid),
+        where("disabled", "==", false),
+        where("endingTime", ">", dayjs().unix())
+      );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        let allJobs = [];
+        snapshot.forEach((doc) => {
+          allJobs.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        let highKeyArray = [];
+        for (let i = 0; i < allJobs.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allJobs.map((job, index) => {
+            if (highest) {
+              if (job.startingTime < highest && !highKeyArray.includes(index)) {
+                highKey = index;
+                highest = job.startingTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = job.startingTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allJobsFiltered = [];
+        highKeyArray.map((index) => allJobsFiltered.push(allJobs[index]));
+
+        dispatch(setMyAddedJobs(allJobsFiltered));
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [dispatch, UserCurrent]);
+
+  useEffect(() => {
+    //Listening for My Added Homes
+    if (auth?.currentUser?.uid) {
+      const q = query(
+        collection(db, "homes"),
+        where("userID", "==", auth?.currentUser?.uid),
+        where("disabled", "==", false)
+      );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const allHomes = [];
+        snapshot.forEach((doc) => {
+          allHomes.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        let highKeyArray = [];
+        for (let i = 0; i < allHomes.length; i++) {
+          let highest = null;
+          let highKey = null;
+          allHomes.map((home, index) => {
+            if (highest) {
+              if (
+                home.uploadedTime > highest &&
+                !highKeyArray.includes(index)
+              ) {
+                highKey = index;
+                highest = home.uploadedTime;
+              }
+            } else if (!highKeyArray.includes(index)) {
+              highKey = index;
+              highest = home.uploadedTime;
+            }
+            return null;
+          });
+          highKeyArray.push(highKey);
+        }
+
+        const allHomesFiltered = [];
+        highKeyArray.map((index) => allHomesFiltered.push(allHomes[index]));
+
+        dispatch(setMyAddedHomes(allHomesFiltered));
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [dispatch, UserCurrent]);
+
+  useEffect(() => {
+    //Listening to Messaging Users
     if (chatRooms) {
       chatRooms.map((chatRoom) => {
         const unsubscribe = onSnapshot(
@@ -103,6 +436,7 @@ function App() {
   }, [chatRooms, dispatch]);
 
   useEffect(() => {
+    //Listening to Messages
     if (chatRooms) {
       chatRooms.map((chatRoom) => {
         const q = query(
@@ -135,6 +469,7 @@ function App() {
   }, [dispatch, chatRooms]);
 
   useEffect(() => {
+    //Listening to ChatRooms
     if (auth?.currentUser?.uid) {
       const q = query(
         collection(db, "chats"),
@@ -163,6 +498,7 @@ function App() {
   }, [dispatch, UserCurrent]);
 
   useEffect(() => {
+    //Listening to User
     onAuthStateChanged(auth, async (userInfo) => {
       if (userInfo) {
         const unsub = onSnapshot(doc(db, "users", userInfo.uid), (docSnap) => {
@@ -197,15 +533,15 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+    //Getting TimedOutJobs
     if (auth?.currentUser?.uid) {
-      const getTimedOutJobs = async () => {
-        const q = query(
-          collection(db, "jobs"),
-          where("userID", "==", auth.currentUser.uid),
-          where("disabled", "==", false),
-          where("endingTime", "<", dayjs().unix())
-        );
-        const querySnapshot = await getDocs(q);
+      const q = query(
+        collection(db, "jobs"),
+        where("userID", "==", auth.currentUser.uid),
+        where("disabled", "==", false),
+        where("endingTime", "<", dayjs().unix())
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach(async (docSnap) => {
           await updateDoc(doc(db, "jobs", docSnap.id), {
             disabled: true,
@@ -227,16 +563,24 @@ function App() {
             timestamp: dayjs().unix(),
           });
         });
-      };
+      });
 
-      const getTimedOutHomes = async () => {
-        const q = query(
-          collection(db, "homes"),
-          where("userID", "==", auth.currentUser.uid),
-          where("deleted", "==", false),
-          where("uploadedTime", "<", dayjs().unix() - 2592000)
-        );
-        const querySnapshot = await getDocs(q);
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [user?.workedWith, UserCurrent]);
+
+  useEffect(() => {
+    //Getting TimedOutHomes
+    if (auth?.currentUser?.uid) {
+      const q = query(
+        collection(db, "homes"),
+        where("userID", "==", auth.currentUser.uid),
+        where("deleted", "==", false),
+        where("uploadedTime", "<", dayjs().unix() - 2592000)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach(async (docSnap) => {
           await updateDoc(doc(db, "homes", docSnap.id), {
             disabled: true,
@@ -257,13 +601,16 @@ function App() {
             timestamp: dayjs().unix(),
           });
         });
+      });
+
+      return () => {
+        unsubscribe();
       };
-      getTimedOutJobs();
-      getTimedOutHomes();
     }
-  }, [user?.workedWith, UserCurrent]);
+  }, [UserCurrent]);
 
   useEffect(() => {
+    //Listening to Notifications
     if (auth?.currentUser?.uid) {
       const q = query(
         collection(db, "notifications"),

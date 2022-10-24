@@ -2,65 +2,12 @@ import React, { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JobCard from "../jobsScreen/JobCard";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { useEffect } from "react";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
-import dayjs from "dayjs";
+import { selectMyAddedJobs } from "../../features/jobsSlice";
 
 function MyJobAddsCard() {
   const [open, setOpen] = useState(false);
-  const [jobs, setJobs] = useState([]);
-  const user = useSelector(selectUser);
-
-  useEffect(() => {
-    if (user) {
-      const q = query(
-        collection(db, "jobs"),
-        where("userID", "==", user.uid),
-        where("disabled", "==", false),
-        where("endingTime", ">", dayjs().unix())
-      );
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        let allJobs = [];
-        snapshot.forEach((doc) => {
-          allJobs.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-        });
-
-        let highKeyArray = [];
-        for (let i = 0; i < allJobs.length; i++) {
-          let highest = null;
-          let highKey = null;
-          allJobs.map((job, index) => {
-            if (highest) {
-              if (job.startingTime < highest && !highKeyArray.includes(index)) {
-                highKey = index;
-                highest = job.startingTime;
-              }
-            } else if (!highKeyArray.includes(index)) {
-              highKey = index;
-              highest = job.startingTime;
-            }
-            return null;
-          });
-          highKeyArray.push(highKey);
-        }
-
-        const allJobsFiltered = [];
-        highKeyArray.map((index) => allJobsFiltered.push(allJobs[index]));
-
-        setJobs(allJobsFiltered);
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
-  }, [user]);
+  const myAddedJobs = useSelector(selectMyAddedJobs);
 
   return (
     <div className="mt-1">
@@ -68,8 +15,8 @@ function MyJobAddsCard() {
         onClick={() => setOpen(!open)}
         className="cursor-pointer flex items-center pt-1 pb-2 justify-center bg-gray-200"
       >
-        <p className="font-[700] text-sm -mb-[2px]">
-          Ish berish uchun e'lonlaringiz soni {jobs.length}ta
+        <p className="font-[700] text-sm -mb-1">
+          Ish berish uchun e'lonlaringiz soni {myAddedJobs.length}ta
         </p>
         {open ? (
           <ExpandLessIcon className="-mb-1" />
@@ -79,7 +26,7 @@ function MyJobAddsCard() {
       </div>
       <div>
         {open &&
-          jobs?.map(
+          myAddedJobs?.map(
             (
               {
                 id,

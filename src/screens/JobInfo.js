@@ -9,14 +9,11 @@ import AdminUserBanCard from "../components/jobsScreen/AdminUserBanCard";
 import EmailIcon from "@mui/icons-material/Email";
 import BlockIcon from "@mui/icons-material/Block";
 import DefaultLoadingModul from "../components/DefaultLoadingModul";
-import { selectCurrentShowing, selectJobs } from "../features/jobsSlice";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { selectUser } from "../features/userSlice";
+import { selectUser, selectWaiting } from "../features/userSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setCurrentShowing } from "../features/jobsSlice";
 import {
   addDoc,
   arrayRemove,
@@ -24,7 +21,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   onSnapshot,
   setDoc,
   updateDoc,
@@ -32,6 +28,7 @@ import {
 import { db } from "../firebase";
 import { useState } from "react";
 import ExitHeader from "../components/ExitHeader";
+import BottomNavigation from "../components/BottomNavigation";
 
 function JobInfo() {
   const [job, setJob] = useState(null);
@@ -43,107 +40,101 @@ function JobInfo() {
   const [showBanErrorModul, setShowBanErrorModul] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [showBan, setShowBan] = useState(false);
-  const jobs = useSelector(selectJobs);
-  const currentJob = useSelector(selectCurrentShowing);
+  const [getNavigate, setGetNavigate] = useState(false);
+  const [jobDone, setJobDone] = useState(false);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { jobId } = useParams();
+  const waiting = useSelector(selectWaiting);
 
   useEffect(() => {
-    if (!user?.currentJob && currentJob) {
-      setJob(currentJob);
-    }
-  }, [user?.currentJob, currentJob]);
-
-  useEffect(() => {
-    if (user?.currentJob && jobId === user?.currentJob) {
-      const getUserJob = async () => {
-        const docSnap = await getDoc(doc(db, "jobs", user.currentJob));
-        if (docSnap.exists()) {
-          if (docSnap.data().deleted === false) {
-            if (docSnap.data().currentWorkers.includes(user.uid)) {
-              if (
-                docSnap.data().disabled === false &&
-                docSnap.data().endingTime > dayjs().unix()
-              ) {
-                setJob({
-                  id: docSnap.id,
-                  ...docSnap.data(),
-                });
-              } else {
-                await updateDoc(doc(db, "users", user.uid), {
-                  currentJob: "",
-                });
-                await addDoc(collection(db, "notifications"), {
-                  userID: docSnap.data().userID,
-                  userImage: docSnap.data().userImage,
-                  userName: docSnap.data().userName,
-                  notifyName: docSnap.data().jobName,
-                  notifyID: docSnap.id,
-                  message: "Ishni muvaffaqiyat tamomladingiz!",
-                  to: user.uid,
-                  from: "jobs",
-                  messageType: "success",
-                  seen: false,
-                  timestamp: dayjs().unix(),
-                });
-                navigate("/");
-              }
-            } else {
-              await updateDoc(doc(db, "users", user.uid), {
-                currentJob: "",
-                workedJobs: user.workedJobs - 1,
-              });
-              navigate("/");
-            }
-          } else {
-            await updateDoc(doc(db, "users", user.uid), {
+    if (getNavigate) {
+      if (user?.currentJob) {
+        if (jobDone) {
+          const updateUserDone = async () => {
+            await updateDoc(doc(db, "users", user?.uid), {
               currentJob: "",
-              workedJobs: user.workedJobs - 1,
             });
-            navigate("/");
-          }
+          };
+          updateUserDone();
         } else {
-          await updateDoc(doc(db, "users", user.uid), {
-            currentJob: "",
-            workedJobs: user.workedJobs - 1,
-          });
-          navigate("/");
+          const updateUser = async () => {
+            await updateDoc(doc(db, "users", user?.uid), {
+              currentJob: "",
+              workedJobs: user?.workedJobs - 1,
+            });
+          };
+          updateUser();
         }
-      };
-      getUserJob();
-    } else if (jobs && jobs?.filter((job) => job.id === jobId).length !== 0) {
-      dispatch(setCurrentShowing(jobId));
-    } else if (jobId) {
-      const getJobDB = async () => {
-        const docSnap = await getDoc(doc(db, "jobs", jobId));
-        if (docSnap.exists()) {
-          setJob({
-            id: docSnap.id,
-            ...docSnap.data(),
-          });
-        } else {
-          navigate("/");
-        }
-      };
-      getJobDB();
-    } else {
+      }
       navigate("/");
     }
-
-    return () => {
-      dispatch(setCurrentShowing(null));
-    };
   }, [
-    dispatch,
-    jobId,
-    jobs,
+    getNavigate,
+    jobDone,
     navigate,
     user?.currentJob,
     user?.uid,
     user?.workedJobs,
   ]);
+
+  useEffect(() => {
+    if (!waiting) {
+      const unsubscribe = onSnapshot(
+        doc(db, "jobs", jobId),
+        async (snapshot) => {
+          if (snapshot.exists()) {
+            if (user?.currentJob) {
+              if (snapshot.data().deleted === false) {
+                if (snapshot.data().currentWorkers.includes(user.uid)) {
+                  if (
+                    snapshot.data().disabled === false &&
+                    snapshot.data().endingTime > dayjs().unix()
+                  ) {
+                    setJob({
+                      id: snapshot.id,
+                      ...snapshot.data(),
+                    });
+                  } else {
+                    setJobDone(true);
+                    await addDoc(collection(db, "notifications"), {
+                      userID: snapshot.data().userID,
+                      userImage: snapshot.data().userImage,
+                      userName: snapshot.data().userName,
+                      notifyName: snapshot.data().jobName,
+                      notifyID: snapshot.id,
+                      message: "Ishni muvaffaqiyat tamomladingiz!",
+                      to: user.uid,
+                      from: "jobs",
+                      messageType: "success",
+                      seen: false,
+                      timestamp: dayjs().unix(),
+                    });
+                    setGetNavigate(true);
+                  }
+                } else {
+                  setGetNavigate(true);
+                }
+              } else {
+                setGetNavigate(true);
+              }
+            } else {
+              setJob({
+                id: snapshot.id,
+                ...snapshot.data(),
+              });
+            }
+          } else {
+            setGetNavigate(true);
+          }
+        }
+      );
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [jobId, user?.currentJob, user?.uid, waiting]);
 
   useEffect(() => {
     if (job) {
@@ -292,8 +283,11 @@ function JobInfo() {
   };
 
   return (
-    <div>
-      <ExitHeader screenName="Ish haqida malumotlar" />
+    <div className="pb-12">
+      <ExitHeader
+        myjob={user?.currentJob ? true : false}
+        screenName="Ish haqida malumotlar"
+      />
       {loading && <LoadingModul />}
       {showModul && (
         <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
@@ -552,6 +546,7 @@ function JobInfo() {
           </div>
         </div>
       )}
+      <BottomNavigation jobId={jobId} />
     </div>
   );
 }
