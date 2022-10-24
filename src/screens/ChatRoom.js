@@ -191,7 +191,7 @@ function ChatRoom() {
   const scrollToBottom = () => {
     setTimeout(() => {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }, 1000);
+    }, 400);
   };
 
   return (

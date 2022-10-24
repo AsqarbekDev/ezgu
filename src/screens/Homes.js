@@ -41,6 +41,7 @@ function Homes() {
             userImage: doc.data().userImage,
             userEmail: doc.data().userEmail,
             userPhoneNumber: doc.data().userPhoneNumber,
+            userRegion: doc.data().userRegion,
             country: doc.data().country,
             region: doc.data().region,
             uploadedTime: doc.data().uploadedTime,
@@ -107,6 +108,7 @@ function Homes() {
             userImage: doc.data().userImage,
             userEmail: doc.data().userEmail,
             userPhoneNumber: doc.data().userPhoneNumber,
+            userRegion: doc.data().userRegion,
             country: doc.data().country,
             region: doc.data().region,
             uploadedTime: doc.data().uploadedTime,
@@ -172,6 +174,7 @@ function Homes() {
                 comment,
                 uploadedTime,
                 userPhoneNumber,
+                userRegion,
               },
               index
             ) => (
@@ -192,6 +195,7 @@ function Homes() {
                 image3={image3}
                 image4={image4}
                 userID={userID}
+                userRegion={userRegion}
               />
             )
           )}

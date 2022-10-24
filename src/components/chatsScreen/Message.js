@@ -62,7 +62,9 @@ function Message({
           mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
         } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] px-3 pt-1 pb-[4px] rounded-2xl`}
       >
-        <span className="overflow-hidden">{filterMessage(message)}</span>
+        <span className="overflow-hidden text-lg">
+          {filterMessage(message)}
+        </span>
         <span
           className={`${
             mine ? "text-gray-600" : "text-gray-300"

@@ -8,6 +8,7 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import MessageIcon from "@mui/icons-material/Message";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import "./HomeCard.css";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
@@ -33,6 +34,7 @@ function HomeCard({
   uploadedTime,
   userPhoneNumber,
   history,
+  userRegion,
 }) {
   const target = useRef(null);
 
@@ -311,6 +313,17 @@ function HomeCard({
             >
               {isCopied ? "Nusxalandi!" : "Nusxalash"}
             </button>
+          </div>
+          <div className="flex items-start text-sm font-[600] mt-[2px]">
+            <LocationCityIcon
+              style={{
+                fontSize: 16,
+                marginLeft: -3,
+                marginTop: 2,
+                marginRight: 3,
+              }}
+            />
+            <p className="overflow-hidden">{userRegion}</p>
           </div>
           <div className="flex items-start text-sm font-[600] mt-[2px]">
             <PlaceIcon

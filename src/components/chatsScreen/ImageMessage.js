@@ -101,7 +101,7 @@ function ImageMessage({
                 <DefaultLoadingModul />
               </div>
             )}
-            <p ref={textRef} className="px-2 overflow-hidden">
+            <p ref={textRef} className="px-2 overflow-hidden text-lg">
               {filterMessage(message)}
             </p>
           </div>
