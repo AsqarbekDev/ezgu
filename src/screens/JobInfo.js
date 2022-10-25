@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import UserCard from "../components/jobsScreen/UserCard";
@@ -360,16 +360,16 @@ function JobInfo() {
                 </div>
               </div>
               {job?.userID !== user?.uid && (
-                <div
+                <IconButton
                   onClick={() =>
                     user
                       ? job && navigate(`/chats/${job.userID}`)
                       : navigate("/signUp")
                   }
-                  className="mx-2 cursor-pointer rounded-md overflow-hidden"
+                  size="small"
                 >
-                  <EmailIcon style={{ fontSize: 38 }} />
-                </div>
+                  <EmailIcon style={{ fontSize: 38, color: "black" }} />
+                </IconButton>
               )}
             </div>
             <div className="space-y-1 text-lg">

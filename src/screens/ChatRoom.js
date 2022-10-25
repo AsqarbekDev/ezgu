@@ -1,4 +1,12 @@
-import { Avatar, TextField } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import React from "react";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import CloseIcon from "@mui/icons-material/Close";
@@ -6,6 +14,7 @@ import SendIcon from "@mui/icons-material/Send";
 import WestIcon from "@mui/icons-material/West";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Message from "../components/chatsScreen/Message";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImageMessage from "../components/chatsScreen/ImageMessage";
 import { useRef } from "react";
 import { useState } from "react";
@@ -35,6 +44,15 @@ function ChatRoom() {
   const [isChatRoomExists, setIsChatRoomExists] = useState(false);
   const [chatRoomID, setChatRoomID] = useState(null);
   const [newMessageID, setNewMessageID] = useState(null);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     for (let i = 0; i < chats[chatRoomID]?.messages.length; i++) {
@@ -189,9 +207,11 @@ function ChatRoom() {
   }, [newMessageID]);
 
   const scrollToBottom = () => {
-    setTimeout(() => {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }, 400);
+    if (bottomRef?.current) {
+      setTimeout(() => {
+        bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      }, 400);
+    }
   };
 
   return (
@@ -199,14 +219,16 @@ function ChatRoom() {
       <div className="fixed top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
         <div
           onClick={() => navigate(-1)}
-          className="cursor-pointer w-12 h-14 flex items-center justify-center"
+          className="w-14 h-14 flex items-center justify-center"
         >
-          <WestIcon />
+          <IconButton size="medium">
+            <WestIcon style={{ color: "black" }} />
+          </IconButton>
         </div>
         <div>
           {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 ? (
             <StyledBadge
-              className="mr-2 ml-2"
+              className="mr-2"
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant="dot"
@@ -219,7 +241,7 @@ function ChatRoom() {
           ) : (
             <Avatar
               src={chats[chatRoomID]?.messagingUser.image}
-              className="mr-2 ml-2"
+              className="mr-2"
               alt={chats[chatRoomID]?.messagingUser.username}
             />
           )}
@@ -240,8 +262,60 @@ function ChatRoom() {
                   .format("HH:mm")}
           </p>
         </div>
-        <div className="cursor-pointer w-12 h-14 flex items-center justify-center">
-          <MoreVertIcon />
+        <div className="w-14 h-14 flex items-center justify-center">
+          <Tooltip title="Sozlamalar">
+            <IconButton
+              onClick={handleClick}
+              size="medium"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <MoreVertIcon style={{ color: "black" }} />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem onClick={() => console.log("clicked")}>
+              <ListItemIcon>
+                <DeleteForeverIcon fontSize="small" />
+              </ListItemIcon>
+              hammasini o'chirish
+            </MenuItem>
+          </Menu>
         </div>
       </div>
       <div>

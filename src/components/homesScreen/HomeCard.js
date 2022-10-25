@@ -1,9 +1,11 @@
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton, ListItemIcon } from "@mui/material";
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PlaceIcon from "@mui/icons-material/Place";
 import EmailIcon from "@mui/icons-material/Email";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import MessageIcon from "@mui/icons-material/Message";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
@@ -16,6 +18,8 @@ import { selectUser } from "../../features/userSlice";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 function HomeCard({
   id,
@@ -47,6 +51,20 @@ function HomeCard({
 
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    setAnchorEl(null);
+    setShowRemoveHomeModul(true);
+  };
 
   useEffect(() => {
     const newImages = [];
@@ -215,17 +233,42 @@ function HomeCard({
           />
           <h2 className="font-bold mx-2 flex-1 truncate">{userName}</h2>
           {userID === user?.uid && !history ? (
-            <DeleteForeverIcon
-              onClick={() => setShowRemoveHomeModul(true)}
-              style={{ fontSize: 28, cursor: "pointer" }}
-            />
+            <div>
+              <IconButton
+                onClick={handleClick}
+                size="medium"
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <MoreVertIcon style={{ color: "black" }} />
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={() => handleDelete()}>
+                  <ListItemIcon>
+                    <DeleteForeverIcon fontSize="small" />
+                  </ListItemIcon>
+                  o'chirish
+                </MenuItem>
+              </Menu>
+            </div>
           ) : !history ? (
-            <EmailIcon
+            <IconButton
               onClick={() =>
                 user ? navigate(`/chats/${userID}`) : navigate("/signUp")
               }
-              style={{ fontSize: 30, cursor: "pointer" }}
-            />
+              size="small"
+            >
+              <EmailIcon style={{ fontSize: 26, color: "black" }} />
+            </IconButton>
           ) : null}
         </div>
         <div

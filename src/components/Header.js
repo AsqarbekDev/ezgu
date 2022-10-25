@@ -6,6 +6,7 @@ import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { selectNotifications } from "../features/notificationsSlice";
+import { IconButton } from "@mui/material";
 
 function Header() {
   const location = useLocation();
@@ -55,10 +56,14 @@ function Header() {
           onClick={() => navigate("/notifications")}
           className={`${
             !user && "hidden"
-          } absolute right-4 top-0 p-1 cursor-pointer rounded-md overflow-hidden`}
+          } absolute right-0 z-10 w-14 h-14 flex items-center justify-center`}
         >
           <div className="relative">
-            <CircleNotificationsIcon style={{ fontSize: 30 }} />
+            <IconButton size="small">
+              <CircleNotificationsIcon
+                style={{ fontSize: 30, color: "black" }}
+              />
+            </IconButton>
             {newNotifications.length > 0 && (
               <div className="absolute -right-1 -top-1 bg-red-500 rounded-full px-[5px]">
                 <p className="text-white text-xs">{newNotifications.length}</p>

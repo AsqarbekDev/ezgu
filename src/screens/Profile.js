@@ -15,7 +15,14 @@ import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../features/userSlice";
-import { Avatar } from "@mui/material";
+import {
+  Avatar,
+  Divider,
+  ListItemButton,
+  ListItemText,
+  MenuItem,
+  Switch,
+} from "@mui/material";
 import defaultBgImage from "../assets/defaultBgImage.jpg";
 import {
   deleteObject,
@@ -471,64 +478,67 @@ function Profile() {
           accept="image/*"
         />
       </div>
-      <div className="px-3">
-        <div
+      <div>
+        <ListItemButton
           onClick={() => setShowUsernameModul(true)}
-          className="py-2 border-b border-gray-300 cursor-pointer"
+          component="a"
         >
-          <h4 className="text-lg font-[600] ml-1 truncate">
-            {user.username}{" "}
-            <span>
-              <EditIcon
-                style={{
-                  fontSize: 20,
-                  marginTop: -6,
-                  cursor: "pointer",
-                }}
-              />
-            </span>
-          </h4>
-          <p className="text-xs -mt-[4px] ml-1 truncate">{user.email}</p>
-        </div>
-        <div
-          onClick={() => setShowNumberModul(true)}
-          className="py-2 border-b border-gray-300 cursor-pointer"
-        >
-          <h4 className="text-lg font-[600] ml-1">
-            {user.phoneNumber || "Raqamingizni kiriting!"}{" "}
-            <span>
-              <EditIcon
-                style={{
-                  fontSize: 20,
-                  marginTop: -6,
-                  cursor: "pointer",
-                }}
-              />
-            </span>
-          </h4>
-          <p className="text-xs -mt-[4px] ml-1">Telefon raqamingiz</p>
-        </div>
-        <div
-          onClick={() => setShowRegionModul(true)}
-          className="py-2 border-b border-gray-300 cursor-pointer"
-        >
-          <h4 className="text-lg font-[600] ml-1 truncate">
-            {user.country || "Davlat va Regioningizni belgilang!"}{" "}
-            <span>
-              <EditIcon
-                style={{
-                  fontSize: 20,
-                  marginTop: -6,
-                  cursor: "pointer",
-                }}
-              />
-            </span>
-          </h4>
-          <p className="text-xs -mt-[4px] ml-1 truncate">
-            {user.region || "Region"}
-          </p>
-        </div>
-        <div className="py-2 px-2 border-b border-x border-gray-300 font-[600]">
+          <div className="px-1">
+            <h4 className="text-lg font-[600] truncate">
+              {user.username}{" "}
+              <span>
+                <EditIcon
+                  style={{
+                    fontSize: 20,
+                    marginTop: -6,
+                    cursor: "pointer",
+                  }}
+                />
+              </span>
+            </h4>
+            <p className="text-xs -mt-[4px] truncate">{user.email}</p>
+          </div>
+        </ListItemButton>
+        <Divider variant="middle" />
+        <ListItemButton onClick={() => setShowNumberModul(true)} component="a">
+          <div className="px-1">
+            <h4 className="text-lg font-[600]">
+              {user.phoneNumber || "Raqamingizni kiriting!"}{" "}
+              <span>
+                <EditIcon
+                  style={{
+                    fontSize: 20,
+                    marginTop: -6,
+                    cursor: "pointer",
+                  }}
+                />
+              </span>
+            </h4>
+            <p className="text-xs -mt-[4px]">Telefon raqamingiz</p>
+          </div>
+        </ListItemButton>
+        <Divider variant="middle" />
+        <ListItemButton onClick={() => setShowRegionModul(true)} component="a">
+          <div className="px-1">
+            <h4 className="text-lg font-[600] truncate">
+              {user.country || "Davlat va Regioningizni belgilang!"}{" "}
+              <span>
+                <EditIcon
+                  style={{
+                    fontSize: 20,
+                    marginTop: -6,
+                    cursor: "pointer",
+                  }}
+                />
+              </span>
+            </h4>
+            <p className="text-xs -mt-[4px] truncate">
+              {user.region || "Region"}
+            </p>
+          </div>
+        </ListItemButton>
+        <Divider variant="middle" />
+        <div className="py-2 px-2 mx-4 border-b border-x border-gray-300 font-[600]">
           <div className="flex items-center">
             <PersonAddAlt1Icon style={{ fontSize: 20, color: "green" }} />
             <p className="ml-2 text-green-700">
@@ -570,76 +580,59 @@ function Profile() {
             </p>
           </div>
         </div>
-        <p className="font-bold ml-1 pt-3">Sozlamalar</p>
-        <div className="flex items-center">
-          {darkMode ? (
-            <ToggleOnIcon
-              style={{
-                fontSize: 34,
-                marginTop: 1,
-                cursor: "pointer",
-              }}
-              onClick={() => setDarkMode(false)}
-            />
-          ) : (
-            <ToggleOffIcon
-              style={{ fontSize: 34, marginTop: 1, cursor: "pointer" }}
-              onClick={() => setDarkMode(true)}
-            />
-          )}
-          <div className="ml-[12px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Ilova Ranggi</p>
-          </div>
-        </div>
-        <div
+        <p className="font-bold ml-5 pt-3">Sozlamalar</p>
+        <ListItemButton onClick={() => setDarkMode(!darkMode)} component="a">
+          <Switch
+            color="default"
+            size="small"
+            style={{ color: darkMode ? "white" : "black" }}
+            checked={darkMode}
+            inputProps={{ "aria-label": "controlled" }}
+            className="-ml-1"
+          />
+          <p className="text-lg font-[600] ml-3">Ilova Ranggi</p>
+        </ListItemButton>
+        <Divider />
+        <ListItemButton
           onClick={() => navigate("/profile/jobsHistory")}
-          className="flex items-center cursor-pointer"
+          component="a"
         >
           <WorkHistoryIcon style={{ fontSize: 24, marginLeft: 4 }} />
-          <div className="ml-[18px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Ishlar Tarixi</p>
-          </div>
-        </div>
-        <div
+          <p className="text-lg font-[600] ml-5">Ishlar Tarixi</p>
+        </ListItemButton>
+        <Divider />
+        <ListItemButton
           onClick={() => navigate("/profile/homesHistory")}
-          className="flex items-center cursor-pointer"
+          component="a"
         >
           <DomainAddIcon style={{ fontSize: 24, marginLeft: 4 }} />
-          <div className="ml-[18px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Uy Ijaralari Tarixi</p>
-          </div>
-        </div>
-        <div className="flex items-center cursor-pointer">
+          <p className="text-lg font-[600] ml-5">Uy Ijaralari Tarixi</p>
+        </ListItemButton>
+        <Divider />
+        <ListItemButton component="a">
           <LanguageIcon style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }} />
-          <div className="ml-[18px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Tilni O'zgartirish</p>
-          </div>
-        </div>
-        <div className="flex items-center cursor-pointer">
+          <p className="text-lg font-[600] ml-5">Tilni O'zgartirish</p>
+        </ListItemButton>
+        <Divider />
+        <ListItemButton component="a">
           <HeadsetMicIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
-          <div className="ml-[18px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Yordam</p>
-          </div>
-        </div>
-        <div className="flex items-center cursor-pointer">
+          <p className="text-lg font-[600] ml-5">Yordam</p>
+        </ListItemButton>
+        <Divider />
+        <ListItemButton component="a">
           <PrivacyTipIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
-          <div className="ml-[18px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Ilova Qoidalari</p>
-          </div>
-        </div>
-        <div
-          onClick={() => setShowLogOutModul(true)}
-          className="flex items-center cursor-pointer"
-        >
+          <p className="text-lg font-[600] ml-5">Ilova Qoidalari</p>
+        </ListItemButton>
+        <Divider />
+        <ListItemButton onClick={() => setShowLogOutModul(true)} component="a">
           <LogoutIcon style={{ fontSize: 24, marginTop: 1, marginLeft: 5 }} />
-          <div className="ml-[17px] flex-1 py-2 border-b border-gray-300">
-            <p className="text-lg font-[600] ml-2">Tizimdan Chiqish</p>
-          </div>
-        </div>
+          <p className="text-lg font-[600] ml-5">Tizimdan Chiqish</p>
+        </ListItemButton>
+        <Divider />
       </div>
     </div>
   );
