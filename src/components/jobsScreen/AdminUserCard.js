@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -146,12 +146,13 @@ function AdminUserCard({
             <p className="text-xs -mt-[1px]">{phoneNumber}</p>
           )}
         </div>
-        <div className="relative">
-          <button
-            onClick={() => navigate(`/chats/${uid}`)}
-            className="absolute z-20 -top-[3px] right-[6.5px] rounded-sm overflow-hidden w-8 h-8"
-          ></button>
-          <SendIcon className="-rotate-45 -mt-[10px] mx-2" />
+        <div className="-mt-[6px] mr-1">
+          <IconButton onClick={() => navigate(`/chats/${uid}`)} size="small">
+            <SendIcon
+              style={{ fontSize: 22, color: "black" }}
+              className="-rotate-45"
+            />
+          </IconButton>
         </div>
         {jobEndingTime > dayjs().unix() && (
           <button

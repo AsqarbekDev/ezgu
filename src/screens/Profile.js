@@ -253,7 +253,7 @@ function Profile() {
   };
 
   return (
-    <div className="pb-[50px]">
+    <div className="pb-14">
       {loading && <LoadingModul />}
       {showErrorModul && (
         <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
@@ -434,7 +434,6 @@ function Profile() {
           style={{
             height: 120,
             width: 120,
-            cursor: "pointer",
           }}
           className="absolute z-20 overflow-hidden"
         />
@@ -579,7 +578,7 @@ function Profile() {
             style={{ color: darkMode ? "white" : "black" }}
             checked={darkMode}
             inputProps={{ "aria-label": "controlled" }}
-            className="-ml-1"
+            className="-ml-[3px]"
           />
           <p className="text-lg font-[600] ml-3">Ilova Ranggi</p>
         </ListItemButton>

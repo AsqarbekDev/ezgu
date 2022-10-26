@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import React from "react";
 import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from "react-router-dom";
@@ -13,17 +13,16 @@ function UserCard({ image, username, uid }) {
     <div className="flex items-center justify-between">
       <Avatar src={image} alt="Avatar" style={{ height: 36, width: 36 }} />
       <p className="ml-2 -mt-1 flex-1 font-bold truncate">{username}</p>
-
       {user?.uid !== uid && (
-        <div className="relative">
-          <button
-            onClick={() =>
-              user ? navigate(`/chats/${uid}`) : navigate("/signUp")
-            }
-            className="absolute z-20 -top-[3px] right-[10.2px] rounded-sm overflow-hidden w-8 h-8"
-          ></button>
-          <SendIcon className="-rotate-45 -mt-2 mx-3" />
-        </div>
+        <IconButton
+          onClick={() => navigate(user ? `/chats/${uid}` : "/signUp")}
+          size="small"
+        >
+          <SendIcon
+            style={{ fontSize: 22, color: "black" }}
+            className="-rotate-45"
+          />
+        </IconButton>
       )}
     </div>
   );

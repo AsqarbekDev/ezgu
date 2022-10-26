@@ -12,7 +12,7 @@ function Homes() {
       {!homes ? (
         <DefaultLoadingModul />
       ) : (
-        <div className="pb-12">
+        <div className="pb-14">
           {homes?.map(
             (
               {

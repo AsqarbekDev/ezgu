@@ -23,7 +23,7 @@ function Jobs() {
       {!jobs ? (
         <DefaultLoadingModul />
       ) : (
-        <div className="pb-12">
+        <div className="pb-14">
           {jobs?.map(
             (
               {

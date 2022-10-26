@@ -46,7 +46,7 @@ function BottomNavigation({ jobId }) {
   }, [location]);
 
   return (
-    <BottomNavigationM
+    <div
       className={`${
         currentScreen === "/" ||
         currentScreen === `/jobs/${jobId}` ||
@@ -59,93 +59,99 @@ function BottomNavigation({ jobId }) {
         currentScreen === "/loading/profile"
           ? ""
           : "hidden"
-      } fixed bottom-0 z-50 w-full flex items-center justify-between bg-white border-t`}
+      } fixed bottom-0 z-50 w-full bg-white`}
     >
-      <BottomNavigationAction
-        className="iconContainer"
-        onClick={() =>
-          navigate(user?.currentJob ? `/jobs/${user.currentJob}` : "/")
-        }
-        icon={
-          currentScreen === "/" || currentScreen === `/jobs/${jobId}` ? (
-            <WorkIcon style={{ fontSize: 30, color: "black" }} />
-          ) : (
-            <WorkOutlineIcon style={{ fontSize: 30, color: "black" }} />
-          )
-        }
-      />
-      <BottomNavigationAction
-        className="iconContainer"
-        onClick={() => navigate("/homes")}
-        icon={
-          currentScreen === "/homes" ? (
-            <AddHomeWorkIcon style={{ fontSize: 30, color: "black" }} />
-          ) : (
-            <AddHomeWorkOutlinedIcon style={{ fontSize: 30, color: "black" }} />
-          )
-        }
-      />
-      <BottomNavigationAction
-        className="iconContainer"
-        onClick={() => navigate(user?.emailVerified ? "/add" : "/loading/add")}
-        icon={
-          currentScreen === "/add" || currentScreen === "/loading/add" ? (
-            <AddCircleIcon style={{ fontSize: 30, color: "black" }} />
-          ) : (
-            <AddCircleOutlineIcon style={{ fontSize: 30, color: "black" }} />
-          )
-        }
-      />
-      <BottomNavigationAction
-        className="iconContainer"
-        onClick={() =>
-          navigate(user?.emailVerified ? "/chats" : "/loading/chats")
-        }
-        icon={
-          currentScreen === "/chats" || currentScreen === "/loading/chats" ? (
-            <div className="relative">
-              {newMessages.length > 0 && (
-                <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                  <p className="text-xs text-white px-[5.1px] py-[1px] -mb-[1px]}">
-                    {newMessages.length}
-                  </p>
-                </div>
-              )}
-              <QuestionAnswerIcon style={{ fontSize: 30, color: "black" }} />
-            </div>
-          ) : (
-            <div className="relative">
-              {newMessages.length > 0 && (
-                <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
-                  <p className="text-xs text-white px-[5.1px] py-[1px] -mb-[1px]">
-                    {newMessages.length}
-                  </p>
-                </div>
-              )}
-              <QuestionAnswerOutlinedIcon
+      <BottomNavigationM className="w-full flex items-center justify-between border-t">
+        <BottomNavigationAction
+          className="iconContainer"
+          onClick={() =>
+            navigate(user?.currentJob ? `/jobs/${user.currentJob}` : "/")
+          }
+          icon={
+            currentScreen === "/" || currentScreen === `/jobs/${jobId}` ? (
+              <WorkIcon style={{ fontSize: 30, color: "black" }} />
+            ) : (
+              <WorkOutlineIcon style={{ fontSize: 30, color: "black" }} />
+            )
+          }
+        />
+        <BottomNavigationAction
+          className="iconContainer"
+          onClick={() => navigate("/homes")}
+          icon={
+            currentScreen === "/homes" ? (
+              <AddHomeWorkIcon style={{ fontSize: 30, color: "black" }} />
+            ) : (
+              <AddHomeWorkOutlinedIcon
                 style={{ fontSize: 30, color: "black" }}
               />
-            </div>
-          )
-        }
-      />
-      <BottomNavigationAction
-        className="iconContainer"
-        onClick={() =>
-          navigate(user?.emailVerified ? "/profile" : "/loading/profile")
-        }
-        icon={
-          currentScreen === "/profile" ||
-          currentScreen === "/loading/profile" ? (
-            <AccountCircleIcon style={{ fontSize: 30, color: "black" }} />
-          ) : (
-            <AccountCircleOutlinedIcon
-              style={{ fontSize: 30, color: "black" }}
-            />
-          )
-        }
-      />
-    </BottomNavigationM>
+            )
+          }
+        />
+        <BottomNavigationAction
+          className="iconContainer"
+          onClick={() =>
+            navigate(user?.emailVerified ? "/add" : "/loading/add")
+          }
+          icon={
+            currentScreen === "/add" || currentScreen === "/loading/add" ? (
+              <AddCircleIcon style={{ fontSize: 30, color: "black" }} />
+            ) : (
+              <AddCircleOutlineIcon style={{ fontSize: 30, color: "black" }} />
+            )
+          }
+        />
+        <BottomNavigationAction
+          className="iconContainer"
+          onClick={() =>
+            navigate(user?.emailVerified ? "/chats" : "/loading/chats")
+          }
+          icon={
+            currentScreen === "/chats" || currentScreen === "/loading/chats" ? (
+              <div className="relative">
+                {newMessages.length > 0 && (
+                  <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
+                    <p className="text-xs text-white px-[5.1px] py-[1px] -mb-[1px]}">
+                      {newMessages.length}
+                    </p>
+                  </div>
+                )}
+                <QuestionAnswerIcon style={{ fontSize: 30, color: "black" }} />
+              </div>
+            ) : (
+              <div className="relative">
+                {newMessages.length > 0 && (
+                  <div className="absolute -top-3 -right-2 bg-blue-500 rounded-full flex items-center justify-center m-1">
+                    <p className="text-xs text-white px-[5.1px] py-[1px] -mb-[1px]">
+                      {newMessages.length}
+                    </p>
+                  </div>
+                )}
+                <QuestionAnswerOutlinedIcon
+                  style={{ fontSize: 30, color: "black" }}
+                />
+              </div>
+            )
+          }
+        />
+        <BottomNavigationAction
+          className="iconContainer"
+          onClick={() =>
+            navigate(user?.emailVerified ? "/profile" : "/loading/profile")
+          }
+          icon={
+            currentScreen === "/profile" ||
+            currentScreen === "/loading/profile" ? (
+              <AccountCircleIcon style={{ fontSize: 30, color: "black" }} />
+            ) : (
+              <AccountCircleOutlinedIcon
+                style={{ fontSize: 30, color: "black" }}
+              />
+            )
+          }
+        />
+      </BottomNavigationM>
+    </div>
   );
 }
 

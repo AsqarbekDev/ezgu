@@ -7,7 +7,7 @@ import MyHomeAddsCard from "../components/addScreen/MyHomeAddsCard";
 
 function Add() {
   return (
-    <div className="pb-12">
+    <div className="pb-14">
       <div className="mb-2">
         <AddNewWidget
           logo={addjobicon}

@@ -283,7 +283,7 @@ function JobInfo() {
   };
 
   return (
-    <div className="pb-12">
+    <div className="pb-14">
       <ExitHeader
         myjob={user?.currentJob ? true : false}
         screenName="Ish haqida malumotlar"

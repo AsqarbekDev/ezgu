@@ -65,7 +65,7 @@ function Header() {
               />
             </IconButton>
             {newNotifications.length > 0 && (
-              <div className="absolute -right-1 -top-1 bg-red-500 rounded-full px-[5px]">
+              <div className="absolute right-1 top-1 bg-red-500 rounded-full px-[5px]">
                 <p className="text-white text-xs">{newNotifications.length}</p>
               </div>
             )}

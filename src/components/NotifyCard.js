@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import React from "react";
 import SendIcon from "@mui/icons-material/Send";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
@@ -52,43 +52,47 @@ function NotifyCard({
         />
         <h5 className="font-[600] text-lg truncate flex-1 ml-2">{userName}</h5>
         {userID !== user.uid && (
-          <div className="relative">
-            <button
-              onClick={() => navigate(`/chats/${userID}`)}
-              className="absolute z-20 -top-[3px] right-[8px] rounded-sm overflow-hidden w-8 h-8"
-            ></button>
+          <IconButton onClick={() => navigate(`/chats/${userID}`)} size="small">
             <SendIcon
-              style={{ fontSize: 22 }}
-              className="-rotate-45 -mt-2 mx-3"
+              style={{ fontSize: 22, color: "black" }}
+              className="-rotate-45"
             />
-          </div>
+          </IconButton>
         )}
         {messageType === "removed" || messageType === "unbanned" ? (
-          <button
-            onClick={() => navigate(`/jobs/${notifyID}`)}
-            className="w-8 h-8 rounded-sm overflow-hidden -mb-[1px]"
-          >
-            <WorkIcon style={{ fontSize: 26 }} />
-          </button>
+          <div className="-mb-1">
+            <IconButton
+              onClick={() => navigate(`/jobs/${notifyID}`)}
+              size="small"
+            >
+              <WorkIcon style={{ fontSize: 26, color: "black" }} />
+            </IconButton>
+          </div>
         ) : messageType === "banned" ? (
-          <div className="w-8 h-8 rounded-sm overflow-hidden -mb-[6px]">
-            <BlockIcon style={{ fontSize: 26 }} />
+          <div className="-mb-1">
+            <IconButton size="small">
+              <BlockIcon style={{ fontSize: 26, color: "black" }} />
+            </IconButton>
           </div>
         ) : messageType === "deletedHome" ? null : (
-          <button
-            onClick={() => navigate("/profile/jobsHistory")}
-            className="w-8 h-8 rounded-sm overflow-hidden -mb-[1px]"
-          >
-            <WorkHistoryIcon style={{ fontSize: 26 }} />
-          </button>
+          <div className="-mb-1">
+            <IconButton
+              size="small"
+              onClick={() => navigate("/profile/jobsHistory")}
+            >
+              <WorkHistoryIcon style={{ fontSize: 26, color: "black" }} />
+            </IconButton>
+          </div>
         )}
         {from === "homes" && (
-          <button
-            onClick={() => navigate("/profile/homesHistory")}
-            className="w-8 h-8 rounded-sm overflow-hidden -mb-[1px]"
-          >
-            <DomainAddIcon style={{ fontSize: 26 }} />
-          </button>
+          <div className="-mb-1">
+            <IconButton
+              size="small"
+              onClick={() => navigate("/profile/homesHistory")}
+            >
+              <DomainAddIcon style={{ fontSize: 26, color: "black" }} />
+            </IconButton>
+          </div>
         )}
       </div>
       <div
