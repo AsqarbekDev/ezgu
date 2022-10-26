@@ -1,6 +1,4 @@
 import React, { useRef } from "react";
-import ToggleOffIcon from "@mui/icons-material/ToggleOff";
-import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -15,14 +13,7 @@ import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../features/userSlice";
-import {
-  Avatar,
-  Divider,
-  ListItemButton,
-  ListItemText,
-  MenuItem,
-  Switch,
-} from "@mui/material";
+import { Avatar, Divider, ListItemButton, Switch } from "@mui/material";
 import defaultBgImage from "../assets/defaultBgImage.jpg";
 import {
   deleteObject,
