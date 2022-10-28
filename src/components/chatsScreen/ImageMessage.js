@@ -20,10 +20,18 @@ function ImageMessage({
   chatRoomID,
   messageID,
   seen,
+  setCurrentShowingDate,
+  currentShowingDate,
+  setShowAgain,
+  showAgain,
+  setShowDate,
+  showDate,
+  setTimestampDate,
 }) {
   const [loaded, setLoaded] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const textRef = useRef(null);
+  const mRef = useRef(null);
 
   const filterMessage = (messageString) => {
     const filteredString = [];
@@ -63,6 +71,42 @@ function ImageMessage({
     }
   }, [chatRoomID, messageID, seen, mine]);
 
+  useEffect(() => {
+    const handleScroll = (e) => {
+      setTimestampDate(dayjs().unix());
+      if (
+        mRef.current.getBoundingClientRect().bottom < 56 ||
+        mRef.current.getBoundingClientRect().top > 104
+      ) {
+      } else {
+        if (currentShowingDate !== dayjs.unix(timestamp).format("DD/MM/YYYY")) {
+          setCurrentShowingDate(dayjs.unix(timestamp).format("DD/MM/YYYY"));
+          setShowDate(messageID);
+        } else if (
+          !showAgain &&
+          !showDate &&
+          currentShowingDate === dayjs.unix(timestamp).format("DD/MM/YYYY")
+        ) {
+          setShowAgain(messageID);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [
+    message,
+    timestamp,
+    setCurrentShowingDate,
+    currentShowingDate,
+    showAgain,
+    setShowAgain,
+    messageID,
+    showDate,
+    setShowDate,
+    setTimestampDate,
+  ]);
+
   return (
     <>
       {showImage && (
@@ -77,7 +121,31 @@ function ImageMessage({
           </div>
         </div>
       )}
-      <div className={`flex items-end mx-1 my-2 ${mine && "justify-end"}`}>
+      <div
+        ref={mRef}
+        className={`flex items-end mx-1 my-2 ${mine && "justify-end"}`}
+      >
+        {currentShowingDate &&
+          !showAgain &&
+          showDate === messageID &&
+          currentShowingDate === dayjs.unix(timestamp).format("DD/MM/YYYY") &&
+          currentShowingDate !==
+            dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
+            <div className="fixed z-40 top-16 w-full flex justify-center">
+              <div className="bg-black opacity-80 text-white rounded-lg">
+                <p className="px-2 py-1">{currentShowingDate}</p>
+              </div>
+            </div>
+          )}
+        {showAgain === messageID &&
+          currentShowingDate !==
+            dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
+            <div className="fixed z-40 top-16 w-full flex justify-center">
+              <div className="bg-black opacity-80 text-white rounded-lg">
+                <p className="px-2 py-1">{currentShowingDate}</p>
+              </div>
+            </div>
+          )}
         {!mine && <Avatar src={userImage} style={{ width: 34, height: 34 }} />}
         <div
           onClick={() => setShowImage(true)}

@@ -1,7 +1,6 @@
 import { Avatar, IconButton, ListItemIcon } from "@mui/material";
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PlaceIcon from "@mui/icons-material/Place";
 import EmailIcon from "@mui/icons-material/Email";
@@ -39,6 +38,7 @@ function HomeCard({
   userPhoneNumber,
   history,
   userRegion,
+  currency,
 }) {
   const target = useRef(null);
 
@@ -319,10 +319,23 @@ function HomeCard({
         <div className="px-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center font-bold text-lg">
-              <p className="text-[#34b804]">{rent}</p>
-              <CurrencyRubleIcon
-                style={{ fontSize: 16, marginTop: -1, color: "#c7a10a" }}
-              />
+              <p className="text-[#34b804]">
+                {rent}{" "}
+                <span>
+                  {currency === "USD" && (
+                    <span className="text-green-500">$</span>
+                  )}
+                  {currency === "EUR" && (
+                    <span className="text-[#5D7EA7]">€</span>
+                  )}
+                  {currency === "RUB" && (
+                    <span className="text-[#c7a10a]">₽</span>
+                  )}
+                  {currency === "UZS" && (
+                    <span className="text-[#FFC33C]">so'm</span>
+                  )}
+                </span>
+              </p>
             </div>
             <div className="flex items-center font-bold text-sm">
               <WatchLaterIcon

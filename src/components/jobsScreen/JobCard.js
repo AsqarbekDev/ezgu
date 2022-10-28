@@ -5,7 +5,6 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
@@ -22,6 +21,7 @@ function JobCard({
   userWorkedWith,
   currentWorkers,
   deleted,
+  currency,
 }) {
   const navigate = useNavigate();
 
@@ -59,14 +59,17 @@ function JobCard({
         <div className="jobCardHr mt-2 mb-1"></div>
         <div className="flex items-end justify-between">
           <h4 className="font-bold text-lg truncate -mb-[1px]">{jobName}</h4>
-          <h2 className="font-bold text-xl text-[#34b804] ml-2 flex items-center">
+          <p className="font-bold text-xl text-[#34b804] ml-2 flex items-center">
             {salary}{" "}
-            <span>
-              <CurrencyRubleIcon
-                style={{ fontSize: 18, marginTop: -4, color: "#c7a10a" }}
-              />
+            <span className="ml-1">
+              {currency === "USD" && <span className="text-green-500">$</span>}
+              {currency === "EUR" && <span className="text-[#5D7EA7]">€</span>}
+              {currency === "RUB" && <span className="text-[#c7a10a]">₽</span>}
+              {currency === "UZS" && (
+                <span className="text-[#FFC33C]">so'm</span>
+              )}
             </span>
-          </h2>
+          </p>
         </div>
         <div className="flex items-end justify-between ">
           <div className="flex items-end">

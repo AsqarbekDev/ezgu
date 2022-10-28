@@ -38,6 +38,7 @@ function Jobs() {
                 endingTime,
                 userWorkedWith,
                 currentWorkers,
+                currency,
               },
               index
             ) => (
@@ -54,6 +55,7 @@ function Jobs() {
                 endingTime={endingTime}
                 userWorkedWith={userWorkedWith}
                 currentWorkers={currentWorkers}
+                currency={currency}
               />
             )
           )}

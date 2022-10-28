@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import addImageIcon from "../assets/addImage.png";
 import closeGreen from "../assets/close_green.webp";
-import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import PinDropIcon from "@mui/icons-material/PinDrop";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import PublicIcon from "@mui/icons-material/Public";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { moscowMetroList } from "../assets/moscowMetroList";
-import { Avatar } from "@mui/material";
+import { Avatar, MenuItem, TextField } from "@mui/material";
 import {
   collection,
   addDoc,
@@ -57,8 +57,32 @@ function AddNewHome() {
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
   const [country, setCountry] = useState(user.country || "");
   const [region, setRegion] = useState("");
+  const [currency, setCurrency] = useState("RUB");
 
   const navigate = useNavigate();
+
+  const currencies = [
+    {
+      value: "USD",
+      label: "$",
+    },
+    {
+      value: "EUR",
+      label: "€",
+    },
+    {
+      value: "RUB",
+      label: "₽",
+    },
+    {
+      value: "UZS",
+      label: "so'm",
+    },
+  ];
+
+  const handleChange = (event) => {
+    setCurrency(event.target.value);
+  };
 
   useEffect(() => {
     const checkLimit = async () => {
@@ -128,6 +152,7 @@ function AddNewHome() {
       setLoading(true);
       addDoc(collection(db, "homes"), {
         rent: salary,
+        currency,
         location: workingPlace,
         comment,
         line,
@@ -527,7 +552,7 @@ function AddNewHome() {
             {formErrors.images}
           </p>
           <div className="flex items-center mt-4">
-            <CurrencyRubleIcon style={{ fontSize: 18 }} />
+            <LocalAtmIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="Oylik to'lov narxini kiriting..."
@@ -538,6 +563,21 @@ function AddNewHome() {
               }}
               disabled={formDisabled}
             />
+            <div className="ml-2 -mt-4">
+              <TextField
+                id="outlined-select-currency"
+                select
+                value={currency}
+                onChange={handleChange}
+                className="w-20 h-10"
+              >
+                {currencies.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
           </div>
           <p className="ml-9 text-red-600 font-[600] text-sm">
             {formErrors.salary}

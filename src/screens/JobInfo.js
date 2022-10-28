@@ -1,7 +1,6 @@
 import React from "react";
 import { Avatar, IconButton } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import UserCard from "../components/jobsScreen/UserCard";
 import LoadingModul from "../components/LoadingModul";
 import AdminUserCard from "../components/jobsScreen/AdminUserCard";
@@ -378,14 +377,23 @@ function JobInfo() {
               </h4>
               <div className="flex items-center font-bold">
                 <h4>Ish xaqqi:</h4>
-                <p className="text-[#34b804] text-xl ml-2">{job?.salary}</p>
-                <CurrencyRubleIcon
-                  style={{
-                    fontSize: 18,
-                    marginTop: -1,
-                    color: "#c7a10a",
-                  }}
-                />
+                <p className="text-[#34b804] text-xl ml-2">
+                  {job?.salary}{" "}
+                  <span>
+                    {job?.currency === "USD" && (
+                      <span className="text-green-500">$</span>
+                    )}
+                    {job?.currency === "EUR" && (
+                      <span className="text-[#5D7EA7]">€</span>
+                    )}
+                    {job?.currency === "RUB" && (
+                      <span className="text-[#c7a10a]">₽</span>
+                    )}
+                    {job?.currency === "UZS" && (
+                      <span className="text-[#FFC33C]">so'm</span>
+                    )}
+                  </span>
+                </p>
               </div>
               <div className="flex items-start font-bold">
                 <h4>Ishchilar soni:</h4>

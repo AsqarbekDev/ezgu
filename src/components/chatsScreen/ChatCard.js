@@ -90,8 +90,9 @@ function ChatCard({
           ) : mine ? (
             <DoneIcon style={{ fontSize: 14, marginTop: -3, marginRight: 2 }} />
           ) : null}
-          {timestamp < dayjs().unix() - 86400
-            ? dayjs.unix(timestamp).format("MM/DD/YYYY")
+          {dayjs.unix(timestamp).format("DD/MM/YYYY") !==
+          dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+            ? dayjs.unix(timestamp).format("DD/MM/YYYY")
             : dayjs.unix(timestamp).format("HH:mm")}
         </p>
         {newMessages.length > 0 && (

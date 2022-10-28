@@ -11,16 +11,30 @@ export const chatsSlice = createSlice({
   reducers: {
     setChatRooms: (state, action) => {
       state.chatRooms = action.payload;
-      action.payload.map((chatRoom) => {
-        return (state.value[chatRoom.id] = { messagingUser: {}, messages: [] });
-      });
+      if (action.payload.length > 0) {
+        action.payload.map((chatRoom) => {
+          return (state.value[chatRoom.id] = {
+            messagingUser: {},
+            messages: [],
+          });
+        });
+      } else {
+        state.value = {};
+      }
     },
     setMessagingUsers: (state, action) => {
-      state.value[action.payload.id].messagingUser =
-        action.payload.messagingUser;
+      if (state.value[action.payload.id]) {
+        state.value[action.payload.id].messagingUser =
+          action.payload.messagingUser;
+      }
     },
     setChats: (state, action) => {
-      state.value[action.payload.id].messages = action.payload.messages;
+      if (
+        state.value[action.payload.id] &&
+        action.payload.messages.length > 0
+      ) {
+        state.value[action.payload.id].messages = action.payload.messages;
+      }
     },
   },
 });

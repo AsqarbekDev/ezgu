@@ -19,7 +19,14 @@ import ImageMessage from "../components/chatsScreen/ImageMessage";
 import { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
@@ -44,6 +51,14 @@ function ChatRoom() {
   const [isChatRoomExists, setIsChatRoomExists] = useState(false);
   const [chatRoomID, setChatRoomID] = useState(null);
   const [newMessageID, setNewMessageID] = useState(null);
+  const [messagingUserChat, setMessagingUserChat] = useState(null);
+  const [waitingUser, setWaitingUser] = useState(true);
+  const [showDeleteModul, setShowDeleteModul] = useState(false);
+  const [currentShowingDate, setCurrentShowingDate] = useState(null);
+  const [showAgain, setShowAgain] = useState(null);
+  const [showDate, setShowDate] = useState(null);
+  const [timestampDate, setTimestampDate] = useState(null);
+  const [dateShowingMessages, setDateShowingMessages] = useState([]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -52,6 +67,18 @@ function ChatRoom() {
   };
   const handleClose = (event) => {
     setAnchorEl(null);
+  };
+
+  const deleteMessages = () => {
+    setShowDeleteModul(false);
+    const allChats = chats[chatRoomID].messages;
+
+    deleteDoc(doc(db, "chats", chatRoomID)).then(() => {
+      allChats.map(async (item) => {
+        await deleteDoc(doc(db, "chats", chatRoomID, "messages", item.id));
+      });
+      navigate("/chats");
+    });
   };
 
   useEffect(() => {
@@ -66,6 +93,21 @@ function ChatRoom() {
       }
     }
   }, [chatRoomID, chats, user.uid, newMessageID]);
+
+  useEffect(() => {
+    const Dates = [];
+    const MessageIDs = [];
+
+    chats[chatRoomID]?.messages.map((item) => {
+      if (!Dates.includes(dayjs.unix(item.timestamp).format("DD/MM/YYYY"))) {
+        Dates.push(dayjs.unix(item.timestamp).format("DD/MM/YYYY"));
+        MessageIDs.push(item.id);
+      }
+      return null;
+    });
+
+    setDateShowingMessages(MessageIDs);
+  }, [chatRoomID, chats]);
 
   const addImage = (e) => {
     const reader = new FileReader();
@@ -140,8 +182,8 @@ function ChatRoom() {
     addDoc(collection(db, "chats"), {
       users: [user.uid, uid],
     })
-      .then((snapDoc) => {
-        addDoc(collection(db, "chats", snapDoc.id, "messages"), {
+      .then((docSnap) => {
+        addDoc(collection(db, "chats", docSnap.id, "messages"), {
           message: sendingMessage,
           timestamp: dayjs().unix(),
           uid: user.uid,
@@ -152,7 +194,7 @@ function ChatRoom() {
             if (image) {
               const storageRef = ref(
                 storage,
-                `chats/${chatRoomID}/${snapDoc.id}`
+                `chats/${docSnap.id}/${snapDoc.id}`
               );
               const uploadTask = uploadBytesResumable(
                 storageRef,
@@ -168,7 +210,7 @@ function ChatRoom() {
                   getDownloadURL(uploadTask.snapshot.ref).then(
                     async (downloadURL) => {
                       await updateDoc(
-                        doc(db, "chats", chatRoomID, "messages", snapDoc.id),
+                        doc(db, "chats", docSnap.id, "messages", snapDoc.id),
                         {
                           image: downloadURL,
                         }
@@ -185,14 +227,34 @@ function ChatRoom() {
   };
 
   useEffect(() => {
+    let chatRoomExists = false;
     chatRooms.map((item) => {
       if (item.messagingUser === uid) {
+        setMessagingUserChat(null);
         setIsChatRoomExists(true);
+        chatRoomExists = true;
         setChatRoomID(item.id);
+        setWaitingUser(false);
       }
       return null;
     });
+    if (!chatRoomExists) {
+      setWaitingUser(false);
+    }
   }, [chatRooms, uid]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const docSnap = await getDoc(doc(db, "users", uid));
+      if (docSnap.exists()) {
+        setMessagingUserChat(docSnap.data());
+      }
+    };
+
+    if (!isChatRoomExists && !waitingUser) {
+      getUser();
+    }
+  }, [isChatRoomExists, uid, waitingUser]);
 
   useEffect(() => {
     if (newMessageID) {
@@ -207,15 +269,53 @@ function ChatRoom() {
   }, [newMessageID]);
 
   const scrollToBottom = () => {
-    if (bottomRef?.current) {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (bottomRef?.current) {
         bottomRef.current.scrollIntoView({ behavior: "smooth" });
-      }, 400);
-    }
+      }
+    }, 400);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timestampDate < dayjs().unix() - 1) {
+        if (showDate) {
+          setShowDate(null);
+        }
+        if (showAgain) {
+          setShowAgain(null);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [showAgain, showDate, timestampDate]);
+
   return (
-    <div className="pb-14">
+    <div className="pb-14 pt-16">
+      {showDeleteModul && (
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+          <div className="rounded-xl bg-black text-white text-lg p-6">
+            <p>Xabarlarni o'chirishni xoxlaysizmi?</p>
+            <div className="flex items-center justify-around mt-6">
+              <button
+                onClick={() => setShowDeleteModul(false)}
+                className="border border-white w-16 rounded-lg"
+              >
+                YO'Q
+              </button>
+              <button
+                onClick={deleteMessages}
+                className="border border-white w-16 rounded-lg"
+              >
+                HA
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="fixed top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
         <div
           onClick={() => navigate(-1)}
@@ -226,7 +326,28 @@ function ChatRoom() {
           </IconButton>
         </div>
         <div>
-          {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 ? (
+          {messagingUserChat ? (
+            messagingUserChat.lastSeen > dayjs().unix() - 70 ? (
+              <StyledBadge
+                className="mr-2"
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+              >
+                <Avatar
+                  alt={messagingUserChat.username}
+                  src={messagingUserChat.image}
+                />
+              </StyledBadge>
+            ) : (
+              <Avatar
+                src={messagingUserChat.image}
+                className="mr-2"
+                alt={messagingUserChat.username}
+              />
+            )
+          ) : chats[chatRoomID]?.messagingUser.lastSeen >
+            dayjs().unix() - 70 ? (
             <StyledBadge
               className="mr-2"
               overlap="circular"
@@ -247,20 +368,57 @@ function ChatRoom() {
           )}
         </div>
         <div className="flex-1 truncate">
-          <p className="font-[600] text-lg -mt-[2px] truncate">
-            {chats[chatRoomID]?.messagingUser.username}
-          </p>
-          <p className="text-xs text-gray-600 -mt-[2px]">
-            {chats[chatRoomID]?.messagingUser.lastSeen < dayjs().unix() - 86400
-              ? dayjs
-                  .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                  .format("MM/DD/YYYY")
-              : chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70
-              ? "online"
-              : dayjs
-                  .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                  .format("HH:mm")}
-          </p>
+          {messagingUserChat ? (
+            <p className="font-[600] text-lg -mt-[2px] truncate">
+              {messagingUserChat.username}
+            </p>
+          ) : (
+            <p className="font-[600] text-lg -mt-[2px] truncate">
+              {chats[chatRoomID]?.messagingUser.username}
+            </p>
+          )}
+          {messagingUserChat ? (
+            <p className="text-xs text-gray-600 -mt-[2px]">
+              {dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY") !==
+              dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+                ? dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY")
+                : messagingUserChat?.lastSeen > dayjs().unix() - 70
+                ? "online"
+                : dayjs.unix(messagingUserChat?.lastSeen).format("HH:mm")}
+              {dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY") !==
+                dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
+                <span className="ml-2">
+                  {dayjs.unix(messagingUserChat?.lastSeen).format("HH:mm")}
+                </span>
+              )}
+            </p>
+          ) : (
+            <p className="text-xs text-gray-600 -mt-[2px]">
+              {dayjs
+                .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                .format("DD/MM/YYYY") !==
+              dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+                ? dayjs
+                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                    .format("DD/MM/YYYY")
+                : chats[chatRoomID]?.messagingUser.lastSeen >
+                  dayjs().unix() - 70
+                ? "online"
+                : dayjs
+                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                    .format("HH:mm")}
+              {dayjs
+                .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                .format("DD/MM/YYYY") !==
+                dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
+                <span className="ml-2">
+                  {dayjs
+                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                    .format("HH:mm")}
+                </span>
+              )}
+            </p>
+          )}
         </div>
         <div className="w-14 h-14 flex items-center justify-center">
           <Tooltip title="Sozlamalar">
@@ -309,12 +467,14 @@ function ChatRoom() {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={() => console.log("clicked")}>
-              <ListItemIcon>
-                <DeleteForeverIcon fontSize="small" />
-              </ListItemIcon>
-              hammasini o'chirish
-            </MenuItem>
+            {chats[chatRoomID]?.messages?.length > 0 && (
+              <MenuItem onClick={() => setShowDeleteModul(true)}>
+                <ListItemIcon>
+                  <DeleteForeverIcon fontSize="small" />
+                </ListItemIcon>
+                hammasini o'chirish
+              </MenuItem>
+            )}
           </Menu>
         </div>
       </div>
@@ -332,6 +492,13 @@ function ChatRoom() {
                   </p>
                 </div>
               )}
+              {dateShowingMessages.includes(item.id) && (
+                <div className="flex justify-center">
+                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg mr-2">
+                    {dayjs.unix(item.timestamp).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+              )}
               <ImageMessage
                 messageID={item.id}
                 image={item.image}
@@ -341,6 +508,13 @@ function ChatRoom() {
                 userImage={chats[chatRoomID]?.messagingUser.image}
                 chatRoomID={chatRoomID}
                 seen={item.seen}
+                setCurrentShowingDate={(date) => setCurrentShowingDate(date)}
+                currentShowingDate={currentShowingDate}
+                setShowAgain={(value) => setShowAgain(value)}
+                showAgain={showAgain}
+                setShowDate={(value) => setShowDate(value)}
+                showDate={showDate}
+                setTimestampDate={(value) => setTimestampDate(value)}
               />
             </div>
           ) : (
@@ -355,6 +529,13 @@ function ChatRoom() {
                   </p>
                 </div>
               )}
+              {dateShowingMessages.includes(item.id) && (
+                <div className="flex justify-center">
+                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg mr-2">
+                    {dayjs.unix(item.timestamp).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+              )}
               <Message
                 messageID={item.id}
                 message={item.message}
@@ -363,6 +544,13 @@ function ChatRoom() {
                 userImage={chats[chatRoomID]?.messagingUser.image}
                 chatRoomID={chatRoomID}
                 seen={item.seen}
+                setCurrentShowingDate={(date) => setCurrentShowingDate(date)}
+                currentShowingDate={currentShowingDate}
+                setShowAgain={(value) => setShowAgain(value)}
+                showAgain={showAgain}
+                setShowDate={(value) => setShowDate(value)}
+                showDate={showDate}
+                setTimestampDate={(value) => setTimestampDate(value)}
               />
             </div>
           )

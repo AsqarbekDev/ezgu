@@ -102,6 +102,7 @@ function App() {
             id: doc.id,
             jobName: doc.data().jobName,
             salary: doc.data().salary,
+            currency: doc.data().currency,
             workersCount: doc.data().workersCount,
             currentWorkers: doc.data().currentWorkers,
             workingPlace: doc.data().workingPlace,
@@ -140,6 +141,7 @@ function App() {
             id: doc.id,
             jobName: doc.data().jobName,
             salary: doc.data().salary,
+            currency: doc.data().currency,
             workersCount: doc.data().workersCount,
             currentWorkers: doc.data().currentWorkers,
             workingPlace: doc.data().workingPlace,
@@ -188,6 +190,7 @@ function App() {
           allHomes.push({
             id: doc.id,
             rent: doc.data().rent,
+            currency: doc.data().currency,
             location: doc.data().location,
             comment: doc.data().comment,
             image1: doc.data().image1,
@@ -251,6 +254,7 @@ function App() {
           allHomes.push({
             id: doc.id,
             rent: doc.data().rent,
+            currency: doc.data().currency,
             location: doc.data().location,
             comment: doc.data().comment,
             image1: doc.data().image1,

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import GroupsIcon from "@mui/icons-material/Groups";
 import PinDropIcon from "@mui/icons-material/PinDrop";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
@@ -12,6 +11,7 @@ import { moscowMetroList } from "../assets/moscowMetroList";
 import { Avatar } from "@mui/material";
 import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import {
   collection,
@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
 import ExitHeader from "../components/ExitHeader";
+import MenuItem from "@mui/material/MenuItem";
 
 function AddNewJob() {
   const [jobName, setJobName] = useState("");
@@ -54,8 +55,32 @@ function AddNewJob() {
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
   const [country, setCountry] = useState(user.country || "");
   const [region, setRegion] = useState("");
+  const [currency, setCurrency] = useState("RUB");
 
   const navigate = useNavigate();
+
+  const currencies = [
+    {
+      value: "USD",
+      label: "$",
+    },
+    {
+      value: "EUR",
+      label: "€",
+    },
+    {
+      value: "RUB",
+      label: "₽",
+    },
+    {
+      value: "UZS",
+      label: "so'm",
+    },
+  ];
+
+  const handleChange = (event) => {
+    setCurrency(event.target.value);
+  };
 
   useEffect(() => {
     const checkLimit = async () => {
@@ -143,6 +168,7 @@ function AddNewJob() {
       addDoc(collection(db, "jobs"), {
         jobName,
         salary,
+        currency,
         workersCount,
         currentWorkers: [],
         workingPlace,
@@ -243,7 +269,7 @@ function AddNewJob() {
             {formErrors.jobName}
           </p>
           <div className="flex items-center mt-4">
-            <CurrencyRubleIcon style={{ fontSize: 18 }} />
+            <LocalAtmIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
               placeholder="2000..."
@@ -254,6 +280,21 @@ function AddNewJob() {
               }}
               disabled={formDisabled}
             />
+            <div className="ml-2 -mt-4">
+              <TextField
+                id="outlined-select-currency"
+                select
+                value={currency}
+                onChange={handleChange}
+                className="w-20 h-10"
+              >
+                {currencies.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
           </div>
           <p className="ml-9 text-red-600 font-[600] text-sm">
             {formErrors.salary}
