@@ -62,6 +62,12 @@ function Chat() {
               : false
           }
           lastSeen={chats[key].messagingUser.lastSeen}
+          showAvatar={
+            !chats[key]?.messagingUser?.blockedUsers?.includes(user.uid) &&
+            !user.blockedUsers.includes(chats[key]?.messagingUser.uid)
+              ? true
+              : false
+          }
         />
       ))}
     </div>

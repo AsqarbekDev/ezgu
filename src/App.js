@@ -53,6 +53,7 @@ import {
 import BottomNavigation from "./components/BottomNavigation";
 import { setJobs, setMyAddedJobs } from "./features/jobsSlice";
 import { setHomes, setMyAddedHomes } from "./features/homesSlice";
+import BlockedUsersChat from "./screens/BlockedUsersChat";
 
 function App() {
   const user = useSelector(selectUser);
@@ -656,6 +657,9 @@ function App() {
           {user && <Route path="/add/newhome" element={<AddNewHome />} />}
           {user && <Route path="/chats" element={<Chat />} />}
           {user && <Route path="/chats/:uid" element={<ChatRoom />} />}
+          {user && (
+            <Route path="/chats/blockedUsers" element={<BlockedUsersChat />} />
+          )}
           {user && <Route path="/profile" element={<Profile />} />}
           {user && (
             <Route path="/profile/jobsHistory" element={<JobsHistory />} />

@@ -74,6 +74,7 @@ function SignUpwithEmail() {
         .then((userCredential) => {
           const user = userCredential.user;
           setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
             email: user.email,
             username,
             phoneNumber: "",

@@ -31,6 +31,7 @@ function SignUp() {
         const docSnap = await getDoc(doc(db, "users", user.uid));
         if (!docSnap.exists()) {
           await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
             email: user.email,
             username: user.displayName,
             image: user.photoURL,

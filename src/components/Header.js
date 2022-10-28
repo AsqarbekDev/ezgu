@@ -6,7 +6,15 @@ import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { selectNotifications } from "../features/notificationsSlice";
-import { IconButton } from "@mui/material";
+import {
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Tooltip,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import BlockIcon from "@mui/icons-material/Block";
 
 function Header() {
   const location = useLocation();
@@ -15,8 +23,16 @@ function Header() {
   const navigate = useNavigate();
 
   const [currentScreen, setCurrentScreen] = useState("/");
-
   const [newNotifications, setNewNotifications] = useState([]);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     const newMessagesArray = [];
@@ -55,7 +71,7 @@ function Header() {
         <div
           onClick={() => navigate("/notifications")}
           className={`${
-            !user && "hidden"
+            !user || currentScreen === "/chats" ? "hidden" : null
           } absolute right-0 z-10 w-14 h-14 flex items-center justify-center`}
         >
           <div className="relative">
@@ -70,6 +86,65 @@ function Header() {
               </div>
             )}
           </div>
+        </div>
+        <div
+          className={`${
+            currentScreen !== "/chats" && "hidden"
+          } absolute right-0 z-10 w-14 h-14 flex items-center justify-center`}
+        >
+          <Tooltip title="Sozlamalar">
+            <IconButton
+              onClick={handleClick}
+              size="medium"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <MoreVertIcon style={{ color: "black" }} />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem onClick={() => navigate("/chats/blockedUsers")}>
+              <ListItemIcon>
+                <BlockIcon fontSize="small" />
+              </ListItemIcon>
+              bloklangan foydalanuvchilar
+            </MenuItem>
+          </Menu>
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ function ChatCard({
   seen,
   mine,
   lastSeen,
+  showAvatar,
 }) {
   const navigate = useNavigate();
   const chats = useSelector(selectChats);
@@ -47,7 +48,7 @@ function ChatCard({
       className="bg-white border-b m-1 flex justify-between px-2 py-2 rounded-lg cursor-pointer"
     >
       <div className="flex items-center">
-        {lastSeen > dayjs().unix() - 70 ? (
+        {lastSeen > dayjs().unix() - 70 && showAvatar ? (
           <StyledBadge
             overlap="circular"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -61,7 +62,7 @@ function ChatCard({
           </StyledBadge>
         ) : (
           <Avatar
-            src={userImage}
+            src={showAvatar ? userImage : null}
             style={{ width: 50, height: 50 }}
             alt={username}
           />

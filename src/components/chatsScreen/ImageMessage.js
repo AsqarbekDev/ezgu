@@ -27,6 +27,7 @@ function ImageMessage({
   setShowDate,
   showDate,
   setTimestampDate,
+  showAvatar,
 }) {
   const [loaded, setLoaded] = useState(false);
   const [showImage, setShowImage] = useState(false);
@@ -146,7 +147,12 @@ function ImageMessage({
               </div>
             </div>
           )}
-        {!mine && <Avatar src={userImage} style={{ width: 34, height: 34 }} />}
+        {!mine && (
+          <Avatar
+            src={showAvatar ? userImage : null}
+            style={{ width: 34, height: 34 }}
+          />
+        )}
         <div
           onClick={() => setShowImage(true)}
           className={`${

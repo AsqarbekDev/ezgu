@@ -23,6 +23,7 @@ function Message({
   setShowDate,
   showDate,
   setTimestampDate,
+  showAvatar,
 }) {
   const mRef = useRef(null);
 
@@ -126,7 +127,12 @@ function Message({
             </div>
           </div>
         )}
-      {!mine && <Avatar src={userImage} style={{ width: 34, height: 34 }} />}
+      {!mine && (
+        <Avatar
+          src={showAvatar ? userImage : null}
+          style={{ width: 34, height: 34 }}
+        />
+      )}
       <p
         className={`${
           mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
