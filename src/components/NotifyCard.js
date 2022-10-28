@@ -113,8 +113,9 @@ function NotifyCard({
             {notifyName}
           </h2>
           <p className="mt-[2px] ml-3 text-sm font-bold text-[#4a4847]">
-            {timestamp < dayjs().unix() - 86400
-              ? dayjs.unix(timestamp).format("MM/DD/YYYY")
+            {dayjs.unix(timestamp).format("DD/MM/YYYY") !==
+            dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+              ? dayjs.unix(timestamp).format("DD/MM/YYYY")
               : dayjs.unix(timestamp).format("HH:mm")}
           </p>
         </div>

@@ -425,6 +425,7 @@ function App() {
                     image: docSnap.data().image,
                     username: docSnap.data().username,
                     lastSeen: docSnap.data().lastSeen,
+                    blockedUsers: docSnap.data().blockedUsers,
                   },
                 })
               );
@@ -522,6 +523,7 @@ function App() {
               jobAdds: docSnap.data().jobAdds,
               workedJobs: docSnap.data().workedJobs,
               bgImage: docSnap.data().bgImage,
+              blockedUsers: docSnap.data().blockedUsers,
             })
           );
           dispatch(setWaiting(false));
@@ -564,7 +566,7 @@ function App() {
             from: "jobs",
             messageType: "mySuccess",
             seen: false,
-            timestamp: dayjs().unix(),
+            timestamp: docSnap.data().endingTime,
           });
         });
       });
@@ -602,7 +604,7 @@ function App() {
             from: "homes",
             messageType: "deletedHome",
             seen: false,
-            timestamp: dayjs().unix(),
+            timestamp: docSnap.data().uploadedTime + 2592000,
           });
         });
       });

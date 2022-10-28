@@ -86,6 +86,7 @@ function SignUpwithEmail() {
             workedJobs: 0,
             bgImage: "",
             lastSeen: dayjs().unix(),
+            blockedUsers: [],
           }).then(async () => {
             if (image) {
               const storageRef = ref(storage, `users/${user.uid}/image`);

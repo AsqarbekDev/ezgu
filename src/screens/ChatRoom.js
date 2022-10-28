@@ -14,6 +14,7 @@ import SendIcon from "@mui/icons-material/Send";
 import WestIcon from "@mui/icons-material/West";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Message from "../components/chatsScreen/Message";
+import BlockIcon from "@mui/icons-material/Block";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImageMessage from "../components/chatsScreen/ImageMessage";
 import { useRef } from "react";
@@ -21,6 +22,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import {
   addDoc,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -54,6 +56,7 @@ function ChatRoom() {
   const [messagingUserChat, setMessagingUserChat] = useState(null);
   const [waitingUser, setWaitingUser] = useState(true);
   const [showDeleteModul, setShowDeleteModul] = useState(false);
+  const [showBlockModul, setShowBlockModul] = useState(false);
   const [currentShowingDate, setCurrentShowingDate] = useState(null);
   const [showAgain, setShowAgain] = useState(null);
   const [showDate, setShowDate] = useState(null);
@@ -67,6 +70,17 @@ function ChatRoom() {
   };
   const handleClose = (event) => {
     setAnchorEl(null);
+  };
+
+  const blockUser = async () => {
+    setShowBlockModul(false);
+    const blockingUser = messagingUserChat
+      ? messagingUserChat.id
+      : chats[chatRoomID]?.messagingUser.uid;
+
+    await updateDoc(doc(db, "users", user.uid), {
+      blockedUsers: arrayUnion(blockingUser),
+    });
   };
 
   const deleteMessages = () => {
@@ -247,7 +261,10 @@ function ChatRoom() {
     const getUser = async () => {
       const docSnap = await getDoc(doc(db, "users", uid));
       if (docSnap.exists()) {
-        setMessagingUserChat(docSnap.data());
+        setMessagingUserChat({
+          id: docSnap.id,
+          ...docSnap.data(),
+        });
       }
     };
 
@@ -308,6 +325,27 @@ function ChatRoom() {
               </button>
               <button
                 onClick={deleteMessages}
+                className="border border-white w-16 rounded-lg"
+              >
+                HA
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showBlockModul && (
+        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+          <div className="rounded-xl bg-black text-white text-lg p-6">
+            <p>Foydalanuvchini bloklashni xoxlaysizmi?</p>
+            <div className="flex items-center justify-around mt-6">
+              <button
+                onClick={() => setShowBlockModul(false)}
+                className="border border-white w-16 rounded-lg"
+              >
+                YO'Q
+              </button>
+              <button
+                onClick={blockUser}
                 className="border border-white w-16 rounded-lg"
               >
                 HA
@@ -379,8 +417,14 @@ function ChatRoom() {
           )}
           {messagingUserChat ? (
             <p className="text-xs text-gray-600 -mt-[2px]">
-              {dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY") !==
-              dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+              {messagingUserChat.blockedUsers.includes(user.uid)
+                ? "Foydalanuvchi sizni bloklagan!"
+                : user.blockedUsers.includes(messagingUserChat.id)
+                ? "bloklangan!"
+                : dayjs
+                    .unix(messagingUserChat?.lastSeen)
+                    .format("DD/MM/YYYY") !==
+                  dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
                 ? dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY")
                 : messagingUserChat?.lastSeen > dayjs().unix() - 70
                 ? "online"
@@ -394,10 +438,16 @@ function ChatRoom() {
             </p>
           ) : (
             <p className="text-xs text-gray-600 -mt-[2px]">
-              {dayjs
-                .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                .format("DD/MM/YYYY") !==
-              dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+              {chats[chatRoomID]?.messagingUser.blockedUsers.includes(user.uid)
+                ? "Foydalanuvchi sizni bloklagan!"
+                : user.blockedUsers.includes(
+                    chats[chatRoomID]?.messagingUser.uid
+                  )
+                ? "bloklangan!"
+                : dayjs
+                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                    .format("DD/MM/YYYY") !==
+                  dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
                 ? dayjs
                     .unix(chats[chatRoomID]?.messagingUser.lastSeen)
                     .format("DD/MM/YYYY")
@@ -475,6 +525,12 @@ function ChatRoom() {
                 hammasini o'chirish
               </MenuItem>
             )}
+            <MenuItem onClick={() => setShowBlockModul(true)}>
+              <ListItemIcon>
+                <BlockIcon fontSize="small" />
+              </ListItemIcon>
+              bloklash
+            </MenuItem>
           </Menu>
         </div>
       </div>

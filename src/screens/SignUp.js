@@ -44,6 +44,7 @@ function SignUp() {
             workedJobs: 0,
             bgImage: "",
             lastSeen: dayjs().unix(),
+            blockedUsers: [],
           });
         }
       })
