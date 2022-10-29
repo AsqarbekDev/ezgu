@@ -59,9 +59,9 @@ function BottomNavigation({ jobId }) {
         currentScreen === "/loading/profile"
           ? ""
           : "hidden"
-      } fixed bottom-0 z-50 w-full bg-white`}
+      } fixed bottom-0 z-50 w-full bg-white xl:hidden`}
     >
-      <BottomNavigationM className="w-full flex items-center justify-between border-t">
+      <BottomNavigationM className="w-full max-w-2xl flex items-center justify-between border-t">
         <BottomNavigationAction
           className="iconContainer"
           onClick={() =>

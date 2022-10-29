@@ -40,7 +40,7 @@ function ExitHeader({ screenName, path, myjob }) {
   return (
     <div className="sticky top-0 z-50 w-full bg-white border-b shadow-sm">
       {showDeleteModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>Bildirishnomalarni o'chirishni xoxlaysizmi?</p>
             <div className="flex items-center justify-around mt-6">

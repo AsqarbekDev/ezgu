@@ -78,6 +78,12 @@ function HomesHistory() {
       <ExitHeader screenName="Uy ijaralari tarixi" />
       {!homes ? (
         <DefaultLoadingModul />
+      ) : homes.length === 0 ? (
+        <div className="flex items-center justify-center w-full h-screen -mt-16">
+          <p className="font-[600] text-xl">
+            Uy ijarasi uchun e'lonlar tarixi yo'q
+          </p>
+        </div>
       ) : (
         <div className="pb-1">
           {homes?.map(

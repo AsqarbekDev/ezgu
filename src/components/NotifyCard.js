@@ -117,6 +117,11 @@ function NotifyCard({
             dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
               ? dayjs.unix(timestamp).format("DD/MM/YYYY")
               : dayjs.unix(timestamp).format("HH:mm")}
+            <span className="ml-2">
+              {dayjs.unix(timestamp).format("DD/MM/YYYY") !==
+                dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
+                dayjs.unix(timestamp).format("DD/MM/YYYY")}
+            </span>
           </p>
         </div>
         <p

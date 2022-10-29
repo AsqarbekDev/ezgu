@@ -111,7 +111,7 @@ function ImageMessage({
   return (
     <>
       {showImage && (
-        <div className="fixed z-[100] top-0 w-full h-screen bg-black">
+        <div className="fixed max-w-2xl z-[100] top-0 w-full h-screen bg-black">
           <div className="relative flex items-center justify-center h-full w-full">
             <CloseIcon
               onClick={() => setShowImage(false)}

@@ -33,11 +33,17 @@ function BlockedUsersChat() {
   }, [blockedUsers]);
 
   return (
-    <div>
+    <div className="pb-1">
       <ExitHeader screenName="Bloklangan foydalanuvchilar" />
-      {bannedUsers.map((item, index) => (
-        <BannedUserCard key={index} uid={item.uid} username={item.username} />
-      ))}
+      {bannedUsers.length === 0 ? (
+        <div className="flex items-center justify-center w-full h-screen -mt-16">
+          <p className="font-[600] text-xl">Bloklangan foydalanuvchilar yo'q</p>
+        </div>
+      ) : (
+        bannedUsers.map((item, index) => (
+          <BannedUserCard key={index} uid={item.uid} username={item.username} />
+        ))
+      )}
     </div>
   );
 }

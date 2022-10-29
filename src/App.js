@@ -54,6 +54,7 @@ import BottomNavigation from "./components/BottomNavigation";
 import { setJobs, setMyAddedJobs } from "./features/jobsSlice";
 import { setHomes, setMyAddedHomes } from "./features/homesSlice";
 import BlockedUsersChat from "./screens/BlockedUsersChat";
+import SideBar from "./components/SideBar";
 
 function App() {
   const user = useSelector(selectUser);
@@ -675,8 +676,9 @@ function App() {
           {!user && <Route path="/signUp" element={<SignUp />} />}
           <Route path="/loading/:path" element={<Loading />} />
         </Routes>
+        <BottomNavigation />
+        <SideBar />
       </LocalizationProvider>
-      <BottomNavigation />
     </div>
   );
 }

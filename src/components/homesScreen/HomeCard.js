@@ -178,7 +178,7 @@ function HomeCard({
         <>
           <div
             role="status"
-            className="fixed z-[100] flex items-center -mt-[41px] justify-center -top-2 bottom-0 left-0 right-0"
+            className="fixed z-[100] max-w-2xl flex items-center -mt-[41px] justify-center -top-2 bottom-0 left-0 right-0"
           >
             <div className="w-40 h-40 rounded-3xl pl-2 bg-black flex flex-col items-center justify-center">
               <svg
@@ -200,11 +200,11 @@ function HomeCard({
               <p className="text-white text-sm -ml-1 mt-3">Yuklanyabdi...</p>
             </div>
           </div>
-          <div className="fixed z-[99] flex items-center -mt-[41px] justify-center -top-2 bottom-0 left-0 right-0 bg-black opacity-20"></div>
+          <div className="fixed z-[99] max-w-2xl flex items-center -mt-[41px] justify-center -top-2 bottom-0 left-0 right-0 bg-black opacity-20"></div>
         </>
       )}
       {showRemoveHomeModul && (
-        <div className="fixed z-[98] flex items-center -mt-[41px] justify-center top-0 bottom-0 left-0 right-0">
+        <div className="fixed z-[98] max-w-2xl flex items-center -mt-[41px] justify-center top-0 bottom-0 left-0 right-0">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>E'lonni o'chirishni xoxlaysizmi?</p>
             <div className="flex items-center justify-around mt-6">

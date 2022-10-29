@@ -22,8 +22,12 @@ function Jobs() {
     <div>
       {!jobs ? (
         <DefaultLoadingModul />
+      ) : jobs.length === 0 ? (
+        <div className="flex items-center justify-center w-full h-screen -mt-14">
+          <p className="font-[600] text-xl">Xozircha ish uchun e'lonlar yo'q</p>
+        </div>
       ) : (
-        <div className="pb-14">
+        <div className="pb-14 xl:pb-1">
           {jobs?.map(
             (
               {

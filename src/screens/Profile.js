@@ -14,7 +14,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../features/userSlice";
 import { Avatar, Divider, ListItemButton, Switch } from "@mui/material";
-import defaultBgImage from "../assets/defaultBgImage.jpg";
 import {
   deleteObject,
   getDownloadURL,
@@ -253,10 +252,10 @@ function Profile() {
   };
 
   return (
-    <div className="pb-14">
+    <div className="pb-14 xl:pb-1">
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>Xatolik yuz berdi! Qayta urinib ko'ring.</p>
             <div className="flex items-center justify-center mt-6">
@@ -271,7 +270,7 @@ function Profile() {
         </div>
       )}
       {showUsernameModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-md bg-white border-2 border-black text-lg p-6">
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.username}
@@ -307,7 +306,7 @@ function Profile() {
         </div>
       )}
       {showNumberModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-md bg-white border-2 border-black text-lg p-6">
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.number}
@@ -345,7 +344,7 @@ function Profile() {
         </div>
       )}
       {showRegionModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-md bg-white border-2 border-black text-lg p-6">
             <p className="text-red-600 font-[700] text-xs ml-1">
               {formErrors.country}
@@ -395,7 +394,7 @@ function Profile() {
         </div>
       )}
       {showLogOutModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>Tizimdan chiqishni xoxlaysizmi?</p>
             <div className="flex items-center justify-around mt-6">
@@ -416,18 +415,19 @@ function Profile() {
         </div>
       )}
       <div className="relative flex items-center justify-center py-6">
-        <img
-          onClick={() => bImageRef.current.click()}
-          className="absolute z-10 w-full h-full object-cover cursor-pointer"
-          src={
-            backgroundImage
-              ? backgroundImage
-              : user.bgImage
-              ? user.bgImage
-              : defaultBgImage
-          }
-          alt=""
-        />
+        {backgroundImage || user.bgImage ? (
+          <img
+            onClick={() => bImageRef.current.click()}
+            className="absolute z-10 w-full h-full object-cover cursor-pointer"
+            src={backgroundImage ? backgroundImage : user.bgImage}
+            alt=""
+          />
+        ) : (
+          <div
+            onClick={() => bImageRef.current.click()}
+            className="absolute z-10 w-full h-full cursor-pointer bg-gradient-to-b from-indigo-600"
+          ></div>
+        )}
         <Avatar
           onClick={() => userImageRef.current.click()}
           src={uImage ? uImage : user.image}

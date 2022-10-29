@@ -371,7 +371,7 @@ function AddNewHome() {
       <ExitHeader screenName="E'lonni to'ldiring" />
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6 mx-6">
             <p className="text-center">{showErrorModul}</p>
             <div className="flex items-center justify-center mt-6">

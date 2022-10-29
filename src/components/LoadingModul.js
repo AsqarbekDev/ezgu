@@ -5,7 +5,7 @@ function LoadingModul() {
     <>
       <div
         role="status"
-        className="fixed z-[100] flex items-center -mt-11 justify-center w-full h-screen"
+        className="fixed z-[100] flex max-w-2xl items-center -mt-11 justify-center w-full h-screen"
       >
         <div className="w-40 h-40 rounded-3xl pl-2 bg-black flex flex-col items-center justify-center">
           <svg
@@ -27,7 +27,7 @@ function LoadingModul() {
           <p className="text-white text-sm -ml-1 mt-3">Yuklanyabdi...</p>
         </div>
       </div>
-      <div className="fixed z-[99] flex items-center top-0 justify-center w-full h-screen bg-black opacity-20"></div>
+      <div className="fixed max-w-2xl z-[99] flex items-center top-0 justify-center w-full h-screen bg-black opacity-20"></div>
     </>
   );
 }

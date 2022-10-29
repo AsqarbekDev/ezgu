@@ -65,18 +65,18 @@ function ChatRoom() {
   const [dateShowingMessages, setDateShowingMessages] = useState([]);
 
   const disabledFirst =
-    messagingUserChat && messagingUserChat.blockedUsers.includes(user.uid)
+    messagingUserChat && messagingUserChat?.blockedUsers?.includes(user.uid)
       ? true
-      : messagingUserChat && user.blockedUsers.includes(messagingUserChat.id)
+      : messagingUserChat && user?.blockedUsers?.includes(messagingUserChat?.id)
       ? true
       : false;
 
   const disabledSecond =
     chats[chatRoomID] &&
-    chats[chatRoomID].messagingUser.blockedUsers.includes(user.uid)
+    chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(user.uid)
       ? true
       : chats[chatRoomID] &&
-        user.blockedUsers.includes(chats[chatRoomID].messagingUser.uid)
+        user.blockedUsers?.includes(chats[chatRoomID]?.messagingUser?.uid)
       ? true
       : false;
 
@@ -341,7 +341,7 @@ function ChatRoom() {
   return (
     <div className="pb-14 pt-16">
       {showModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6 m-8 text-center">
             <p>
               {showModul === "deleteAll"
@@ -377,7 +377,7 @@ function ChatRoom() {
           </div>
         </div>
       )}
-      <div className="fixed top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
+      <div className="fixed max-w-2xl top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
         <div
           onClick={() => navigate(-1)}
           className="w-14 h-14 flex items-center justify-center"
@@ -433,10 +433,10 @@ function ChatRoom() {
           ) : (
             <Avatar
               src={
-                !chats[chatRoomID]?.messagingUser.blockedUsers.includes(
+                !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
                   user.uid
                 ) &&
-                !user.blockedUsers.includes(
+                !user.blockedUsers?.includes(
                   chats[chatRoomID]?.messagingUser.uid
                 )
                   ? chats[chatRoomID]?.messagingUser.image
@@ -482,9 +482,11 @@ function ChatRoom() {
             </p>
           ) : (
             <p className="text-xs text-gray-600 -mt-[2px]">
-              {user.blockedUsers.includes(chats[chatRoomID]?.messagingUser.uid)
+              {user.blockedUsers?.includes(
+                chats[chatRoomID]?.messagingUser?.uid
+              )
                 ? "bloklangan!"
-                : chats[chatRoomID]?.messagingUser.blockedUsers.includes(
+                : chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
                     user.uid
                   )
                 ? "Foydalanuvchi sizni bloklagan!"
@@ -505,15 +507,15 @@ function ChatRoom() {
                 .unix(chats[chatRoomID]?.messagingUser.lastSeen)
                 .format("DD/MM/YYYY") !==
                 dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
-                !user.blockedUsers.includes(
-                  chats[chatRoomID]?.messagingUser.uid
+                !user.blockedUsers?.includes(
+                  chats[chatRoomID]?.messagingUser?.uid
                 ) &&
-                !chats[chatRoomID]?.messagingUser.blockedUsers.includes(
+                !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
                   user.uid
                 ) && (
                   <span className="ml-2">
                     {dayjs
-                      .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                      .unix(chats[chatRoomID]?.messagingUser?.lastSeen)
                       .format("HH:mm")}
                   </span>
                 )}
@@ -695,7 +697,7 @@ function ChatRoom() {
           )
         )}
       </div>
-      <div className="fixed overflow-hidden bottom-2 right-2 left-2 bg-gray-300 flex items-center rounded-2xl">
+      <div className="fixed max-w-2xl overflow-hidden bottom-2 right-2 xl:right-auto left-2 xl:left-auto xl:w-full sm:mx-auto bg-gray-300 flex items-center rounded-2xl">
         {image ? (
           <button onClick={deleteImage} className="relative h-12 w-[70px] pr-1">
             <img className="object-cover h-12 w-[70px]" src={image} alt="" />

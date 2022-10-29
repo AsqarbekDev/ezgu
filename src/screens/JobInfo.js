@@ -282,14 +282,14 @@ function JobInfo() {
   };
 
   return (
-    <div className="pb-14">
+    <div className="pb-14 xl:pb-1">
       <ExitHeader
         myjob={user?.currentJob ? true : false}
         screenName="Ish haqida malumotlar"
       />
       {loading && <LoadingModul />}
       {showModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6">
             <p>
               {job?.userID === user?.uid
@@ -322,7 +322,7 @@ function JobInfo() {
         </div>
       )}
       {showBanErrorModul && (
-        <div className="fixed z-[98] flex items-center top-0 justify-center w-full h-screen">
+        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black border border-red-600 text-white text-lg p-6">
             <p className="text-red-600">Ish beruvchi sizni ban qilgan!</p>
             <div className="flex items-center justify-center mt-6">

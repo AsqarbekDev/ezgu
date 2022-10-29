@@ -7,11 +7,24 @@ import ExitHeader from "../components/ExitHeader";
 import JobCard from "../components/jobsScreen/JobCard";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 function JobsHistory() {
   const [showMyAdds, setShowMyAdds] = useState(false);
   const [iWorkedJobs, setIWorkedJobs] = useState([]);
   const [iAddedJobs, setIAddedJobs] = useState([]);
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    if (newValue === 0) {
+      setShowMyAdds(false);
+    } else {
+      setShowMyAdds(true);
+    }
+  };
 
   const user = useSelector(selectUser);
 
@@ -136,100 +149,96 @@ function JobsHistory() {
   return (
     <div className="pb-1">
       <ExitHeader screenName="Ishlar tarixi" />
-      <div className="fixed w-full z-30 flex items-center">
-        <button
-          onClick={() => setShowMyAdds(false)}
-          className={`flex-1 pb-3 pt-4 font-bold bg-gray-200 -mt-1 ${
-            showMyAdds
-              ? "border-gray-200 border-b-2"
-              : "border-gray-400 border-b-2"
-          }`}
-        >
-          Ishlaganlarim
-        </button>
-        <button
-          onClick={() => setShowMyAdds(true)}
-          className={`flex-1 pb-3 pt-4 font-bold bg-gray-200 -mt-1 ${
-            showMyAdds
-              ? "border-gray-400 border-b-2"
-              : "border-gray-200 border-b-2"
-          }`}
-        >
-          Bergan e'lonlarim
-        </button>
+      <div className="fixed z-30 w-full max-w-2xl">
+        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+          <Tabs value={value} onChange={handleChange} centered>
+            <Tab label="Ishlaganlarim" className="w-[50%]" />
+            <Tab label="Bergan e'lonlarim" className="w-[50%]" />
+          </Tabs>
+        </Box>
       </div>
       <div className="pt-[50px]">
-        {showMyAdds
-          ? iAddedJobs?.map(
-              (
-                {
-                  id,
-                  userImage,
-                  userName,
-                  jobName,
-                  salary,
-                  region,
-                  workersCount,
-                  startingTime,
-                  endingTime,
-                  userWorkedWith,
-                  currentWorkers,
-                  deleted,
-                },
-                index
-              ) => (
-                <JobCard
-                  key={index}
-                  id={id}
-                  userImage={userImage}
-                  userName={userName}
-                  jobName={jobName}
-                  salary={salary}
-                  region={region}
-                  workersCount={workersCount}
-                  startingTime={startingTime}
-                  endingTime={endingTime}
-                  userWorkedWith={userWorkedWith}
-                  currentWorkers={currentWorkers}
-                  deleted={deleted}
-                />
-              )
+        {showMyAdds && iAddedJobs?.length === 0 ? (
+          <div className="flex items-center justify-center w-full h-screen -mt-28">
+            <p className="font-[600] text-xl">Berilgan e'lonlar tarixi yo'q</p>
+          </div>
+        ) : showMyAdds && iAddedJobs?.length > 0 ? (
+          iAddedJobs?.map(
+            (
+              {
+                id,
+                userImage,
+                userName,
+                jobName,
+                salary,
+                region,
+                workersCount,
+                startingTime,
+                endingTime,
+                userWorkedWith,
+                currentWorkers,
+                deleted,
+              },
+              index
+            ) => (
+              <JobCard
+                key={index}
+                id={id}
+                userImage={userImage}
+                userName={userName}
+                jobName={jobName}
+                salary={salary}
+                region={region}
+                workersCount={workersCount}
+                startingTime={startingTime}
+                endingTime={endingTime}
+                userWorkedWith={userWorkedWith}
+                currentWorkers={currentWorkers}
+                deleted={deleted}
+              />
             )
-          : iWorkedJobs?.map(
-              (
-                {
-                  id,
-                  userImage,
-                  userName,
-                  jobName,
-                  salary,
-                  region,
-                  workersCount,
-                  startingTime,
-                  endingTime,
-                  userWorkedWith,
-                  currentWorkers,
-                  deleted,
-                },
-                index
-              ) => (
-                <JobCard
-                  key={index}
-                  id={id}
-                  userImage={userImage}
-                  userName={userName}
-                  jobName={jobName}
-                  salary={salary}
-                  region={region}
-                  workersCount={workersCount}
-                  startingTime={startingTime}
-                  endingTime={endingTime}
-                  userWorkedWith={userWorkedWith}
-                  currentWorkers={currentWorkers}
-                  deleted={deleted}
-                />
-              )
-            )}
+          )
+        ) : iWorkedJobs?.length === 0 ? (
+          <div className="flex items-center justify-center w-full h-screen -mt-28">
+            <p className="font-[600] text-xl">Olingan ishlar tarixi yo'q</p>
+          </div>
+        ) : (
+          iWorkedJobs?.map(
+            (
+              {
+                id,
+                userImage,
+                userName,
+                jobName,
+                salary,
+                region,
+                workersCount,
+                startingTime,
+                endingTime,
+                userWorkedWith,
+                currentWorkers,
+                deleted,
+              },
+              index
+            ) => (
+              <JobCard
+                key={index}
+                id={id}
+                userImage={userImage}
+                userName={userName}
+                jobName={jobName}
+                salary={salary}
+                region={region}
+                workersCount={workersCount}
+                startingTime={startingTime}
+                endingTime={endingTime}
+                userWorkedWith={userWorkedWith}
+                currentWorkers={currentWorkers}
+                deleted={deleted}
+              />
+            )
+          )
+        )}
       </div>
     </div>
   );
