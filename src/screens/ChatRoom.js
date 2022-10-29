@@ -339,7 +339,7 @@ function ChatRoom() {
   }, [showAgain, showDate, timestampDate]);
 
   return (
-    <div className="pb-14 pt-16 -mb-14">
+    <div className="pb-14 pt-16">
       {showModul && (
         <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
           <div className="rounded-xl bg-black text-white text-lg p-6 m-8 text-center">
