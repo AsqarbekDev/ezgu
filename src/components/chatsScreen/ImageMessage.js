@@ -132,8 +132,8 @@ function ImageMessage({
           currentShowingDate === dayjs.unix(timestamp).format("DD/MM/YYYY") &&
           currentShowingDate !==
             dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
-            <div className="fixed z-40 top-16 w-full flex justify-center">
-              <div className="bg-black opacity-80 text-white rounded-lg">
+            <div className="fixed z-40 max-w-2xl top-16 w-full flex justify-center">
+              <div className="bg-black opacity-80 text-white rounded-lg mr-2">
                 <p className="px-2 py-1">{currentShowingDate}</p>
               </div>
             </div>
@@ -141,8 +141,8 @@ function ImageMessage({
         {showAgain === messageID &&
           currentShowingDate !==
             dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
-            <div className="fixed z-40 top-16 w-full flex justify-center">
-              <div className="bg-black opacity-80 text-white rounded-lg">
+            <div className="fixed z-40 max-w-2xl top-16 w-full flex justify-center">
+              <div className="bg-black opacity-80 text-white rounded-lg mr-2">
                 <p className="px-2 py-1">{currentShowingDate}</p>
               </div>
             </div>

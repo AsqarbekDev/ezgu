@@ -10,8 +10,10 @@ import { db } from "../firebase";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { selectTheme } from "../features/themeSlice";
 
 function JobsHistory() {
+  const theme = useSelector(selectTheme);
   const [showMyAdds, setShowMyAdds] = useState(false);
   const [iWorkedJobs, setIWorkedJobs] = useState([]);
   const [iAddedJobs, setIAddedJobs] = useState([]);
@@ -150,10 +152,23 @@ function JobsHistory() {
     <div className="pb-1">
       <ExitHeader screenName="Ishlar tarixi" />
       <div className="fixed z-30 w-full max-w-2xl">
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <Box
+          sx={{
+            width: "100%",
+            bgcolor: theme.type === "light" ? "lightgray" : "black",
+          }}
+        >
           <Tabs value={value} onChange={handleChange} centered>
-            <Tab label="Ishlaganlarim" className="w-[50%]" />
-            <Tab label="Bergan e'lonlarim" className="w-[50%]" />
+            <Tab
+              label="Ishlaganlarim"
+              style={{ color: theme.textColor }}
+              className="w-[50%]"
+            />
+            <Tab
+              label="Bergan e'lonlarim"
+              style={{ color: theme.textColor }}
+              className="w-[50%]"
+            />
           </Tabs>
         </Box>
       </div>

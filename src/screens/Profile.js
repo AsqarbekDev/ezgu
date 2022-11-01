@@ -28,18 +28,25 @@ import PhoneInput from "react-phone-number-input";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { selectTheme } from "../features/themeSlice";
+import ActionModul from "../components/ActionModul";
 
 function Profile() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   const bImageRef = useRef(null);
   const userImageRef = useRef(null);
   const usernameRef = useRef(null);
   const phoneNumberRef = useRef(null);
 
-  const [darkMode, setDarkMode] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["theme", "user"]);
+  const [darkMode, setDarkMode] = useState(
+    cookies.theme === "dark" ? true : false
+  );
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [uImage, setUImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -54,6 +61,14 @@ function Profile() {
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
   const [country, setCountry] = useState(user.country || "");
   const [region, setRegion] = useState("");
+
+  useEffect(() => {
+    if (cookies.theme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [cookies.theme]);
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -241,6 +256,7 @@ function Profile() {
     setLoading(true);
     signOut(auth)
       .then(() => {
+        removeCookie("user", { path: "/" });
         dispatch(logout());
         setLoading(false);
         window.location.href = "/";
@@ -252,52 +268,64 @@ function Profile() {
   };
 
   return (
-    <div className="pb-14 xl:pb-1">
+    <div
+      style={{ backgroundColor: theme.background, color: theme.textColor }}
+      className="pb-14 xl:pb-1"
+    >
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6">
-            <p>Xatolik yuz berdi! Qayta urinib ko'ring.</p>
-            <div className="flex items-center justify-center mt-6">
-              <button
-                onClick={() => setShowErrorModul(false)}
-                className="border border-white px-4 rounded-lg"
-              >
-                Qaytish
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text="Xatolik yuz berdi! Qayta urinib ko'ring."
+          cancelFunction={(value) => setShowErrorModul(value)}
+          errorModul
+        />
       )}
       {showUsernameModul && (
         <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-md bg-white border-2 border-black text-lg p-6">
+          <div
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              borderColor: theme.border,
+            }}
+            className="rounded-md border-2 text-lg p-6"
+          >
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.username}
             </p>
             <input
+              style={{
+                borderColor: theme.border,
+                outlineColor: theme.border,
+              }}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Ismingizni kiriting!"
-              className="p-1 m-1 border border-black outline-black bg-white rounded-md w-full"
+              className="p-1 m-1 bg-white text-black border rounded-md w-full"
               type="text"
               maxLength={40}
               ref={usernameRef}
             />
             <div className="flex items-center justify-around mt-6">
               <button
+                style={{ borderColor: theme.border }}
                 onClick={() => {
                   setShowUsernameModul(false);
                   setUsername(user.username);
                   setFormErrors({});
                 }}
-                className="text-sm bg-black text-white px-2 py-[2px] rounded-lg"
+                className={`${
+                  theme.type === "dark" && "border"
+                } text-sm bg-black text-white px-2 py-[2px] rounded-lg`}
               >
                 Qaytish
               </button>
               <button
+                style={{ borderColor: theme.border }}
                 onClick={changeUsername}
-                className="text-sm bg-black text-white px-2 py-[2px] rounded-lg"
+                className={`${
+                  theme.type === "dark" && "border"
+                } text-sm bg-black text-white px-2 py-[2px] rounded-lg`}
               >
                 Saqlash
               </button>
@@ -307,14 +335,25 @@ function Profile() {
       )}
       {showNumberModul && (
         <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-md bg-white border-2 border-black text-lg p-6">
+          <div
+            style={{
+              backgroundColor: theme.background,
+              borderColor: theme.border,
+              color: "black",
+            }}
+            className="rounded-md border-2 text-lg p-6"
+          >
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.number}
             </p>
             <div className="flex items-center mt-1">
               <PhoneInput
                 defaultCountry="UZ"
-                className="border border-black p-2 rounded-lg w-full"
+                style={{
+                  backgroundColor: theme.background,
+                  borderColor: theme.border,
+                }}
+                className="border p-2 rounded-lg w-full"
                 value={phoneNumber}
                 onChange={setPhoneNumber}
                 international
@@ -324,18 +363,24 @@ function Profile() {
             </div>
             <div className="flex items-center justify-around mt-6">
               <button
+                style={{ borderColor: theme.border }}
                 onClick={() => {
                   setShowNumberModul(false);
                   setPhoneNumber(user.phoneNumber || "");
                   setFormErrors({});
                 }}
-                className="border text-sm text-white px-2 bg-black py-[2px] rounded-lg"
+                className={`${
+                  theme.type === "dark" && "border"
+                } text-sm text-white px-2 bg-black py-[2px] rounded-lg`}
               >
                 Qaytish
               </button>
               <button
+                style={{ borderColor: theme.border }}
                 onClick={changePhoneNumber}
-                className="border text-sm text-white bg-black px-2 py-[2px] rounded-lg"
+                className={`${
+                  theme.type === "dark" && "border"
+                } text-sm text-white bg-black px-2 py-[2px] rounded-lg`}
               >
                 Saqlash
               </button>
@@ -345,7 +390,14 @@ function Profile() {
       )}
       {showRegionModul && (
         <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-md bg-white border-2 border-black text-lg p-6">
+          <div
+            style={{
+              backgroundColor: theme.background,
+              borderColor: theme.border,
+              color: theme.textColor,
+            }}
+            className="rounded-md border-2 text-lg p-6"
+          >
             <p className="text-red-600 font-[700] text-xs ml-1">
               {formErrors.country}
             </p>
@@ -354,7 +406,7 @@ function Profile() {
                 <p>Davlat:</p>
                 <p>Region:</p>
               </div>
-              <div className="flex flex-col ml-[11px] space-y-4 w-60">
+              <div className="flex text-black flex-col ml-[11px] space-y-4 w-60">
                 <CountryDropdown
                   value={country}
                   onChange={(val) => {
@@ -394,25 +446,11 @@ function Profile() {
         </div>
       )}
       {showLogOutModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6">
-            <p>Tizimdan chiqishni xoxlaysizmi?</p>
-            <div className="flex items-center justify-around mt-6">
-              <button
-                onClick={() => setShowLogOutModul(false)}
-                className="border border-white w-16 rounded-lg"
-              >
-                YO'Q
-              </button>
-              <button
-                onClick={signOutUser}
-                className="border border-white w-16 rounded-lg"
-              >
-                HA
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text="Tizimdan chiqishni xoxlaysizmi?"
+          cancelFunction={(value) => setShowLogOutModul(value)}
+          confirmFunction={signOutUser}
+        />
       )}
       <div className="relative flex items-center justify-center py-6">
         {backgroundImage || user.bgImage ? (
@@ -489,7 +527,12 @@ function Profile() {
             <p className="text-xs -mt-[4px] truncate">{user.email}</p>
           </div>
         </ListItemButton>
-        <Divider variant="middle" />
+        <Divider
+          variant="middle"
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton onClick={() => setShowNumberModul(true)} component="a">
           <div className="px-1">
             <h4 className="text-lg font-[600]">
@@ -507,7 +550,12 @@ function Profile() {
             <p className="text-xs -mt-[4px]">Telefon raqamingiz</p>
           </div>
         </ListItemButton>
-        <Divider variant="middle" />
+        <Divider
+          variant="middle"
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton onClick={() => setShowRegionModul(true)} component="a">
           <div className="px-1">
             <h4 className="text-lg font-[600] truncate">
@@ -527,7 +575,12 @@ function Profile() {
             </p>
           </div>
         </ListItemButton>
-        <Divider variant="middle" />
+        <Divider
+          variant="middle"
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <div className="py-2 px-2 mx-4 border-b border-x border-gray-300 font-[600]">
           <div className="flex items-center">
             <PersonAddAlt1Icon style={{ fontSize: 20, color: "green" }} />
@@ -571,18 +624,31 @@ function Profile() {
           </div>
         </div>
         <p className="font-bold ml-5 pt-3">Sozlamalar</p>
-        <ListItemButton onClick={() => setDarkMode(!darkMode)} component="a">
+        <ListItemButton
+          onClick={() =>
+            cookies.theme === "light" || !cookies.theme
+              ? setCookie("theme", "dark", { path: "/" })
+              : setCookie("theme", "light", { path: "/" })
+          }
+          component="a"
+        >
           <Switch
-            color="default"
+            color={theme.type === "light" ? "default" : "primary"}
             size="small"
-            style={{ color: darkMode ? "white" : "black" }}
+            style={{
+              color: darkMode ? "white" : "black",
+            }}
             checked={darkMode}
             inputProps={{ "aria-label": "controlled" }}
             className="-ml-[3px]"
           />
           <p className="text-lg font-[600] ml-3">Ilova Ranggi</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton
           onClick={() => navigate("/profile/jobsHistory")}
           component="a"
@@ -590,7 +656,11 @@ function Profile() {
           <WorkHistoryIcon style={{ fontSize: 24, marginLeft: 4 }} />
           <p className="text-lg font-[600] ml-5">Ishlar Tarixi</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton
           onClick={() => navigate("/profile/homesHistory")}
           component="a"
@@ -598,31 +668,51 @@ function Profile() {
           <DomainAddIcon style={{ fontSize: 24, marginLeft: 4 }} />
           <p className="text-lg font-[600] ml-5">Uy Ijaralari Tarixi</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton component="a">
           <LanguageIcon style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }} />
           <p className="text-lg font-[600] ml-5">Tilni O'zgartirish</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton component="a">
           <HeadsetMicIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
           <p className="text-lg font-[600] ml-5">Yordam</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton component="a">
           <PrivacyTipIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
           <p className="text-lg font-[600] ml-5">Ilova Qoidalari</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
         <ListItemButton onClick={() => setShowLogOutModul(true)} component="a">
           <LogoutIcon style={{ fontSize: 24, marginTop: 1, marginLeft: 5 }} />
           <p className="text-lg font-[600] ml-5">Tizimdan Chiqish</p>
         </ListItemButton>
-        <Divider />
+        <Divider
+          sx={{
+            bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+          }}
+        />
       </div>
     </div>
   );

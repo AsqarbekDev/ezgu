@@ -45,38 +45,43 @@ function Chat() {
           <p className="font-[600] text-xl">Xozircha xabarlar yo'q</p>
         </div>
       ) : (
-        chatsArray.map((key, index) => (
-          <ChatCard
-            key={index}
-            id={key}
-            uid={chats[key].messagingUser.uid}
-            username={chats[key].messagingUser.username}
-            userImage={chats[key].messagingUser.image}
-            lastMessage={
-              chats[key].messages[chats[key].messages.length - 1]?.message
-            }
-            lastImage={
-              chats[key].messages[chats[key].messages.length - 1]?.image
-            }
-            timestamp={
-              chats[key].messages[chats[key].messages.length - 1]?.timestamp
-            }
-            seen={chats[key].messages[chats[key].messages.length - 1]?.seen}
-            mine={
-              chats[key].messages[chats[key].messages.length - 1]?.uid ===
-              user.uid
-                ? true
-                : false
-            }
-            lastSeen={chats[key].messagingUser.lastSeen}
-            showAvatar={
-              !chats[key]?.messagingUser?.blockedUsers?.includes(user.uid) &&
-              !user.blockedUsers.includes(chats[key]?.messagingUser.uid)
-                ? true
-                : false
-            }
-          />
-        ))
+        chatsArray.map(
+          (key, index) =>
+            chats[key].deleted === false && (
+              <ChatCard
+                key={index}
+                id={key}
+                uid={chats[key].messagingUser.uid}
+                username={chats[key].messagingUser.username}
+                userImage={chats[key].messagingUser.image}
+                lastMessage={
+                  chats[key].messages[chats[key].messages.length - 1]?.message
+                }
+                lastImage={
+                  chats[key].messages[chats[key].messages.length - 1]?.image
+                }
+                timestamp={
+                  chats[key].messages[chats[key].messages.length - 1]?.timestamp
+                }
+                seen={chats[key].messages[chats[key].messages.length - 1]?.seen}
+                mine={
+                  chats[key].messages[chats[key].messages.length - 1]?.uid ===
+                  user.uid
+                    ? true
+                    : false
+                }
+                lastSeen={chats[key].messagingUser.lastSeen}
+                showAvatar={
+                  !chats[key]?.messagingUser?.blockedUsers?.includes(
+                    user.uid
+                  ) &&
+                  !user.blockedUsers.includes(chats[key]?.messagingUser.uid)
+                    ? true
+                    : false
+                }
+              />
+            )
+        )
       )}
     </div>
   );

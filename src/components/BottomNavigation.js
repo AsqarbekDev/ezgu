@@ -15,6 +15,7 @@ import { selectUser } from "../features/userSlice";
 import { selectChats } from "../features/chatsSlice";
 import BottomNavigationM from "@mui/material/BottomNavigation";
 import { BottomNavigationAction } from "@mui/material";
+import { selectTheme } from "../features/themeSlice";
 
 function BottomNavigation({ jobId }) {
   const [currentScreen, setCurrentScreen] = useState("/");
@@ -23,6 +24,7 @@ function BottomNavigation({ jobId }) {
   const user = useSelector(selectUser);
   const chats = useSelector(selectChats);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     const newMessagesArray = [];
@@ -59,9 +61,16 @@ function BottomNavigation({ jobId }) {
         currentScreen === "/loading/profile"
           ? ""
           : "hidden"
-      } fixed bottom-0 z-50 w-full bg-white xl:hidden`}
+      } fixed bottom-0 z-50 max-w-2xl w-full xl:hidden`}
     >
-      <BottomNavigationM className="w-full max-w-2xl flex items-center justify-between border-t">
+      <BottomNavigationM
+        style={{
+          backgroundColor: theme.background,
+          color: theme.textColor,
+          borderColor: theme.borderBlack,
+        }}
+        className="w-full border-t max-w-2xl flex items-center justify-between"
+      >
         <BottomNavigationAction
           className="iconContainer"
           onClick={() =>
@@ -69,9 +78,11 @@ function BottomNavigation({ jobId }) {
           }
           icon={
             currentScreen === "/" || currentScreen === `/jobs/${jobId}` ? (
-              <WorkIcon style={{ fontSize: 30, color: "black" }} />
+              <WorkIcon style={{ fontSize: 30, color: theme.textColor }} />
             ) : (
-              <WorkOutlineIcon style={{ fontSize: 30, color: "black" }} />
+              <WorkOutlineIcon
+                style={{ fontSize: 30, color: theme.textColor }}
+              />
             )
           }
         />
@@ -80,10 +91,12 @@ function BottomNavigation({ jobId }) {
           onClick={() => navigate("/homes")}
           icon={
             currentScreen === "/homes" ? (
-              <AddHomeWorkIcon style={{ fontSize: 30, color: "black" }} />
+              <AddHomeWorkIcon
+                style={{ fontSize: 30, color: theme.textColor }}
+              />
             ) : (
               <AddHomeWorkOutlinedIcon
-                style={{ fontSize: 30, color: "black" }}
+                style={{ fontSize: 30, color: theme.textColor }}
               />
             )
           }
@@ -95,9 +108,11 @@ function BottomNavigation({ jobId }) {
           }
           icon={
             currentScreen === "/add" || currentScreen === "/loading/add" ? (
-              <AddCircleIcon style={{ fontSize: 30, color: "black" }} />
+              <AddCircleIcon style={{ fontSize: 30, color: theme.textColor }} />
             ) : (
-              <AddCircleOutlineIcon style={{ fontSize: 30, color: "black" }} />
+              <AddCircleOutlineIcon
+                style={{ fontSize: 30, color: theme.textColor }}
+              />
             )
           }
         />
@@ -116,7 +131,9 @@ function BottomNavigation({ jobId }) {
                     </p>
                   </div>
                 )}
-                <QuestionAnswerIcon style={{ fontSize: 30, color: "black" }} />
+                <QuestionAnswerIcon
+                  style={{ fontSize: 30, color: theme.textColor }}
+                />
               </div>
             ) : (
               <div className="relative">
@@ -128,7 +145,7 @@ function BottomNavigation({ jobId }) {
                   </div>
                 )}
                 <QuestionAnswerOutlinedIcon
-                  style={{ fontSize: 30, color: "black" }}
+                  style={{ fontSize: 30, color: theme.textColor }}
                 />
               </div>
             )
@@ -142,10 +159,12 @@ function BottomNavigation({ jobId }) {
           icon={
             currentScreen === "/profile" ||
             currentScreen === "/loading/profile" ? (
-              <AccountCircleIcon style={{ fontSize: 30, color: "black" }} />
+              <AccountCircleIcon
+                style={{ fontSize: 30, color: theme.textColor }}
+              />
             ) : (
               <AccountCircleOutlinedIcon
-                style={{ fontSize: 30, color: "black" }}
+                style={{ fontSize: 30, color: theme.textColor }}
               />
             )
           }

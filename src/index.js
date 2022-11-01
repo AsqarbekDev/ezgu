@@ -6,18 +6,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <CookiesProvider>
         <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+      </CookiesProvider>
+    </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

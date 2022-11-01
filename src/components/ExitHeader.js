@@ -13,10 +13,13 @@ import { selectNotifications } from "../features/notificationsSlice";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
+import { selectTheme } from "../features/themeSlice";
+import ActionModul from "./ActionModul";
 
 function ExitHeader({ screenName, path, myjob }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useSelector(selectTheme);
   const notifications = useSelector(selectNotifications);
   const [showDeleteModul, setShowDeleteModul] = useState(false);
 
@@ -38,27 +41,20 @@ function ExitHeader({ screenName, path, myjob }) {
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-white border-b shadow-sm">
+    <div
+      style={{
+        backgroundColor: theme.background,
+        color: theme.textColor,
+        borderColor: theme.borderBlack,
+      }}
+      className="sticky top-0 z-50 w-full border-b shadow-sm"
+    >
       {showDeleteModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6">
-            <p>Bildirishnomalarni o'chirishni xoxlaysizmi?</p>
-            <div className="flex items-center justify-around mt-6">
-              <button
-                onClick={() => setShowDeleteModul(false)}
-                className="border border-white w-16 rounded-lg"
-              >
-                YO'Q
-              </button>
-              <button
-                onClick={deleteNotifications}
-                className="border border-white w-16 rounded-lg"
-              >
-                HA
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text="Bildirishnomalarni o'chirishni xoxlaysizmi?"
+          cancelFunction={(value) => setShowDeleteModul(value)}
+          confirmFunction={deleteNotifications}
+        />
       )}
       <div className="relative h-14 flex items-center justify-center">
         <h1 className="font-bold text-xl">{screenName}</h1>
@@ -68,7 +64,7 @@ function ExitHeader({ screenName, path, myjob }) {
             className="absolute left-0 z-10 w-14 h-14 flex items-center justify-center"
           >
             <IconButton size="medium">
-              <WestIcon style={{ color: "black" }} />
+              <WestIcon style={{ color: theme.textColor }} />
             </IconButton>
           </div>
         )}
@@ -82,7 +78,7 @@ function ExitHeader({ screenName, path, myjob }) {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <MoreVertIcon style={{ color: "black" }} />
+                <MoreVertIcon style={{ color: theme.textColor }} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -120,12 +116,14 @@ function ExitHeader({ screenName, path, myjob }) {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              <MenuItem onClick={() => setShowDeleteModul(true)}>
-                <ListItemIcon>
-                  <DeleteForeverIcon fontSize="small" />
-                </ListItemIcon>
-                hammasini o'chirish
-              </MenuItem>
+              {notifications.length > 0 && (
+                <MenuItem onClick={() => setShowDeleteModul(true)}>
+                  <ListItemIcon>
+                    <DeleteForeverIcon fontSize="small" />
+                  </ListItemIcon>
+                  hammasini o'chirish
+                </MenuItem>
+              )}
             </Menu>
           </div>
         )}

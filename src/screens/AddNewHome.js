@@ -29,6 +29,7 @@ import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
 import ExitHeader from "../components/ExitHeader";
+import ActionModul from "../components/ActionModul";
 
 function AddNewHome() {
   const image1Ref = useRef(null);
@@ -371,29 +372,12 @@ function AddNewHome() {
       <ExitHeader screenName="E'lonni to'ldiring" />
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6 mx-6">
-            <p className="text-center">{showErrorModul}</p>
-            <div className="flex items-center justify-center mt-6">
-              {showErrorModul ===
-              "Kuniga faqat 4ta e'lon berishingiz mumkin!" ? (
-                <button
-                  onClick={() => navigate("/")}
-                  className="border border-white px-4 pb-[2px] rounded-lg"
-                >
-                  Chiqish
-                </button>
-              ) : (
-                <button
-                  onClick={() => navigate(`/jobs/${user.currentJob}`)}
-                  className="border border-white px-4 pb-[2px] rounded-lg"
-                >
-                  Ishni ko'rish
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text={showErrorModul}
+          exitFunction={() => navigate("/homes")}
+          errorModulExit
+          buttonName={"Chiqish"}
+        />
       )}
       <div className="p-2">
         <div className="bg-white shadow-xl rounded-lg px-2 py-4">

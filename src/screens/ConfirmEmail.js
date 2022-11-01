@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoadingModul from "../components/LoadingModul";
+import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
 
@@ -20,6 +21,7 @@ function ConfirmEmail() {
 
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     if (!user || user?.emailVerified) {
@@ -70,8 +72,11 @@ function ConfirmEmail() {
   return (
     <>
       {loading && <LoadingModul />}
-      <div className="max-w-md -mt-11 mx-auto bg-gray-50 h-screen px-4 flex items-center justify-center">
-        <div className="shadow-lg w-full bg-white flex flex-col items-center justify-center py-4 px-6 rounded-lg">
+      <div className="max-w-md -mt-11 mx-auto h-screen px-4 flex items-center justify-center">
+        <div
+          style={{ backgroundColor: theme.background, color: theme.textColor }}
+          className="shadow-lg w-full flex flex-col items-center justify-center py-4 px-6 rounded-lg"
+        >
           {showError && (
             <Alert
               className="mb-4"
@@ -113,7 +118,7 @@ function ConfirmEmail() {
           <button
             disabled={formDisabled}
             onClick={sendConfirm}
-            className="logButton mb-2 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
+            className="logButton border border-white mb-2 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
             Yuborish
           </button>

@@ -28,6 +28,8 @@ import { db } from "../firebase";
 import { useState } from "react";
 import ExitHeader from "../components/ExitHeader";
 import BottomNavigation from "../components/BottomNavigation";
+import { selectTheme } from "../features/themeSlice";
+import ActionModul from "../components/ActionModul";
 
 function JobInfo() {
   const [job, setJob] = useState(null);
@@ -45,6 +47,7 @@ function JobInfo() {
   const navigate = useNavigate();
   const { jobId } = useParams();
   const waiting = useSelector(selectWaiting);
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     if (getNavigate) {
@@ -289,58 +292,43 @@ function JobInfo() {
       />
       {loading && <LoadingModul />}
       {showModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6">
-            <p>
-              {job?.userID === user?.uid
-                ? "Elonni o'chirishni xoxlaysizmi?"
-                : user?.currentJob === job?.id
-                ? "Ishni bekor qilishni xoxlaysizmi?"
-                : "Ishni olishni xoxlaysizmi?"}
-            </p>
-            <div className="flex items-center justify-around mt-6">
-              <button
-                onClick={() => setShowModul(false)}
-                className="border border-white w-16 rounded-lg"
-              >
-                YO'Q
-              </button>
-              <button
-                onClick={
-                  job?.userID === user?.uid
-                    ? deleteJob
-                    : user?.currentJob === job?.id
-                    ? exitJob
-                    : getJob
-                }
-                className="border border-white w-16 rounded-lg"
-              >
-                HA
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text={
+            job?.userID === user?.uid
+              ? "Elonni o'chirishni xoxlaysizmi?"
+              : user?.currentJob === job?.id
+              ? "Ishni bekor qilishni xoxlaysizmi?"
+              : "Ishni olishni xoxlaysizmi?"
+          }
+          cancelFunction={() => setShowModul(false)}
+          confirmFunction={
+            job?.userID === user?.uid
+              ? deleteJob
+              : user?.currentJob === job?.id
+              ? exitJob
+              : getJob
+          }
+        />
       )}
       {showBanErrorModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black border border-red-600 text-white text-lg p-6">
-            <p className="text-red-600">Ish beruvchi sizni ban qilgan!</p>
-            <div className="flex items-center justify-center mt-6">
-              <button
-                onClick={() => navigate("/")}
-                className="border border-red-600 px-4 rounded-lg"
-              >
-                Chiqish
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text="Ish beruvchi sizni ban qilgan!"
+          exitFunction={() => navigate("/")}
+          errorModulExit
+          buttonName={"Chiqish"}
+        />
       )}
       {!job ? (
         <DefaultLoadingModul />
       ) : (
         <div className="p-2">
-          <div className="bg-white p-2 rounded-lg shadow-lg">
+          <div
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+            }}
+            className="p-2 rounded-lg shadow-lg"
+          >
             <div className="flex items-center m-1">
               <Avatar
                 src={job?.userImage}
@@ -367,7 +355,7 @@ function JobInfo() {
                   }
                   size="small"
                 >
-                  <EmailIcon style={{ fontSize: 38, color: "black" }} />
+                  <EmailIcon style={{ fontSize: 38, color: theme.iconColor }} />
                 </IconButton>
               )}
             </div>
@@ -397,7 +385,7 @@ function JobInfo() {
               </div>
               <div className="flex items-start font-bold">
                 <h4>Ishchilar soni:</h4>
-                <p className="ml-2 text-[#4a4847]">
+                <p style={{ color: theme.iconColor }} className="ml-2">
                   <span className="text-blue-700">{workers.length}</span>/
                   {job?.workersCount}
                 </p>
@@ -406,12 +394,18 @@ function JobInfo() {
               job?.endingTime > dayjs().unix() ? (
                 <div className="flex items-start font-bold">
                   <h4 className="">Telefon:</h4>
-                  <p className="ml-2 text-[#4a4847]">{job?.userPhoneNumber}</p>
+                  <p style={{ color: theme.iconColor }} className="ml-2">
+                    {job?.userPhoneNumber}
+                  </p>
                   <button
+                    style={{
+                      backgroundColor: isCopied
+                        ? theme.buttonOpacityColor
+                        : theme.background,
+                      borderColor: theme.border,
+                    }}
                     onClick={handleCopyClick}
-                    className={`${isCopied ? "bg-gray-300" : "bg-white"} ${
-                      !isCopied && "hover:bg-gray-200"
-                    } ml-2 mt-[3px] border border-black rounded-lg px-2 pb-[1px] text-sm`}
+                    className={`ml-2 mt-[3px] border rounded-lg px-2 pb-[1px] text-sm`}
                   >
                     {isCopied ? "Nusxalandi!" : "Nusxalash"}
                   </button>
@@ -419,14 +413,21 @@ function JobInfo() {
               ) : job?.userID === user?.uid ? (
                 <div className="flex items-start font-bold">
                   <h4 className="">Telefon:</h4>
-                  <p className="ml-2 text-[#4a4847] truncate">
+                  <p
+                    style={{ color: theme.iconColor }}
+                    className="ml-2 truncate"
+                  >
                     {job?.userPhoneNumber}
                   </p>
                   <button
+                    style={{
+                      backgroundColor: isCopied
+                        ? theme.buttonOpacityColor
+                        : theme.background,
+                      borderColor: theme.border,
+                    }}
                     onClick={handleCopyClick}
-                    className={`${isCopied ? "bg-gray-300" : "bg-white"} ${
-                      !isCopied && "hover:bg-gray-200"
-                    } ml-2 mt-[3px] border border-black rounded-lg px-2 pb-[1px] text-sm`}
+                    className={`ml-2 mt-[3px] border rounded-lg px-2 pb-[1px] text-sm`}
                   >
                     {isCopied ? "Nusxalandi!" : "Nusxalash"}
                   </button>
@@ -434,33 +435,40 @@ function JobInfo() {
               ) : null}
               <div className="flex items-start font-bold">
                 <h4>Ish vaqti:</h4>
-                <p className="ml-2 text-[#4a4847]">
+                <p style={{ color: theme.iconColor }} className="ml-2">
                   {dayjs.unix(job?.startingTime).format("D/M/YYYY")}
                 </p>
-                <p className="text-[#4a4847] ml-6">
+                <p style={{ color: theme.iconColor }} className="ml-6">
                   {dayjs.unix(job?.startingTime).format("HH:mm")} -{" "}
                   {dayjs.unix(job?.endingTime).format("HH:mm")}
                 </p>
               </div>
               <div className="flex items-start font-bold">
                 <h4 className="">Davlat:</h4>
-                <p className="ml-2 text-[#4a4847]">{job?.country}</p>
+                <p style={{ color: theme.iconColor }} className="ml-2">
+                  {job?.country}
+                </p>
               </div>
               <div className="flex items-start font-bold">
                 <h4 className="">Region:</h4>
-                <p className="ml-2 text-[#4a4847]">{job?.region}</p>
+                <p style={{ color: theme.iconColor }} className="ml-2">
+                  {job?.region}
+                </p>
               </div>
               {job?.line !== "Неизвестный" && (
                 <div className="flex items-start font-bold">
                   <h4 className="">Metro:</h4>
-                  <p className="ml-2 text-[#4a4847]">
+                  <p style={{ color: theme.iconColor }} className="ml-2">
                     {job?.line} {job?.station}
                   </p>
                 </div>
               )}
               <div className="flex items-start font-bold">
                 <h4 className="">Manzil:</h4>
-                <p className="ml-2 text-[#4a4847] overflow-hidden">
+                <p
+                  style={{ color: theme.iconColor }}
+                  className="ml-2 overflow-hidden"
+                >
                   {job?.workingPlace}
                 </p>
               </div>
@@ -468,7 +476,10 @@ function JobInfo() {
                 <div className="flex items-start">
                   <h4 className="font-bold leading-3 overflow-hidden">
                     Kommentariya:{" "}
-                    <span className="text-[#4a4847] font-medium text-base">
+                    <span
+                      style={{ color: theme.iconColor }}
+                      className="font-medium text-base"
+                    >
                       {job?.comment}
                     </span>
                   </h4>
@@ -483,18 +494,30 @@ function JobInfo() {
                 {job?.userID === user?.uid && (
                   <button
                     onClick={() => setShowBan(!showBan)}
-                    className={`${
-                      showBan
-                        ? "text-black bg-white border border-black"
-                        : "text-white bg-black"
-                    } rounded-lg overflow-hidden px-2 font-bold`}
+                    style={{
+                      backgroundColor: showBan
+                        ? theme.background
+                        : theme.textColor,
+                      borderColor: showBan ? theme.border : theme.background,
+                      color: showBan ? theme.textColor : theme.background,
+                    }}
+                    className={`border rounded-lg overflow-hidden h-6 w-16 flex items-center justify-between px-[6px] ${
+                      showBan && theme.type === "dark"
+                        ? "font-[600]"
+                        : !showBan && theme.type === "dark"
+                        ? "font-bold"
+                        : showBan && theme.type === "light"
+                        ? "font-bold"
+                        : !showBan && theme.type === "light"
+                        ? "font-[600]"
+                        : ""
+                    }`}
                   >
-                    Ban{" "}
+                    <p>Ban</p>
                     <BlockIcon
                       style={{
                         fontSize: 18,
-                        marginBottom: 4,
-                        color: showBan ? "black" : "white",
+                        color: showBan ? theme.textColor : theme.background,
                       }}
                     />
                   </button>
@@ -538,9 +561,12 @@ function JobInfo() {
               {job?.endingTime > dayjs().unix() && job?.deleted === false && (
                 <div className="flex items-center justify-center mb-4 mt-6">
                   <button
+                    style={{ borderColor: theme.border }}
                     disabled={loading}
                     onClick={() => setShowModul(true)}
-                    className="bg-black text-white w-[60%] py-1 rounded-lg overflow-hidden"
+                    className={`${
+                      theme.type === "dark" && "border"
+                    } bg-black text-white w-[60%] py-1 rounded-lg overflow-hidden`}
                   >
                     {job?.userID === user?.uid
                       ? "Elonni o'chirish"

@@ -28,6 +28,7 @@ import { auth, db } from "./firebase";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
@@ -45,7 +46,10 @@ import HomesHistory from "./screens/HomesHistory";
 import dayjs from "dayjs";
 import ChatRoom from "./screens/ChatRoom";
 import {
+  deleteChat,
   selectChatRooms,
+  selectChats,
+  selectDeletingChat,
   setChatRooms,
   setChats,
   setMessagingUsers,
@@ -55,13 +59,73 @@ import { setJobs, setMyAddedJobs } from "./features/jobsSlice";
 import { setHomes, setMyAddedHomes } from "./features/homesSlice";
 import BlockedUsersChat from "./screens/BlockedUsersChat";
 import SideBar from "./components/SideBar";
+import { selectTheme, setTheme } from "./features/themeSlice";
+import { useCookies } from "react-cookie";
 
 function App() {
   const user = useSelector(selectUser);
   const chatRooms = useSelector(selectChatRooms);
   const waiting = useSelector(selectWaiting);
+  const deletingChat = useSelector(selectDeletingChat);
+  const chats = useSelector(selectChats);
   const dispatch = useDispatch();
   const UserCurrent = auth?.currentUser;
+  const [cookies, setCookie] = useCookies(["theme", "user"]);
+  const theme = useSelector(selectTheme);
+  const allChats = chats[deletingChat]?.messages;
+
+  document.body.style = `background: ${theme.backgroundBody};`;
+
+  useEffect(() => {
+    // Delete Chat
+    if (deletingChat) {
+      deleteDoc(doc(db, "chats", deletingChat)).then(() => {
+        allChats.map(async (item) => {
+          await deleteDoc(doc(db, "chats", deletingChat, "messages", item.id));
+        });
+      });
+      dispatch(deleteChat(null));
+    }
+  }, [deletingChat, chats, allChats, dispatch]);
+
+  useEffect(() => {
+    // Setting theme
+    if (cookies.theme === "dark") {
+      if (theme.type !== "dark") {
+        dispatch(setTheme("dark"));
+      }
+    } else {
+      if (theme.type !== "light") {
+        dispatch(setTheme("light"));
+      }
+    }
+  }, [cookies, dispatch, theme.type]);
+
+  useEffect(() => {
+    // Getting user from cookies
+    if (cookies.user && !user) {
+      dispatch(
+        login({
+          uid: cookies.user.uid,
+          email: cookies.user.email,
+          image: cookies.user.image,
+          username: cookies.user.username,
+          phoneNumber: cookies.user.phoneNumber,
+          country: cookies.user.country,
+          region: cookies.user.region,
+          emailVerified: cookies.user.emailVerified,
+          workedWith: cookies.user.workedWith,
+          currentJob: cookies.user.currentJob,
+          homeAdds: cookies.user.homeAdds,
+          jobAdds: cookies.user.jobAdds,
+          workedJobs: cookies.user.workedJobs,
+          bgImage: cookies.user.bgImage,
+          blockedUsers: cookies.user.blockedUsers,
+        })
+      );
+      dispatch(setWaiting(false));
+    }
+  }, [cookies.user, user, dispatch]);
 
   useEffect(() => {
     //Updating User LastSeen
@@ -489,6 +553,7 @@ function App() {
         snapshot.forEach((doc) => {
           allChats.push({
             id: doc.id,
+            deleted: doc.data().deleted,
             messagingUser: doc
               .data()
               .users.filter((dbUser) => dbUser !== auth.currentUser.uid)[0],
@@ -529,6 +594,11 @@ function App() {
             })
           );
           dispatch(setWaiting(false));
+          setCookie(
+            "user",
+            { emailVerified: userInfo.emailVerified, ...docSnap.data() },
+            { path: "/" }
+          );
         });
 
         return () => {
@@ -538,7 +608,7 @@ function App() {
         dispatch(setWaiting(false));
       }
     });
-  }, [dispatch]);
+  }, [dispatch, setCookie]);
 
   useEffect(() => {
     //Getting TimedOutJobs

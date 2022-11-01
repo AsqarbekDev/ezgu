@@ -10,6 +10,7 @@ import { selectUser } from "../features/userSlice";
 import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
 import ExitHeader from "../components/ExitHeader";
+import { selectTheme } from "../features/themeSlice";
 
 function SignUpwithEmail() {
   const avatarRef = useRef(null);
@@ -27,6 +28,7 @@ function SignUpwithEmail() {
 
   const navigate = useNavigate();
   const user = useSelector(selectUser);
+  const theme = useSelector(selectTheme);
 
   const addImage = (e) => {
     const reader = new FileReader();
@@ -152,8 +154,11 @@ function SignUpwithEmail() {
     <>
       <ExitHeader path="/signUp" screenName="Email orqali ro'yxatdan o'tish" />
       {loading && <LoadingModul />}
-      <div className="max-w-md -mt-11 mx-auto bg-gray-50 h-screen px-4 flex items-center justify-center">
-        <div className="shadow-lg w-full bg-white flex flex-col items-center justify-center py-4 px-6 rounded-lg">
+      <div className="max-w-md -mt-16 mx-auto h-screen px-4 flex items-center justify-center">
+        <div
+          style={{ backgroundColor: theme.background, color: theme.textColor }}
+          className="shadow-lg w-full flex flex-col items-center justify-center py-4 px-6 rounded-lg"
+        >
           {showError && (
             <Alert
               className="mb-4"
@@ -168,14 +173,19 @@ function SignUpwithEmail() {
             onClick={() => avatarRef.current.click()}
             src={image}
             style={{ width: 50, height: 50 }}
-            className="mb-3 cursor-pointer"
+            className="mb-3"
           />
           <p className="text-red-600 font-[600] text-xs">{formErrors.image}</p>
           <input
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              outlineColor: theme.border,
+            }}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Ismingizni kiriting!"
-            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            className="logInput p-1 m-1 border rounded-md w-full"
             type="text"
             disabled={formDisabled}
             maxLength={40}
@@ -184,20 +194,30 @@ function SignUpwithEmail() {
             {formErrors.username}
           </p>
           <input
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              outlineColor: theme.border,
+            }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Emailingizni kiriting!"
-            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            className="logInput p-1 m-1 border rounded-md w-full"
             type="email"
             disabled={formDisabled}
             maxLength={50}
           />
           <p className="text-red-600 font-[600] text-xs">{formErrors.email}</p>
           <input
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              outlineColor: theme.border,
+            }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Parol kiriting!"
-            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            className="logInput p-1 m-1 border rounded-md w-full"
             type="password"
             disabled={formDisabled}
             maxLength={20}
@@ -206,10 +226,15 @@ function SignUpwithEmail() {
             {formErrors.password}
           </p>
           <input
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              outlineColor: theme.border,
+            }}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Parolni qayta kiriting!"
-            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            className="logInput p-1 m-1 border rounded-md w-full"
             type="password"
             disabled={formDisabled}
             maxLength={20}
@@ -228,7 +253,7 @@ function SignUpwithEmail() {
           <button
             disabled={formDisabled}
             onClick={handleSubmit}
-            className="logButton mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
+            className="logButton border border-white mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
             Ro'yxatdan o'tish
           </button>

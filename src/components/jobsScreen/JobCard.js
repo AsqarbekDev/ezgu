@@ -7,6 +7,8 @@ import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectTheme } from "../../features/themeSlice";
 
 function JobCard({
   id,
@@ -24,6 +26,7 @@ function JobCard({
   currency,
 }) {
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   const navigateToJob = () => {
     navigate(`/jobs/${id}`);
@@ -40,7 +43,8 @@ function JobCard({
       )}
       <div
         onClick={navigateToJob}
-        className="bg-white m-1 px-3 pt-2 rounded-lg shadow-lg cursor-pointer"
+        style={{ backgroundColor: theme.background, color: theme.textColor }}
+        className="m-1 px-3 pt-2 rounded-lg shadow-lg cursor-pointer"
       >
         <div className="flex items-center">
           <Avatar alt={userName} src={userImage} />
@@ -73,27 +77,41 @@ function JobCard({
         </div>
         <div className="flex items-end justify-between ">
           <div className="flex items-end">
-            <LocationCityIcon style={{ fontSize: 28, color: "#4a4847" }} />
-            <p className="font-bold -mb-[0.6px] text-sm text-[#4a4847]">
+            <LocationCityIcon
+              style={{ fontSize: 28, color: theme.iconColor }}
+            />
+            <p
+              style={{ color: theme.iconColor }}
+              className="font-bold -mb-[0.6px] text-sm"
+            >
               {region}
             </p>
           </div>
           <div className="flex flex-col items-center">
-            <GroupsIcon style={{ fontSize: 28, color: "#4a4847" }} />
-            <p className="font-bold -mt-2 text-sm text-[#4a4847]">
+            <GroupsIcon style={{ fontSize: 28, color: theme.iconColor }} />
+            <p
+              style={{ color: theme.iconColor }}
+              className="font-bold -mt-2 text-sm"
+            >
               {currentWorkers.length}/{workersCount}
             </p>
           </div>
           <div className="flex items-center">
             <div className="flex flex-col items-end mr-2 mt-1">
               <AccessTimeFilledIcon
-                style={{ fontSize: 16, color: "#4a4847", marginTop: -2 }}
+                style={{ fontSize: 16, color: theme.iconColor, marginTop: -2 }}
               />
-              <p className="text-sm mt-[2px] font-bold text-[#4a4847]">
+              <p
+                style={{ color: theme.iconColor }}
+                className="text-sm mt-[2px] font-bold"
+              >
                 {dayjs.unix(startingTime).format("D/M/YYYY")}
               </p>
             </div>
-            <div className="text-sm font-bold text-[#4a4847]">
+            <div
+              style={{ color: theme.iconColor }}
+              className="text-sm font-bold"
+            >
               <p>{dayjs.unix(startingTime).format("HH:mm")}</p>
               <p>{dayjs.unix(endingTime).format("HH:mm")}</p>
             </div>
@@ -101,7 +119,7 @@ function JobCard({
         </div>
         <div className="flex items-center">
           <div className="jobCardHr"></div>
-          <ExpandMoreIcon style={{ color: "#4a4847" }} />
+          <ExpandMoreIcon style={{ color: theme.iconColor }} />
         </div>
       </div>
     </>

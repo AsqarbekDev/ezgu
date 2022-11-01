@@ -21,7 +21,9 @@ import { selectUser } from "../features/userSlice";
 import { selectChats } from "../features/chatsSlice";
 import { useEffect } from "react";
 import { selectNotifications } from "../features/notificationsSlice";
-import { Divider } from "@mui/material";
+import { Divider, ListItemButton, Switch } from "@mui/material";
+import { selectTheme } from "../features/themeSlice";
+import { useCookies } from "react-cookie";
 
 function SideBar({ jobId }) {
   const [currentScreen, setCurrentScreen] = useState("/");
@@ -32,6 +34,19 @@ function SideBar({ jobId }) {
   const chats = useSelector(selectChats);
   const notifications = useSelector(selectNotifications);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
+  const [cookies, setCookie] = useCookies(["theme"]);
+  const [darkMode, setDarkMode] = useState(
+    cookies.theme === "dark" ? true : false
+  );
+
+  useEffect(() => {
+    if (cookies.theme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [cookies.theme]);
 
   useEffect(() => {
     const newMessagesArray = [];
@@ -68,67 +83,101 @@ function SideBar({ jobId }) {
   }, [location]);
 
   return (
-    <div className="fixed hidden xl:inline xl:left-0 xl:w-[300px] 2xl:left-20 2xl:w-[348px] top-14 z-50 bg-white rounded-lg">
+    <div
+      style={{
+        backgroundColor: theme.background,
+        color: theme.textColor,
+      }}
+      className="fixed shadow-md hidden xl:inline xl:left-0 xl:w-[300px] 2xl:left-20 2xl:w-[348px] top-14 z-50 rounded-lg"
+    >
       <button
-        className={`${
-          currentScreen === "/" ? "bg-gray-300" : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
+        style={{
+          backgroundColor:
+            currentScreen === "/"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
         onClick={() =>
           navigate(user?.currentJob ? `/jobs/${user.currentJob}` : "/")
         }
       >
         {currentScreen === "/" ? (
-          <WorkIcon style={{ fontSize: 30, color: "black" }} />
+          <WorkIcon style={{ fontSize: 30, color: theme.textColor }} />
         ) : (
-          <WorkOutlineIcon style={{ fontSize: 30, color: "black" }} />
+          <WorkOutlineIcon style={{ fontSize: 30, color: theme.textColor }} />
         )}
         <p className="text-lg font-[600] ml-4">Ish uchun e'lonlar</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/homes" ? "bg-gray-300" : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
+        style={{
+          backgroundColor:
+            currentScreen === "/homes"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
         onClick={() => navigate("/homes")}
       >
         {currentScreen === "/homes" ? (
-          <AddHomeWorkIcon style={{ fontSize: 30, color: "black" }} />
+          <AddHomeWorkIcon style={{ fontSize: 30, color: theme.textColor }} />
         ) : (
-          <AddHomeWorkOutlinedIcon style={{ fontSize: 30, color: "black" }} />
+          <AddHomeWorkOutlinedIcon
+            style={{ fontSize: 30, color: theme.textColor }}
+          />
         )}
         <p className="text-lg font-[600] ml-4">Uy ijarasi uchun e'lonlar</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/add" ||
-          currentScreen === "/loading/add" ||
-          currentScreen === "/add/newjob" ||
-          currentScreen === "/add/newhome"
-            ? "bg-gray-300"
-            : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
+        style={{
+          backgroundColor:
+            currentScreen === "/add" ||
+            currentScreen === "/loading/add" ||
+            currentScreen === "/add/newjob" ||
+            currentScreen === "/add/newhome"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
         onClick={() => navigate(user?.emailVerified ? "/add" : "/loading/add")}
       >
         {currentScreen === "/add" ||
         currentScreen === "/loading/add" ||
         currentScreen === "/add/newjob" ||
         currentScreen === "/add/newhome" ? (
-          <AddCircleIcon style={{ fontSize: 30, color: "black" }} />
+          <AddCircleIcon style={{ fontSize: 30, color: theme.textColor }} />
         ) : (
-          <AddCircleOutlineIcon style={{ fontSize: 30, color: "black" }} />
+          <AddCircleOutlineIcon
+            style={{ fontSize: 30, color: theme.textColor }}
+          />
         )}
         <p className="text-lg font-[600] ml-4">E'lon qo'shish</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/chats" ||
-          currentScreen === "/loading/chats" ||
-          currentScreen === "/chats/blockedUsers"
-            ? "bg-gray-300"
-            : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
+        style={{
+          backgroundColor:
+            currentScreen === "/chats" ||
+            currentScreen === "/loading/chats" ||
+            currentScreen === "/chats/blockedUsers"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
         onClick={() =>
           navigate(user?.emailVerified ? "/chats" : "/loading/chats")
         }
@@ -144,7 +193,9 @@ function SideBar({ jobId }) {
                 </p>
               </div>
             )}
-            <QuestionAnswerIcon style={{ fontSize: 30, color: "black" }} />
+            <QuestionAnswerIcon
+              style={{ fontSize: 30, color: theme.textColor }}
+            />
           </div>
         ) : (
           <div className="relative">
@@ -156,41 +207,64 @@ function SideBar({ jobId }) {
               </div>
             )}
             <QuestionAnswerOutlinedIcon
-              style={{ fontSize: 30, color: "black" }}
+              style={{ fontSize: 30, color: theme.textColor }}
             />
           </div>
         )}
         <p className="text-lg font-[600] ml-4">Xabarlar</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/profile" || currentScreen === "/loading/profile"
-            ? "bg-gray-300"
-            : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
+        style={{
+          backgroundColor:
+            currentScreen === "/profile" || currentScreen === "/loading/profile"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
         onClick={() =>
           navigate(user?.emailVerified ? "/profile" : "/loading/profile")
         }
       >
         {currentScreen === "/profile" ||
         currentScreen === "/loading/profile" ? (
-          <AccountCircleIcon style={{ fontSize: 30, color: "black" }} />
+          <AccountCircleIcon style={{ fontSize: 30, color: theme.textColor }} />
         ) : (
-          <AccountCircleOutlinedIcon style={{ fontSize: 30, color: "black" }} />
+          <AccountCircleOutlinedIcon
+            style={{ fontSize: 30, color: theme.textColor }}
+          />
         )}
         <p className="text-lg font-[600] ml-4">Foydalanuvchi</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/notifications" ? "bg-gray-300" : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
-        onClick={() => navigate("/notifications")}
+        style={{
+          backgroundColor:
+            currentScreen === "/notifications"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
+        onClick={() =>
+          navigate(
+            user?.emailVerified ? "/notifications" : "/loading/notifications"
+          )
+        }
       >
-        {currentScreen === "/notifications" ? (
+        {currentScreen === "/notifications" ||
+        currentScreen === "/loading/notifications" ? (
           <div className="relative">
-            <CircleNotificationsIcon style={{ fontSize: 30, color: "black" }} />
+            <CircleNotificationsIcon
+              style={{ fontSize: 30, color: theme.textColor }}
+            />
             {newNotifications.length > 0 && (
               <div className="absolute right-0 top-0 bg-red-500 rounded-full px-[5px]">
                 <p className="text-white text-xs">{newNotifications.length}</p>
@@ -200,7 +274,7 @@ function SideBar({ jobId }) {
         ) : (
           <div className="relative">
             <CircleNotificationsOutlinedIcon
-              style={{ fontSize: 30, color: "black" }}
+              style={{ fontSize: 30, color: theme.textColor }}
             />
             {newNotifications.length > 0 && (
               <div className="absolute right-0 top-0 bg-red-500 rounded-full px-[5px]">
@@ -211,34 +285,94 @@ function SideBar({ jobId }) {
         )}
         <p className="text-lg font-[600] ml-4">Bildirishnomalar</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/profile/jobsHistory" ? "bg-gray-300" : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
-        onClick={() => navigate("/profile/jobsHistory")}
+        style={{
+          backgroundColor:
+            currentScreen === "/profile/jobsHistory"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
+        onClick={() =>
+          navigate(
+            user?.emailVerified
+              ? "/profile/jobsHistory"
+              : "/loading/profile/jobsHistory"
+          )
+        }
       >
-        {currentScreen === "/profile/jobsHistory" ? (
-          <WorkHistoryIcon style={{ fontSize: 30, color: "black" }} />
+        {currentScreen === "/profile/jobsHistory" ||
+        currentScreen === "/loading/profile/jobsHistory" ? (
+          <WorkHistoryIcon style={{ fontSize: 30, color: theme.textColor }} />
         ) : (
-          <WorkHistoryOutlinedIcon style={{ fontSize: 30, color: "black" }} />
+          <WorkHistoryOutlinedIcon
+            style={{ fontSize: 30, color: theme.textColor }}
+          />
         )}
         <p className="text-lg font-[600] ml-4">Ishlar tarixi</p>
       </button>
-      <Divider />
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
       <button
-        className={`${
-          currentScreen === "/profile/homesHistory" ? "bg-gray-300" : null
-        } rounded-lg flex items-center h-12 px-4 hover:bg-gray-200 transition transform duration-200 ease-in-out w-full`}
-        onClick={() => navigate("/profile/homesHistory")}
+        style={{
+          backgroundColor:
+            currentScreen === "/profile/homesHistory"
+              ? theme.sidebarBtnBackground
+              : theme.background,
+        }}
+        className={`rounded-lg outline-none flex items-center h-12 px-4 transition transform duration-200 ease-in-out w-full`}
+        onClick={() =>
+          navigate(
+            user?.emailVerified
+              ? "/profile/homesHistory"
+              : "/loading/profile/homesHistory"
+          )
+        }
       >
-        {currentScreen === "/profile/homesHistory" ? (
-          <DomainAddIcon style={{ fontSize: 30, color: "black" }} />
+        {currentScreen === "/profile/homesHistory" ||
+        currentScreen === "/loading/profile/homesHistory" ? (
+          <DomainAddIcon style={{ fontSize: 30, color: theme.textColor }} />
         ) : (
-          <DomainAddIcon style={{ fontSize: 30, color: "black" }} />
+          <DomainAddIcon style={{ fontSize: 30, color: theme.textColor }} />
         )}
         <p className="text-lg font-[600] ml-4">Uy ijaralari tarixi</p>
       </button>
+      <Divider
+        sx={{
+          bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
+        }}
+      />
+      <div className="rounded-lg overflow-hidden">
+        <ListItemButton
+          className="h-12 px-4 transition transform duration-200 ease-in-out w-full"
+          onClick={() =>
+            cookies.theme === "light" || !cookies.theme
+              ? setCookie("theme", "dark", { path: "/" })
+              : setCookie("theme", "light", { path: "/" })
+          }
+          component="a"
+        >
+          <Switch
+            color={theme.type === "light" ? "default" : "primary"}
+            size="small"
+            style={{
+              color: darkMode ? "white" : "black",
+            }}
+            checked={darkMode}
+            inputProps={{ "aria-label": "controlled" }}
+            className="-ml-1"
+          />
+          <p className="text-lg font-[600] ml-[10px]">Ilova Ranggi</p>
+        </ListItemButton>
+      </div>
     </div>
   );
 }

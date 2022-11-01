@@ -8,6 +8,9 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
 import ExitHeader from "../components/ExitHeader";
+import { useSelector } from "react-redux";
+import { selectTheme } from "../features/themeSlice";
+import ActionModul from "../components/ActionModul";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -15,6 +18,7 @@ function SignUp() {
   const [formDisabled, setFormDisabled] = useState(false);
 
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   const provider = new GoogleAuthProvider();
   auth.languageCode = "uz";
@@ -64,22 +68,17 @@ function SignUp() {
       <ExitHeader path="/" screenName="Ro'yxatdan o'tish" />
       {loading && <LoadingModul />}
       {showErrorModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6">
-            <p>Xatolik yuz berdi! Qayta urinib ko'ring.</p>
-            <div className="flex items-center justify-center mt-6">
-              <button
-                onClick={() => setShowErrorModul(false)}
-                className="border border-white px-4 rounded-lg"
-              >
-                Qaytish
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text="Xatolik yuz berdi! Qayta urinib ko'ring."
+          cancelFunction={(value) => setShowErrorModul(value)}
+          errorModul
+        />
       )}
-      <div className="max-w-md mx-auto min-h-screen -mt-11 flex items-center justify-center p-4">
-        <div className="flex flex-col items-center justify-center bg-white shadow-lg px-4 pb-8 pt-6 rounded-lg">
+      <div className="max-w-md mx-auto min-h-screen -mt-16 flex items-center justify-center p-4">
+        <div
+          style={{ backgroundColor: theme.background, color: theme.textColor }}
+          className="flex flex-col items-center justify-center shadow-lg px-4 pb-8 pt-6 rounded-lg"
+        >
           <h2 className="mb-6 text-center font-bold tracking-tight leading-5">
             Ilovaning to'liq imkoniyatlaridan foydalanish uchun ro'yxatdan
             o'tishingiz kerak!
@@ -87,7 +86,7 @@ function SignUp() {
           <button
             disabled={formDisabled}
             onClick={signInWithGoogle}
-            className="flex items-center bg-black p-2 text-white rounded-lg"
+            className="flex border border-white items-center bg-black p-2 text-white rounded-lg"
           >
             <img className="w-8 h-8 object-contain" src={googleLogo} alt="G" />
             <p className="ml-2 font-[600]">Google orqali ro'yxatdan o'tish</p>
@@ -95,7 +94,7 @@ function SignUp() {
           <button
             disabled={formDisabled}
             onClick={() => navigate("/signUpwithEmail")}
-            className="flex items-center bg-black p-2 text-white rounded-lg mt-2"
+            className="flex border border-white items-center bg-black p-2 text-white rounded-lg mt-2"
           >
             <img className="w-8 h-8 object-contain" src={emailLogo} alt="E" />
             <p className="ml-2 font-[600]">Email orqali ro'yxatdan o'tish</p>

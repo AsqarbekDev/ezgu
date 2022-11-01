@@ -26,19 +26,24 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db, storage } from "../firebase";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import { selectChatRooms, selectChats } from "../features/chatsSlice";
+import {
+  deleteChat,
+  selectChatRooms,
+  selectChats,
+} from "../features/chatsSlice";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { StyledBadge } from "../components/StyledBadge";
+import { selectTheme } from "../features/themeSlice";
+import ActionModul from "../components/ActionModul";
 
 function ChatRoom() {
   const imageRef = useRef(null);
@@ -50,6 +55,8 @@ function ChatRoom() {
   const chatRooms = useSelector(selectChatRooms);
   const { uid } = useParams();
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
+  const dispatch = useDispatch();
 
   const [image, setImage] = useState(null);
   const [isChatRoomExists, setIsChatRoomExists] = useState(false);
@@ -111,17 +118,21 @@ function ChatRoom() {
     });
   };
 
-  const deleteMessages = () => {
+  const deleteMessages = async () => {
     setShowModul("");
-    const allChats = chats[chatRoomID].messages;
 
-    deleteDoc(doc(db, "chats", chatRoomID)).then(() => {
-      allChats.map(async (item) => {
-        await deleteDoc(doc(db, "chats", chatRoomID, "messages", item.id));
-      });
-      navigate("/chats");
+    await updateDoc(doc(db, "chats", chatRoomID), {
+      deleted: true,
     });
+
+    dispatch(deleteChat(chatRoomID));
   };
+
+  useEffect(() => {
+    if (chats[chatRoomID]?.deleted) {
+      navigate("/chats");
+    }
+  }, [chatRoomID, chats, navigate]);
 
   useEffect(() => {
     for (let i = 0; i < chats[chatRoomID]?.messages.length; i++) {
@@ -168,6 +179,7 @@ function ChatRoom() {
   };
 
   const sendMessage = () => {
+    messageRef.current.focus();
     if (messageRef.current.value.replace(/\s/g, "").length > 0 || image) {
       const sendingMessage = messageRef.current.value;
       messageRef.current.value = "";
@@ -223,6 +235,7 @@ function ChatRoom() {
   const createChatRoom = (sendingMessage) => {
     addDoc(collection(db, "chats"), {
       users: [user.uid, uid],
+      deleted: false,
     })
       .then((docSnap) => {
         addDoc(collection(db, "chats", docSnap.id, "messages"), {
@@ -270,16 +283,18 @@ function ChatRoom() {
 
   useEffect(() => {
     let chatRoomExists = false;
-    chatRooms.map((item) => {
-      if (item.messagingUser === uid) {
-        setMessagingUserChat(null);
-        setIsChatRoomExists(true);
-        chatRoomExists = true;
-        setChatRoomID(item.id);
-        setWaitingUser(false);
-      }
-      return null;
-    });
+    if (chatRooms) {
+      chatRooms.map((item) => {
+        if (item.messagingUser === uid) {
+          setMessagingUserChat(null);
+          setIsChatRoomExists(true);
+          chatRoomExists = true;
+          setChatRoomID(item.id);
+          setWaitingUser(false);
+        }
+        return null;
+      });
+    }
     if (!chatRoomExists) {
       setWaitingUser(false);
     }
@@ -304,11 +319,15 @@ function ChatRoom() {
   useEffect(() => {
     if (newMessageID) {
       setTimeout(() => {
-        newMessageRef.current.scrollIntoView();
-      }, 10);
+        if (newMessageRef?.current) {
+          newMessageRef.current.scrollIntoView();
+        }
+      }, 400);
     } else {
       setTimeout(() => {
-        bottomRef.current.scrollIntoView();
+        if (bottomRef?.current) {
+          bottomRef.current.scrollIntoView();
+        }
       }, 10);
     }
   }, [newMessageID]);
@@ -341,49 +360,42 @@ function ChatRoom() {
   return (
     <div className="pb-14 pt-16">
       {showModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
-          <div className="rounded-xl bg-black text-white text-lg p-6 m-8 text-center">
-            <p>
-              {showModul === "deleteAll"
-                ? "Xabarlarni o'chirishni xoxlaysizmi?"
-                : showModul === "block"
-                ? "Foydalanuvchini bloklashni xoxlaysizmi?"
-                : showModul === "unBlock"
-                ? "Foydalanuvchini blokdan chiqarishni xoxlaysizmi?"
-                : null}
-            </p>
-            <div className="flex items-center justify-around mt-6">
-              <button
-                onClick={() => setShowModul("")}
-                className="border border-white w-16 rounded-lg"
-              >
-                YO'Q
-              </button>
-              <button
-                onClick={
-                  showModul === "deleteAll"
-                    ? deleteMessages
-                    : showModul === "block"
-                    ? blockUser
-                    : showModul === "unBlock"
-                    ? unBlockUser
-                    : null
-                }
-                className="border border-white w-16 rounded-lg"
-              >
-                HA
-              </button>
-            </div>
-          </div>
-        </div>
+        <ActionModul
+          text={
+            showModul === "deleteAll"
+              ? "Xabarlarni o'chirishni xoxlaysizmi?"
+              : showModul === "block"
+              ? "Foydalanuvchini bloklashni xoxlaysizmi?"
+              : showModul === "unBlock"
+              ? "Foydalanuvchini blokdan chiqarishni xoxlaysizmi?"
+              : null
+          }
+          cancelFunction={() => setShowModul("")}
+          confirmFunction={
+            showModul === "deleteAll"
+              ? deleteMessages
+              : showModul === "block"
+              ? blockUser
+              : showModul === "unBlock"
+              ? unBlockUser
+              : null
+          }
+        />
       )}
-      <div className="fixed max-w-2xl top-0 z-50 flex items-center justify-between w-full bg-white border-b shadow-sm">
+      <div
+        style={{
+          backgroundColor: theme.background,
+          color: theme.textColor,
+          borderColor: theme.borderBlack,
+        }}
+        className="fixed max-w-2xl top-0 z-50 flex items-center justify-between w-full border-b shadow-sm"
+      >
         <div
           onClick={() => navigate(-1)}
           className="w-14 h-14 flex items-center justify-center"
         >
           <IconButton size="medium">
-            <WestIcon style={{ color: "black" }} />
+            <WestIcon style={{ color: theme.textColor }} />
           </IconButton>
         </div>
         <div>
@@ -458,10 +470,13 @@ function ChatRoom() {
             </p>
           )}
           {messagingUserChat ? (
-            <p className="text-xs text-gray-600 -mt-[2px]">
-              {user.blockedUsers.includes(messagingUserChat.id)
+            <p
+              style={{ color: theme.chatTimeColor }}
+              className="text-xs -mt-[2px]"
+            >
+              {user?.blockedUsers?.includes(messagingUserChat.id)
                 ? "bloklangan!"
-                : messagingUserChat.blockedUsers.includes(user.uid)
+                : messagingUserChat?.blockedUsers?.includes(user.uid)
                 ? "Foydalanuvchi sizni bloklagan!"
                 : dayjs
                     .unix(messagingUserChat?.lastSeen)
@@ -473,15 +488,20 @@ function ChatRoom() {
                 : dayjs.unix(messagingUserChat?.lastSeen).format("HH:mm")}
               {dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY") !==
                 dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
-                !user.blockedUsers.includes(messagingUserChat.id) &&
-                !messagingUserChat.blockedUsers.includes(user.uid)(
+                !user.blockedUsers.includes(messagingUserChat?.id) &&
+                !messagingUserChat?.blockedUsers?.includes(user.uid)(
                   <span className="ml-2">
                     {dayjs.unix(messagingUserChat?.lastSeen).format("HH:mm")}
                   </span>
                 )}
             </p>
           ) : (
-            <p className="text-xs text-gray-600 -mt-[2px]">
+            <p
+              style={{
+                color: theme.chatTimeColor,
+              }}
+              className="text-xs -mt-[2px]"
+            >
               {user.blockedUsers?.includes(
                 chats[chatRoomID]?.messagingUser?.uid
               )
@@ -531,7 +551,7 @@ function ChatRoom() {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <MoreVertIcon style={{ color: "black" }} />
+              <MoreVertIcon style={{ color: theme.textColor }} />
             </IconButton>
           </Tooltip>
           <Menu
@@ -615,7 +635,7 @@ function ChatRoom() {
               )}
               {dateShowingMessages.includes(item.id) && (
                 <div className="flex justify-center">
-                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg mr-2">
+                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg">
                     {dayjs.unix(item.timestamp).format("DD/MM/YYYY")}
                   </p>
                 </div>
@@ -637,10 +657,10 @@ function ChatRoom() {
                 showDate={showDate}
                 setTimestampDate={(value) => setTimestampDate(value)}
                 showAvatar={
-                  !chats[chatRoomID]?.messagingUser.blockedUsers.includes(
+                  !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
                     user.uid
                   ) &&
-                  !user.blockedUsers.includes(
+                  !user?.blockedUsers?.includes(
                     chats[chatRoomID]?.messagingUser.uid
                   )
                     ? true
@@ -662,7 +682,7 @@ function ChatRoom() {
               )}
               {dateShowingMessages.includes(item.id) && (
                 <div className="flex justify-center">
-                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg mr-2">
+                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg">
                     {dayjs.unix(item.timestamp).format("DD/MM/YYYY")}
                   </p>
                 </div>
@@ -683,10 +703,10 @@ function ChatRoom() {
                 showDate={showDate}
                 setTimestampDate={(value) => setTimestampDate(value)}
                 showAvatar={
-                  !chats[chatRoomID]?.messagingUser.blockedUsers.includes(
+                  !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
                     user.uid
                   ) &&
-                  !user.blockedUsers.includes(
+                  !user?.blockedUsers?.includes(
                     chats[chatRoomID]?.messagingUser.uid
                   )
                     ? true

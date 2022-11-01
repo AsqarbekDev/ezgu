@@ -1,8 +1,10 @@
 import { Alert } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ExitHeader from "../components/ExitHeader";
+import { selectTheme } from "../features/themeSlice";
 import { auth } from "../firebase";
 
 function SignInwithEmail() {
@@ -15,6 +17,7 @@ function SignInwithEmail() {
   const [showError, setShowError] = useState(false);
 
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   const checkForm = () => {
     const errors = {};
@@ -70,8 +73,11 @@ function SignInwithEmail() {
   return (
     <div>
       <ExitHeader path="/signUp" screenName="Tizimga kirish" />
-      <div className="max-w-md -mt-11 mx-auto bg-gray-50 h-screen px-4 flex items-center justify-center">
-        <div className="shadow-lg w-full bg-white flex flex-col items-center justify-center py-4 px-6 rounded-lg">
+      <div className="max-w-md -mt-16 mx-auto h-screen px-4 flex items-center justify-center">
+        <div
+          style={{ backgroundColor: theme.background, color: theme.textColor }}
+          className="shadow-lg w-full flex flex-col items-center justify-center py-4 px-6 rounded-lg"
+        >
           {showError && (
             <Alert
               className="mb-4"
@@ -86,20 +92,30 @@ function SignInwithEmail() {
             Tizimga kirish uchun Email va Parolingizni kiriting!
           </h2>
           <input
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              outlineColor: theme.border,
+            }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Emailingizni kiriting!"
-            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            className="logInput p-1 m-1 border rounded-md w-full"
             type="email"
             disabled={formDisabled}
             maxLength={50}
           />
           <p className="text-red-600 font-[600] text-xs">{formErrors.email}</p>
           <input
+            style={{
+              backgroundColor: theme.background,
+              color: theme.textColor,
+              outlineColor: theme.border,
+            }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Parol kiriting!"
-            className="logInput p-1 m-1 border outline-black rounded-md w-full"
+            className="logInput p-1 m-1 border rounded-md w-full"
             type="password"
             disabled={formDisabled}
             maxLength={20}
@@ -110,7 +126,7 @@ function SignInwithEmail() {
           <button
             disabled={formDisabled}
             onClick={handleSubmit}
-            className="logButton mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
+            className="logButton border border-white mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
             Kirish
           </button>

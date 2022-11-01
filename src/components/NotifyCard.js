@@ -12,6 +12,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
+import { selectTheme } from "../features/themeSlice";
 
 function NotifyCard({
   id,
@@ -28,6 +29,7 @@ function NotifyCard({
 }) {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     const updateSeen = () => {
@@ -43,7 +45,10 @@ function NotifyCard({
   }, [id, seen]);
 
   return (
-    <div className="bg-white m-1 p-3 rounded-lg shadow-lg">
+    <div
+      style={{ backgroundColor: theme.background, color: theme.textColor }}
+      className="bg-white m-1 p-3 rounded-lg shadow-lg"
+    >
       <div className="flex items-center">
         <Avatar
           style={{ width: 30, height: 30 }}
@@ -54,7 +59,7 @@ function NotifyCard({
         {userID !== user.uid && (
           <IconButton onClick={() => navigate(`/chats/${userID}`)} size="small">
             <SendIcon
-              style={{ fontSize: 22, color: "black" }}
+              style={{ fontSize: 22, color: theme.textColor }}
               className="-rotate-45"
             />
           </IconButton>
@@ -65,13 +70,13 @@ function NotifyCard({
               onClick={() => navigate(`/jobs/${notifyID}`)}
               size="small"
             >
-              <WorkIcon style={{ fontSize: 26, color: "black" }} />
+              <WorkIcon style={{ fontSize: 26, color: theme.textColor }} />
             </IconButton>
           </div>
         ) : messageType === "banned" ? (
           <div className="-mb-1">
             <IconButton size="small">
-              <BlockIcon style={{ fontSize: 26, color: "black" }} />
+              <BlockIcon style={{ fontSize: 26, color: theme.textColor }} />
             </IconButton>
           </div>
         ) : messageType === "deletedHome" ? null : (
@@ -80,7 +85,9 @@ function NotifyCard({
               size="small"
               onClick={() => navigate("/profile/jobsHistory")}
             >
-              <WorkHistoryIcon style={{ fontSize: 26, color: "black" }} />
+              <WorkHistoryIcon
+                style={{ fontSize: 26, color: theme.textColor }}
+              />
             </IconButton>
           </div>
         )}
@@ -90,7 +97,7 @@ function NotifyCard({
               size="small"
               onClick={() => navigate("/profile/homesHistory")}
             >
-              <DomainAddIcon style={{ fontSize: 26, color: "black" }} />
+              <DomainAddIcon style={{ fontSize: 26, color: theme.textColor }} />
             </IconButton>
           </div>
         )}
@@ -104,7 +111,7 @@ function NotifyCard({
             ? "bg-red-700"
             : messageType === "success" || messageType === "mySuccess"
             ? "bg-green-700"
-            : "bg-black"
+            : "bg-blue-700"
         } mt-2 mb-1`}
       ></div>
       <div>
@@ -112,11 +119,11 @@ function NotifyCard({
           <h2 className="font-bold text-lg flex-1 overflow-hidden">
             {notifyName}
           </h2>
-          <p className="mt-[2px] ml-3 text-sm font-bold text-[#4a4847]">
-            {dayjs.unix(timestamp).format("DD/MM/YYYY") !==
-            dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
-              ? dayjs.unix(timestamp).format("DD/MM/YYYY")
-              : dayjs.unix(timestamp).format("HH:mm")}
+          <p
+            style={{ color: theme.iconColor }}
+            className="mt-[2px] ml-3 text-sm font-bold"
+          >
+            {dayjs.unix(timestamp).format("HH:mm")}
             <span className="ml-2">
               {dayjs.unix(timestamp).format("DD/MM/YYYY") !==
                 dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
@@ -133,7 +140,7 @@ function NotifyCard({
               ? "text-red-600"
               : messageType === "success" || messageType === "mySuccess"
               ? "text-green-600"
-              : "text-black"
+              : "text-blue-600"
           } overflow-hidden`}
         >
           {message}

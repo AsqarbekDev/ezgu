@@ -4,16 +4,22 @@ import JobCard from "../jobsScreen/JobCard";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { useSelector } from "react-redux";
 import { selectMyAddedJobs } from "../../features/jobsSlice";
+import { selectTheme } from "../../features/themeSlice";
 
 function MyJobAddsCard() {
   const [open, setOpen] = useState(false);
   const myAddedJobs = useSelector(selectMyAddedJobs);
+  const theme = useSelector(selectTheme);
 
   return (
     <div className="mt-1">
       <div
         onClick={() => setOpen(!open)}
-        className="cursor-pointer flex items-center pt-1 pb-2 justify-center bg-gray-200"
+        style={{
+          backgroundColor: theme.addScreenMoreCom,
+          color: theme.textColor,
+        }}
+        className="cursor-pointer flex items-center pt-1 pb-2 justify-center"
       >
         <p className="font-[700] text-sm -mb-1">
           Ish berish uchun e'lonlaringiz soni {myAddedJobs.length}ta

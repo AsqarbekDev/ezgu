@@ -4,6 +4,7 @@ import userReducer from "../features/userSlice";
 import homesReducer from "../features/homesSlice";
 import chatsReducer from "../features/chatsSlice";
 import notificationsReducer from "../features/notificationsSlice";
+import themeReducer from "../features/themeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     homes: homesReducer,
     chats: chatsReducer,
     notifications: notificationsReducer,
+    theme: themeReducer,
   },
 });

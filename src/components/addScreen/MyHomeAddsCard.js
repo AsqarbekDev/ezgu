@@ -4,16 +4,22 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import HomeCard from "../homesScreen/HomeCard";
 import { useSelector } from "react-redux";
 import { selectMyAddedHomes } from "../../features/homesSlice";
+import { selectTheme } from "../../features/themeSlice";
 
 function MyHomeAddsCard() {
   const [open, setOpen] = useState(false);
   const homes = useSelector(selectMyAddedHomes);
+  const theme = useSelector(selectTheme);
 
   return (
     <div className="mt-1">
       <div
         onClick={() => setOpen(!open)}
-        className="cursor-pointer flex items-center pt-1 pb-2 justify-center bg-gray-200"
+        style={{
+          backgroundColor: theme.addScreenMoreCom,
+          color: theme.textColor,
+        }}
+        className="cursor-pointer flex items-center pt-1 pb-2 justify-center"
       >
         <p className="font-[700] text-sm -mb-1">
           Uy ijaraga berish uchun e'lonlaringiz soni {homes.length}ta

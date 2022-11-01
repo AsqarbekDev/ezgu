@@ -15,12 +15,14 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BlockIcon from "@mui/icons-material/Block";
+import { selectTheme } from "../features/themeSlice";
 
 function Header() {
   const location = useLocation();
   const user = useSelector(selectUser);
   const notifications = useSelector(selectNotifications);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   const [currentScreen, setCurrentScreen] = useState("/");
   const [newNotifications, setNewNotifications] = useState([]);
@@ -53,6 +55,11 @@ function Header() {
 
   return (
     <div
+      style={{
+        backgroundColor: theme.background,
+        color: theme.textColor,
+        borderColor: theme.borderBlack,
+      }}
       className={`${
         currentScreen === "/" ||
         currentScreen === "/homes" ||
@@ -64,7 +71,7 @@ function Header() {
         currentScreen === "/loading/profile"
           ? ""
           : "hidden"
-      } sticky top-0 z-50 w-full flex items-center justify-center bg-white border-b shadow-sm h-14`}
+      } sticky top-0 z-50 w-full flex items-center justify-center border-b shadow-sm h-14`}
     >
       <div className="relative w-full flex items-center justify-center">
         <h1 className="font-bold text-3xl">EZGU</h1>
@@ -77,7 +84,7 @@ function Header() {
           <div className="relative">
             <IconButton size="small">
               <CircleNotificationsIcon
-                style={{ fontSize: 30, color: "black" }}
+                style={{ fontSize: 30, color: theme.textColor }}
               />
             </IconButton>
             {newNotifications.length > 0 && (
@@ -100,7 +107,7 @@ function Header() {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <MoreVertIcon style={{ color: "black" }} />
+              <MoreVertIcon style={{ color: theme.textColor }} />
             </IconButton>
           </Tooltip>
           <Menu
