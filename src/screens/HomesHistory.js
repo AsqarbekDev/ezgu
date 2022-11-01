@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 import DefaultLoadingModul from "../components/DefaultLoadingModul";
 import ExitHeader from "../components/ExitHeader";
 import HomeCard from "../components/homesScreen/HomeCard";
+import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
 
 function HomesHistory() {
   const user = useSelector(selectUser);
+  const theme = useSelector(selectTheme);
   const [homes, setHomes] = useState(null);
 
   useEffect(() => {
@@ -79,7 +81,10 @@ function HomesHistory() {
       {!homes ? (
         <DefaultLoadingModul />
       ) : homes.length === 0 ? (
-        <div className="flex items-center justify-center w-full h-screen -mt-16">
+        <div
+          style={{ color: theme.textColor }}
+          className="flex items-center justify-center w-full h-screen -mt-16"
+        >
           <p className="font-[600] text-xl">
             Uy ijarasi uchun e'lonlar tarixi yo'q
           </p>

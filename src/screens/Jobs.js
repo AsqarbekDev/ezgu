@@ -5,10 +5,12 @@ import DefaultLoadingModul from "../components/DefaultLoadingModul";
 import { selectJobs } from "../features/jobsSlice";
 import { selectUser, selectWaiting } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
+import { selectTheme } from "../features/themeSlice";
 
 function Jobs() {
   const user = useSelector(selectUser);
   const jobs = useSelector(selectJobs);
+  const theme = useSelector(selectTheme);
   const waiting = useSelector(selectWaiting);
   const navigate = useNavigate();
 
@@ -23,7 +25,10 @@ function Jobs() {
       {!jobs ? (
         <DefaultLoadingModul />
       ) : jobs.length === 0 ? (
-        <div className="flex items-center justify-center w-full h-screen -mt-14">
+        <div
+          style={{ color: theme.textColor }}
+          className="flex items-center justify-center w-full h-screen -mt-14"
+        >
           <p className="font-[600] text-xl">Xozircha ish uchun e'lonlar yo'q</p>
         </div>
       ) : (

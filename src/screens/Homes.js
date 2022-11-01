@@ -3,16 +3,21 @@ import React from "react";
 import DefaultLoadingModul from "../components/DefaultLoadingModul";
 import { useSelector } from "react-redux";
 import { selectHomes } from "../features/homesSlice";
+import { selectTheme } from "../features/themeSlice";
 
 function Homes() {
   const homes = useSelector(selectHomes);
+  const theme = useSelector(selectTheme);
 
   return (
     <div>
       {!homes ? (
         <DefaultLoadingModul />
       ) : homes.length === 0 ? (
-        <div className="flex items-center justify-center w-full h-screen -mt-14">
+        <div
+          style={{ color: theme.textColor }}
+          className="flex items-center justify-center w-full h-screen -mt-14"
+        >
           <p className="font-[600] text-xl">
             Xozircha uy ijarasi uchun e'lonlar yo'q
           </p>

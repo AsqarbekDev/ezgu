@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   light: {
     type: "light",
+    appBackground: "#fafafa",
     backgroundBody: "#fafafa",
     background: "#FFF",
     textColor: "#000",
@@ -16,6 +17,7 @@ const initialState = {
   },
   dark: {
     type: "dark",
+    appBackground: "#060606",
     backgroundBody: "#0f0f0f",
     background: "#000",
     textColor: "#FFF",
@@ -29,6 +31,7 @@ const initialState = {
   },
   currentTheme: {
     type: "light",
+    appBackground: "#fafafa",
     backgroundBody: "#fafafa",
     background: "#FFF",
     textColor: "#000",

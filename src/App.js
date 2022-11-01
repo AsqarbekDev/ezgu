@@ -714,7 +714,10 @@ function App() {
   }, [dispatch, UserCurrent]);
 
   return (
-    <div className="app">
+    <div
+      style={{ backgroundColor: theme.appBackground }}
+      className="app h-screen"
+    >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Header />
         <Routes>

@@ -174,7 +174,10 @@ function JobsHistory() {
       </div>
       <div className="pt-[50px]">
         {showMyAdds && iAddedJobs?.length === 0 ? (
-          <div className="flex items-center justify-center w-full h-screen -mt-28">
+          <div
+            style={{ color: theme.textColor }}
+            className="flex items-center justify-center w-full h-screen -mt-28"
+          >
             <p className="font-[600] text-xl">Berilgan e'lonlar tarixi yo'q</p>
           </div>
         ) : showMyAdds && iAddedJobs?.length > 0 ? (
@@ -214,7 +217,10 @@ function JobsHistory() {
             )
           )
         ) : iWorkedJobs?.length === 0 ? (
-          <div className="flex items-center justify-center w-full h-screen -mt-28">
+          <div
+            style={{ color: theme.textColor }}
+            className="flex items-center justify-center w-full h-screen -mt-28"
+          >
             <p className="font-[600] text-xl">Olingan ishlar tarixi yo'q</p>
           </div>
         ) : (

@@ -3,15 +3,20 @@ import ExitHeader from "../components/ExitHeader";
 import NotifyCard from "../components/NotifyCard";
 import { selectNotifications } from "../features/notificationsSlice";
 import { useSelector } from "react-redux";
+import { selectTheme } from "../features/themeSlice";
 
 function Notifications() {
   const notifications = useSelector(selectNotifications);
+  const theme = useSelector(selectTheme);
 
   return (
     <div className="pb-1">
       <ExitHeader screenName="Bildirishnomalar" />
       {notifications.length === 0 ? (
-        <div className="flex items-center justify-center w-full h-screen -mt-16">
+        <div
+          style={{ color: theme.textColor }}
+          className="flex items-center justify-center w-full h-screen -mt-16"
+        >
           <p className="font-[600] text-xl">Bildirishnomalar yo'q</p>
         </div>
       ) : (
