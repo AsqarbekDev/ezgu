@@ -17,7 +17,7 @@ const initialState = {
   },
   dark: {
     type: "dark",
-    appBackground: "#0a0a0a",
+    appBackground: "#0b0b0b",
     backgroundBody: "#0f0f0f",
     background: "#000",
     textColor: "#FFF",
