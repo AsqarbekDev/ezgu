@@ -716,7 +716,7 @@ function App() {
   return (
     <div
       style={{ backgroundColor: theme.appBackground }}
-      className="app h-screen"
+      className="app min-h-screen"
     >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Header />

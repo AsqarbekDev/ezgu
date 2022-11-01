@@ -635,7 +635,11 @@ function ChatRoom() {
               )}
               {dateShowingMessages.includes(item.id) && (
                 <div className="flex justify-center">
-                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg">
+                  <p
+                    className={`${
+                      theme.type === "dark" && "border"
+                    } px-2 py-1 bg-black opacity-80 text-white rounded-lg`}
+                  >
                     {dayjs.unix(item.timestamp).format("DD/MM/YYYY")}
                   </p>
                 </div>
@@ -682,7 +686,11 @@ function ChatRoom() {
               )}
               {dateShowingMessages.includes(item.id) && (
                 <div className="flex justify-center">
-                  <p className="px-2 py-1 bg-black opacity-80 text-white rounded-lg">
+                  <p
+                    className={`${
+                      theme.type === "dark" && "border"
+                    } px-2 py-1 bg-black opacity-80 text-white rounded-lg`}
+                  >
                     {dayjs.unix(item.timestamp).format("DD/MM/YYYY")}
                   </p>
                 </div>

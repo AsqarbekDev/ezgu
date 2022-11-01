@@ -10,6 +10,8 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRef } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
+import { selectTheme } from "../../features/themeSlice";
 
 function ImageMessage({
   image,
@@ -33,6 +35,7 @@ function ImageMessage({
   const [showImage, setShowImage] = useState(false);
   const textRef = useRef(null);
   const mRef = useRef(null);
+  const theme = useSelector(selectTheme);
 
   const filterMessage = (messageString) => {
     const filteredString = [];
@@ -133,7 +136,11 @@ function ImageMessage({
           currentShowingDate !==
             dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
             <div className="fixed z-40 max-w-2xl top-16 w-full flex justify-center">
-              <div className="bg-black opacity-80 text-white rounded-lg mr-2">
+              <div
+                className={`${
+                  theme.type === "dark" && "border"
+                } bg-black opacity-80 text-white rounded-lg mr-2`}
+              >
                 <p className="px-2 py-1">{currentShowingDate}</p>
               </div>
             </div>
@@ -142,7 +149,11 @@ function ImageMessage({
           currentShowingDate !==
             dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") && (
             <div className="fixed z-40 max-w-2xl top-16 w-full flex justify-center">
-              <div className="bg-black opacity-80 text-white rounded-lg mr-2">
+              <div
+                className={`${
+                  theme.type === "dark" && "border"
+                } bg-black opacity-80 text-white rounded-lg mr-2`}
+              >
                 <p className="px-2 py-1">{currentShowingDate}</p>
               </div>
             </div>

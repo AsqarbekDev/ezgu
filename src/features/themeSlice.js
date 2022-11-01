@@ -21,7 +21,7 @@ const initialState = {
     backgroundBody: "#0f0f0f",
     background: "#000",
     textColor: "#FFF",
-    iconColor: "#d5ded8",
+    iconColor: "#FFF",
     border: "#FFF",
     buttonOpacityColor: "#212020",
     addScreenMoreCom: "#212020",
