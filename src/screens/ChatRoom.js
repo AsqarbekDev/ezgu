@@ -358,7 +358,7 @@ function ChatRoom() {
   }, [showAgain, showDate, timestampDate]);
 
   return (
-    <div className="pb-14 pt-16">
+    <div className="pb-14 pt-28 sm:pt-16">
       {showModul && (
         <ActionModul
           text={

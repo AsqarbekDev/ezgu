@@ -10,6 +10,7 @@ import LoadingModul from "../components/LoadingModul";
 import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
+import { useCookies } from "react-cookie";
 
 function ConfirmEmail() {
   const [loginError, setLoginError] = useState("");
@@ -19,6 +20,7 @@ function ConfirmEmail() {
   const [reSignDisabled, setReSignDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [, , removeCookie] = useCookies(["user"]);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
@@ -32,6 +34,7 @@ function ConfirmEmail() {
   const reSignUp = async () => {
     setReSignDisabled(true);
     setLoading(true);
+    removeCookie("user", { path: "/" });
     const storageRef = ref(storage, `users/${auth.currentUser.uid}/image`);
     deleteObject(storageRef)
       .then(() => {})

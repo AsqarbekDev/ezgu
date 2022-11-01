@@ -47,7 +47,7 @@ function Chat() {
       ) : (
         chatsArray.map(
           (key, index) =>
-            chats[key].deleted === false && (
+            chats[key]?.deleted === false && (
               <ChatCard
                 key={index}
                 id={key}
