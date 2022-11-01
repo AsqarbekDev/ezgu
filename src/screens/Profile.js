@@ -43,10 +43,7 @@ function Profile() {
   const usernameRef = useRef(null);
   const phoneNumberRef = useRef(null);
 
-  const [cookies, setCookie, removeCookie] = useCookies(["theme", "user"]);
-  const [darkMode, setDarkMode] = useState(
-    cookies.theme === "dark" ? true : false
-  );
+  const [, setCookie, removeCookie] = useCookies(["theme", "user"]);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [uImage, setUImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -61,14 +58,6 @@ function Profile() {
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
   const [country, setCountry] = useState(user.country || "");
   const [region, setRegion] = useState("");
-
-  useEffect(() => {
-    if (cookies.theme === "dark") {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-  }, [cookies.theme]);
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -626,7 +615,7 @@ function Profile() {
         <p className="font-bold ml-5 pt-3">Sozlamalar</p>
         <ListItemButton
           onClick={() =>
-            cookies.theme === "light" || !cookies.theme
+            theme.type === "light"
               ? setCookie("theme", "dark", { path: "/" })
               : setCookie("theme", "light", { path: "/" })
           }
@@ -636,9 +625,9 @@ function Profile() {
             color={theme.type === "light" ? "default" : "primary"}
             size="small"
             style={{
-              color: darkMode ? "white" : "black",
+              color: theme.type === "dark" ? "white" : "black",
             }}
-            checked={darkMode}
+            checked={theme.type === "dark"}
             inputProps={{ "aria-label": "controlled" }}
             className="-ml-[3px]"
           />

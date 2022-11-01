@@ -90,6 +90,7 @@ function SignUpwithEmail() {
             bgImage: "",
             lastSeen: dayjs().unix(),
             blockedUsers: [],
+            theme: "light",
           }).then(async () => {
             if (image) {
               const storageRef = ref(storage, `users/${user.uid}/image`);

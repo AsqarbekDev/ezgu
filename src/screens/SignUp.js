@@ -50,6 +50,7 @@ function SignUp() {
             bgImage: "",
             lastSeen: dayjs().unix(),
             blockedUsers: [],
+            theme: "light",
           });
         }
       })

@@ -35,18 +35,7 @@ function SideBar({ jobId }) {
   const notifications = useSelector(selectNotifications);
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
-  const [cookies, setCookie] = useCookies(["theme"]);
-  const [darkMode, setDarkMode] = useState(
-    cookies.theme === "dark" ? true : false
-  );
-
-  useEffect(() => {
-    if (cookies.theme === "dark") {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-  }, [cookies.theme]);
+  const [, setCookie] = useCookies(["theme"]);
 
   useEffect(() => {
     const newMessagesArray = [];
@@ -354,7 +343,7 @@ function SideBar({ jobId }) {
         <ListItemButton
           className="h-12 px-4 transition transform duration-200 ease-in-out w-full"
           onClick={() =>
-            cookies.theme === "light" || !cookies.theme
+            theme.type === "light"
               ? setCookie("theme", "dark", { path: "/" })
               : setCookie("theme", "light", { path: "/" })
           }
@@ -364,9 +353,9 @@ function SideBar({ jobId }) {
             color={theme.type === "light" ? "default" : "primary"}
             size="small"
             style={{
-              color: darkMode ? "white" : "black",
+              color: theme.type === "dark" ? "white" : "black",
             }}
-            checked={darkMode}
+            checked={theme.type === "dark"}
             inputProps={{ "aria-label": "controlled" }}
             className="-ml-1"
           />

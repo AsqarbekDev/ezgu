@@ -90,16 +90,38 @@ function App() {
 
   useEffect(() => {
     // Setting theme
-    if (cookies.theme === "dark") {
-      if (theme.type !== "dark") {
-        dispatch(setTheme("dark"));
+    if (user && !cookies.theme && user.theme !== theme.type) {
+      dispatch(setTheme(user.theme));
+    } else if (
+      cookies.theme &&
+      cookies.theme === "dark" &&
+      theme.type !== "dark"
+    ) {
+      dispatch(setTheme("dark"));
+      if (user && user.theme !== "dark") {
+        const updateTheme = async () => {
+          await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
+            theme: "dark",
+          });
+        };
+        updateTheme();
       }
-    } else {
-      if (theme.type !== "light") {
-        dispatch(setTheme("light"));
+    } else if (
+      cookies.theme &&
+      cookies.theme === "light" &&
+      theme.type !== "light"
+    ) {
+      dispatch(setTheme("light"));
+      if (user && user.theme !== "light") {
+        const updateTheme = async () => {
+          await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
+            theme: "light",
+          });
+        };
+        updateTheme();
       }
     }
-  }, [cookies, dispatch, theme.type]);
+  }, [cookies, dispatch, theme.type, user]);
 
   useEffect(() => {
     // Getting user from cookies
@@ -121,6 +143,7 @@ function App() {
           workedJobs: cookies.user.workedJobs,
           bgImage: cookies.user.bgImage,
           blockedUsers: cookies.user.blockedUsers,
+          theme: cookies.user.theme,
         })
       );
       dispatch(setWaiting(false));
@@ -591,6 +614,7 @@ function App() {
               workedJobs: docSnap.data().workedJobs,
               bgImage: docSnap.data().bgImage,
               blockedUsers: docSnap.data().blockedUsers,
+              theme: docSnap.data().theme,
             })
           );
           dispatch(setWaiting(false));
