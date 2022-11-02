@@ -71,7 +71,6 @@ function ChatRoom() {
   const [showDate, setShowDate] = useState(null);
   const [timestampDate, setTimestampDate] = useState(null);
   const [dateShowingMessages, setDateShowingMessages] = useState([]);
-  const [allChats, setAllChats] = useState([]);
 
   const disabledFirst =
     messagingUserChat && messagingUserChat?.blockedUsers?.includes(user.uid)
@@ -88,34 +87,6 @@ function ChatRoom() {
         user.blockedUsers?.includes(chats[chatRoomID]?.messagingUser?.uid)
       ? true
       : false;
-
-  useEffect(() => {
-    let highKeyArray = [];
-    for (let i = 0; i < chats[chatRoomID]?.messages.length; i++) {
-      let highest = null;
-      let highKey = null;
-      chats[chatRoomID]?.messages.map((message, index) => {
-        if (highest) {
-          if (message.timestamp < highest && !highKeyArray.includes(index)) {
-            highKey = index;
-            highest = message.timestamp;
-          }
-        } else if (!highKeyArray.includes(index)) {
-          highKey = index;
-          highest = message.timestamp;
-        }
-        return null;
-      });
-      highKeyArray.push(highKey);
-    }
-
-    const allChatsFiltered = [];
-    highKeyArray.map((index) =>
-      allChatsFiltered.push(chats[chatRoomID]?.messages[index])
-    );
-
-    setAllChats(allChatsFiltered);
-  }, [chatRoomID, chats]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -652,7 +623,7 @@ function ChatRoom() {
         </div>
       </div>
       <div>
-        {allChats.map((item, index) =>
+        {chats[chatRoomID]?.messages.map((item, index) =>
           item.image ? (
             <div key={index}>
               {item.id === newMessageID && (
