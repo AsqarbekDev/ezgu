@@ -535,7 +535,7 @@ function App() {
       chatRooms.map((chatRoom) => {
         const q = query(
           collection(db, "chats", chatRoom.id, "messages"),
-          orderBy("timestamp", "asc")
+          orderBy("uploadedTime", "asc")
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const allMessages = [];
@@ -543,7 +543,6 @@ function App() {
           snapshot.forEach((doc) => {
             allMessages.push({
               id: doc.id,
-              timestamp: dayjs.unix(doc.data().timestamp),
               ...doc.data(),
             });
           });

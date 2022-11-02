@@ -218,7 +218,8 @@ function ChatRoom() {
         bottomRef.current.scrollIntoView();
         addDoc(collection(db, "chats", chatRoomID, "messages"), {
           message: sendingMessage,
-          timestamp: serverTimestamp(),
+          timestamp: dayjs().unix(),
+          uploadedTime: serverTimestamp(),
           uid: user.uid,
           image: "",
           seen: false,
@@ -270,7 +271,8 @@ function ChatRoom() {
       .then((docSnap) => {
         addDoc(collection(db, "chats", docSnap.id, "messages"), {
           message: sendingMessage,
-          timestamp: serverTimestamp(),
+          timestamp: dayjs().unix(),
+          uploadedTime: serverTimestamp(),
           uid: user.uid,
           image: "",
           seen: false,
