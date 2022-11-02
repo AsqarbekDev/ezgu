@@ -543,6 +543,7 @@ function App() {
           snapshot.forEach((doc) => {
             allMessages.push({
               id: doc.id,
+              timestamp: dayjs.unix(doc.data().timestamp),
               ...doc.data(),
             });
           });
