@@ -543,7 +543,11 @@ function App() {
           snapshot.forEach((doc) => {
             allMessages.push({
               id: doc.id,
-              ...doc.data(),
+              message: doc.data().message,
+              timestamp: doc.data().timestamp,
+              uid: doc.data().uid,
+              image: doc.data().image,
+              seen: doc.data().seen,
             });
           });
 
