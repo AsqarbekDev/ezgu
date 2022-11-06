@@ -53,6 +53,10 @@ function AddNewHome() {
   const [loading, setLoading] = useState(false);
   const [showErrorModul, setShowErrorModul] = useState("");
   const [addedHomes, setAddedHomes] = useState([]);
+  const [image1Loading, setImage1Loading] = useState(true);
+  const [image2Loading, setImage2Loading] = useState(true);
+  const [image3Loading, setImage3Loading] = useState(true);
+  const [image4Loading, setImage4Loading] = useState(true);
 
   const user = useSelector(selectUser);
   const language = useSelector(selectLanguage);
@@ -206,6 +210,7 @@ function AddNewHome() {
                     await updateDoc(doc(db, "homes", docRef.id), {
                       image1: downloadURL,
                     });
+                    setImage1Loading(false);
                   }
                 );
               }
@@ -234,6 +239,7 @@ function AddNewHome() {
                     await updateDoc(doc(db, "homes", docRef.id), {
                       image2: downloadURL,
                     });
+                    setImage2Loading(false);
                   }
                 );
               }
@@ -262,6 +268,7 @@ function AddNewHome() {
                     await updateDoc(doc(db, "homes", docRef.id), {
                       image3: downloadURL,
                     });
+                    setImage3Loading(false);
                   }
                 );
               }
@@ -290,14 +297,12 @@ function AddNewHome() {
                     await updateDoc(doc(db, "homes", docRef.id), {
                       image4: downloadURL,
                     });
+                    setImage4Loading(false);
                   }
                 );
               }
             );
           }
-
-          setLoading(false);
-          navigate("/add");
         })
         .catch((e) => {
           setLoading(false);
@@ -307,6 +312,57 @@ function AddNewHome() {
       setShowErrorModul(language.addNewHome.errorModulText);
     }
   };
+
+  useEffect(() => {
+    if (loading) {
+      let image1Uploaded = false;
+      let image2Uploaded = false;
+      let image3Uploaded = false;
+      let image4Uploaded = false;
+
+      if (image1 && !image1Loading) {
+        image1Uploaded = true;
+      } else if (!image1) {
+        image1Uploaded = true;
+      }
+      if (image2 && !image2Loading) {
+        image2Uploaded = true;
+      } else if (!image2) {
+        image2Uploaded = true;
+      }
+      if (image3 && !image3Loading) {
+        image3Uploaded = true;
+      } else if (!image3) {
+        image3Uploaded = true;
+      }
+      if (image4 && !image4Loading) {
+        image4Uploaded = true;
+      } else if (!image4) {
+        image4Uploaded = true;
+      }
+
+      if (
+        image1Uploaded &&
+        image2Uploaded &&
+        image3Uploaded &&
+        image4Uploaded
+      ) {
+        setLoading(false);
+        navigate("/add");
+      }
+    }
+  }, [
+    loading,
+    image1,
+    image2,
+    image3,
+    image4,
+    image1Loading,
+    image2Loading,
+    image3Loading,
+    image4Loading,
+    navigate,
+  ]);
 
   const addImage1 = (e) => {
     const reader = new FileReader();
