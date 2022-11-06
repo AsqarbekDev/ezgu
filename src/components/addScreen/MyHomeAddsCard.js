@@ -5,11 +5,13 @@ import HomeCard from "../homesScreen/HomeCard";
 import { useSelector } from "react-redux";
 import { selectMyAddedHomes } from "../../features/homesSlice";
 import { selectTheme } from "../../features/themeSlice";
+import { selectLanguage } from "../../features/languageSlice";
 
 function MyHomeAddsCard() {
   const [open, setOpen] = useState(false);
   const homes = useSelector(selectMyAddedHomes);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   return (
     <div className="mt-1">
@@ -22,7 +24,7 @@ function MyHomeAddsCard() {
         className="cursor-pointer flex items-center pt-1 pb-2 justify-center"
       >
         <p className="font-[700] text-sm -mb-1">
-          Uy ijaraga berish uchun e'lonlaringiz soni {homes.length}ta
+          {language.add.myHomeAdds} {homes.length}
         </p>
         {open ? (
           <ExpandLessIcon className="-mb-1" />
@@ -50,6 +52,8 @@ function MyHomeAddsCard() {
                 uploadedTime,
                 userPhoneNumber,
                 userID,
+                userRegion,
+                currency,
               },
               index
             ) => (
@@ -70,6 +74,8 @@ function MyHomeAddsCard() {
                 image3={image3}
                 image4={image4}
                 userID={userID}
+                userRegion={userRegion}
+                currency={currency}
               />
             )
           )}

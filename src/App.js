@@ -61,6 +61,8 @@ import BlockedUsersChat from "./screens/BlockedUsersChat";
 import SideBar from "./components/SideBar";
 import { selectTheme, setTheme } from "./features/themeSlice";
 import { useCookies } from "react-cookie";
+import ChangeLanguage from "./screens/ChangeLanguage";
+import { selectLanguage, setLanguage } from "./features/languageSlice";
 
 function App() {
   const user = useSelector(selectUser);
@@ -70,8 +72,9 @@ function App() {
   const chats = useSelector(selectChats);
   const dispatch = useDispatch();
   const UserCurrent = auth?.currentUser;
-  const [cookies, setCookie] = useCookies(["theme", "user"]);
+  const [cookies, setCookie] = useCookies(["theme", "user", "language"]);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const allChats = chats[deletingChat]?.messages;
 
   document.body.style = `background: ${theme.backgroundBody};`;
@@ -124,6 +127,62 @@ function App() {
   }, [cookies, dispatch, theme.type, user]);
 
   useEffect(() => {
+    // Setting language
+    if (user && !cookies.language && user.language !== language.type) {
+      console.log("user");
+      dispatch(setLanguage(user.language));
+    } else if (
+      cookies.language &&
+      cookies.language === "eng" &&
+      language.type !== "eng"
+    ) {
+      console.log("eng");
+      dispatch(setLanguage("eng"));
+      if (user && user.language !== "eng") {
+        console.log("updateEng");
+        const updateLanguage = async () => {
+          await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
+            language: "eng",
+          });
+        };
+        updateLanguage();
+      }
+    } else if (
+      cookies.language &&
+      cookies.language === "ru" &&
+      language.type !== "ru"
+    ) {
+      console.log("ru");
+      dispatch(setLanguage("ru"));
+      if (user && user.language !== "ru") {
+        console.log("updateRu");
+        const updateLanguage = async () => {
+          await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
+            language: "ru",
+          });
+        };
+        updateLanguage();
+      }
+    } else if (
+      cookies.language &&
+      cookies.language === "uz" &&
+      language.type !== "uz"
+    ) {
+      console.log("uz");
+      dispatch(setLanguage("uz"));
+      if (user && user.language !== "uz") {
+        console.log("updateUz");
+        const updateLanguage = async () => {
+          await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
+            language: "uz",
+          });
+        };
+        updateLanguage();
+      }
+    }
+  }, [cookies, dispatch, language.type, user]);
+
+  useEffect(() => {
     // Getting user from cookies
     if (cookies.user && !user) {
       dispatch(
@@ -144,9 +203,9 @@ function App() {
           bgImage: cookies.user.bgImage,
           blockedUsers: cookies.user.blockedUsers,
           theme: cookies.user.theme,
+          language: cookies.user.language,
         })
       );
-      dispatch(setWaiting(false));
     }
   }, [cookies.user, user, dispatch]);
 
@@ -619,6 +678,7 @@ function App() {
               bgImage: docSnap.data().bgImage,
               blockedUsers: docSnap.data().blockedUsers,
               theme: docSnap.data().theme,
+              language: docSnap.data().language,
             })
           );
           dispatch(setWaiting(false));
@@ -652,21 +712,20 @@ function App() {
           await updateDoc(doc(db, "jobs", docSnap.id), {
             disabled: true,
           });
-          await updateDoc(doc(db, "users", auth.currentUser.uid), {
-            workedWith: user.workedWith + docSnap.data().currentWorkers.length,
-          });
           await addDoc(collection(db, "notifications"), {
             userID: docSnap.data().userID,
             userImage: docSnap.data().userImage,
             userName: docSnap.data().userName,
             notifyName: docSnap.data().jobName,
             notifyID: docSnap.id,
-            message: "Bergan e'loningiz muvaffaqiyat tugatildi!",
             to: docSnap.data().userID,
             from: "jobs",
             messageType: "mySuccess",
             seen: false,
             timestamp: docSnap.data().endingTime,
+          });
+          await updateDoc(doc(db, "users", auth.currentUser.uid), {
+            workedWith: user.workedWith + docSnap.data().currentWorkers.length,
           });
         });
       });
@@ -698,8 +757,6 @@ function App() {
             userName: docSnap.data().userName,
             notifyName: docSnap.data().location,
             notifyID: docSnap.id,
-            message:
-              "E'lon berganingizga 30 kun bo'lganligi sababli ushbu e'lon o'chirib tashlandi!",
             to: docSnap.data().userID,
             from: "homes",
             messageType: "deletedHome",
@@ -753,6 +810,7 @@ function App() {
           <Route path="/" element={<Jobs />} />
           <Route path="/jobs/:jobId" element={<JobInfo />} />
           <Route path="/homes" element={<Homes />} />
+          <Route path="/profile/changeLanguage" element={<ChangeLanguage />} />
           {user && <Route path="/notifications" element={<Notifications />} />}
           {user && <Route path="/add" element={<Add />} />}
           {user && <Route path="/add/newjob" element={<AddNewJob />} />}

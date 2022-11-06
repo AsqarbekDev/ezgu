@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ExitHeader from "../components/ExitHeader";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 import { auth } from "../firebase";
 
 function SignInwithEmail() {
@@ -18,20 +19,21 @@ function SignInwithEmail() {
 
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const checkForm = () => {
     const errors = {};
     const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (!email || email.replace(/\s/g, "").length <= 0) {
-      errors.email = "Emailingizni kiriting!";
+      errors.email = language.signIn.errorEmail;
     } else if (!regex.test(email)) {
-      errors.email = "Emailingizni to'g'ri kiriting!";
+      errors.email = language.signIn.errorEmailConfirm;
     }
     if (!password || password.replace(/\s/g, "").length <= 0) {
-      errors.password = "Parol kiriting!";
+      errors.password = language.signIn.errorPassword;
     } else if (password.replace(/\s/g, "").length < 6) {
-      errors.password = "Parol kamida 6ta belgidan iborat bo'lishi kerak!";
+      errors.password = language.signIn.errorPasswordConfirm;
     }
 
     return errors;
@@ -49,10 +51,10 @@ function SignInwithEmail() {
           const errorCode = error.code;
 
           if (errorCode === "auth/user-not-found") {
-            setLoginError("Emailingiz tizimda yo'q! Qayta urinib ko'ring!");
+            setLoginError(language.signIn.emailNoError);
             setShowError(true);
           } else {
-            setLoginError("Xatolik yuz berdi! Qayta urinib ko'ring!");
+            setLoginError(language.signIn.errorText);
             setShowError(true);
           }
 
@@ -62,7 +64,15 @@ function SignInwithEmail() {
     } else {
       setFormDisabled(false);
     }
-  }, [formErrors, isSubmitted, email, password, navigate]);
+  }, [
+    formErrors,
+    isSubmitted,
+    email,
+    password,
+    navigate,
+    language.signIn.emailNoError,
+    language.signIn.errorText,
+  ]);
 
   const handleSubmit = () => {
     setFormDisabled(true);
@@ -72,7 +82,7 @@ function SignInwithEmail() {
 
   return (
     <div>
-      <ExitHeader path="/signUp" screenName="Tizimga kirish" />
+      <ExitHeader path="/signUp" screenName={language.signIn.headerText} />
       <div className="max-w-md -mt-16 mx-auto h-screen px-4 flex items-center justify-center">
         <div
           style={{ backgroundColor: theme.background, color: theme.textColor }}
@@ -89,7 +99,7 @@ function SignInwithEmail() {
             </Alert>
           )}
           <h2 className="mb-6 text-center font-bold tracking-tight leading-5">
-            Tizimga kirish uchun Email va Parolingizni kiriting!
+            {language.signIn.headerInfo}
           </h2>
           <input
             style={{
@@ -99,7 +109,7 @@ function SignInwithEmail() {
             }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Emailingizni kiriting!"
+            placeholder={language.signIn.email}
             className="logInput p-1 m-1 border rounded-md w-full"
             type="email"
             disabled={formDisabled}
@@ -114,7 +124,7 @@ function SignInwithEmail() {
             }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Parol kiriting!"
+            placeholder={language.signIn.password}
             className="logInput p-1 m-1 border rounded-md w-full"
             type="password"
             disabled={formDisabled}
@@ -128,12 +138,12 @@ function SignInwithEmail() {
             onClick={handleSubmit}
             className="logButton border border-white mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
-            Kirish
+            {language.signIn.enterBtn}
           </button>
           <p className="text-xs">
-            Xali ro'yxatdan o'tmaganmisiz?
+            {language.signIn.question}
             <Link to="/signUpwithEmail" className="text-blue-400 ml-1">
-              Ro'yxatdan o'tish
+              {language.signIn.navigateBtn}
             </Link>
           </p>
         </div>

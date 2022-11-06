@@ -44,6 +44,7 @@ import {
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { StyledBadge } from "../components/StyledBadge";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 import ActionModul from "../components/ActionModul";
 
 function ChatRoom() {
@@ -57,6 +58,7 @@ function ChatRoom() {
   const { uid } = useParams();
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState(null);
@@ -366,11 +368,11 @@ function ChatRoom() {
         <ActionModul
           text={
             showModul === "deleteAll"
-              ? "Xabarlarni o'chirishni xoxlaysizmi?"
+              ? language.chats.modulTextDelete
               : showModul === "block"
-              ? "Foydalanuvchini bloklashni xoxlaysizmi?"
+              ? language.chats.modulTextBlock
               : showModul === "unBlock"
-              ? "Foydalanuvchini blokdan chiqarishni xoxlaysizmi?"
+              ? language.chats.modulTextUnblock
               : null
           }
           cancelFunction={() => setShowModul("")}
@@ -546,7 +548,7 @@ function ChatRoom() {
           )}
         </div>
         <div className="w-14 h-14 flex items-center justify-center">
-          <Tooltip title="Sozlamalar">
+          <Tooltip title={language.chats.iconInfo}>
             <IconButton
               onClick={handleClick}
               size="medium"
@@ -597,7 +599,7 @@ function ChatRoom() {
                 <ListItemIcon>
                   <DeleteForeverIcon fontSize="small" />
                 </ListItemIcon>
-                hammasini o'chirish
+                {language.chats.deleteAllText}
               </MenuItem>
             )}
             {user.blockedUsers.includes(
@@ -609,14 +611,14 @@ function ChatRoom() {
                 <ListItemIcon>
                   <RemoveCircleOutlineIcon fontSize="small" />
                 </ListItemIcon>
-                blokdan chiqarish
+                {language.chats.unblockText}
               </MenuItem>
             ) : (
               <MenuItem onClick={() => setShowModul("block")}>
                 <ListItemIcon>
                   <BlockIcon fontSize="small" />
                 </ListItemIcon>
-                bloklash
+                {language.chats.blockText}
               </MenuItem>
             )}
           </Menu>
@@ -632,7 +634,7 @@ function ChatRoom() {
                   className="border-b-8 border-violet-700 flex justify-center mt-4 mb-7"
                 >
                   <p className="bg-violet-700 w-max -mb-[20px] text-white rounded-2xl px-6 pt-1 pb-1">
-                    Yangi xabarlar
+                    {language.chats.newMessagesText}
                   </p>
                 </div>
               )}
@@ -683,7 +685,7 @@ function ChatRoom() {
                   className="border-b-8 border-violet-700 flex justify-center mt-4 mb-7"
                 >
                   <p className="bg-violet-700 w-max -mb-[20px] text-white rounded-2xl px-6 pt-1 pb-1">
-                    Yangi xabarlar
+                    {language.chats.newMessagesText}
                   </p>
                 </div>
               )}

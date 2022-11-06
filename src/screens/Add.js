@@ -4,19 +4,23 @@ import addjobicon from "../assets/addjobicon.jpg";
 import addhomeicon from "../assets/addhomeicon.jpg";
 import MyJobAddsCard from "../components/addScreen/MyJobAddsCard";
 import MyHomeAddsCard from "../components/addScreen/MyHomeAddsCard";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../features/languageSlice";
 
 function Add() {
+  const language = useSelector(selectLanguage);
+
   return (
     <div className="pb-14 xl:pb-1">
       <div className="mb-2">
         <AddNewWidget
           logo={addjobicon}
-          text="Ish berish uchun e'lon qo'shish"
+          text={language.add.addJobText}
           path="/add/newjob"
         />
         <AddNewWidget
           logo={addhomeicon}
-          text="Uy ijaraga berish uchun e'lon qo'shish"
+          text={language.add.addHomeText}
           path="/add/newhome"
         />
       </div>

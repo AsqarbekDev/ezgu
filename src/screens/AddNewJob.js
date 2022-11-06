@@ -29,6 +29,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
+import { selectLanguage } from "../features/languageSlice";
 import LoadingModul from "../components/LoadingModul";
 import ExitHeader from "../components/ExitHeader";
 import MenuItem from "@mui/material/MenuItem";
@@ -52,6 +53,7 @@ function AddNewJob() {
   const [addedJobs, setAddedJobs] = useState([]);
 
   const user = useSelector(selectUser);
+  const language = useSelector(selectLanguage);
 
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
   const [country, setCountry] = useState(user.country || "");
@@ -102,11 +104,9 @@ function AddNewJob() {
 
   useEffect(() => {
     if (user.currentJob) {
-      setShowErrorModul(
-        "Allaqachon ish olgansiz! E'lon berish uchun ishni bekor qilishingiz kerak!"
-      );
+      setShowErrorModul(language.addNewJob.errorModulTextJob);
     }
-  }, [user.currentJob]);
+  }, [user.currentJob, language.addNewJob.errorModulTextJob]);
 
   useEffect(() => {
     setLine(moscowMetroList[lineIndex].line);
@@ -117,39 +117,39 @@ function AddNewJob() {
     const errors = {};
 
     if (!jobName || jobName.replace(/\s/g, "").length <= 0) {
-      errors.jobName = "Ish nomini kiriting!";
+      errors.jobName = language.addNewJob.jobNameError;
     }
     if (!salary || salary.replace(/\s/g, "").length <= 0) {
-      errors.salary = "Ish xaqqi miqdorini kiriting!";
+      errors.salary = language.addNewJob.salaryError;
     }
     if (!workersCount || workersCount.replace(/\s/g, "").length <= 0) {
-      errors.workersCount = "Ishchilar sonini kiriting!";
+      errors.workersCount = language.addNewJob.workersCountError;
     }
     if (!workingPlace || workingPlace.replace(/\s/g, "").length <= 0) {
-      errors.workingPlace = "Ishlash manzilini kiriting!";
+      errors.workingPlace = language.addNewJob.workingPlaceError;
     }
     if (!comment || comment.replace(/\s/g, "").length <= 0) {
-      errors.comment = "Kommentariya kiriting!";
+      errors.comment = language.addNewJob.commentError;
     }
     if (startingTime.unix() < dayjs().unix() + 7200) {
-      errors.startingTime = "Ish boshlanish vaqtini to'g'ri belgilang!";
+      errors.startingTime = language.addNewJob.startingTimeError;
     }
     if (
       endingTime.unix() < startingTime.unix() + 3600 ||
       endingTime.unix() > startingTime.unix() + 43200
     ) {
-      errors.endingTime = "Ish tugash vaqtini to'g'ri belgilang!";
+      errors.endingTime = language.addNewJob.endingTimeError;
     }
     if (!country || !region) {
-      errors.country = "Davlat va Regionni kiriting!";
+      errors.country = language.addNewJob.regionError;
     }
     if (country === "Russian Federation" && region === "Moscow") {
       if (line === moscowMetroList[0].line) {
-        errors.metro = "Ish joyiga yaqin metroni kiriting!";
+        errors.metro = language.addNewJob.metroError;
       }
     }
     if (!phoneNumber || phoneNumber?.length < 10 || phoneNumber?.length > 20) {
-      errors.number = "Telefon raqamingizni kiriting!";
+      errors.number = language.addNewJob.numberError;
     }
 
     if (Object.keys(errors).length === 0) {
@@ -206,27 +206,27 @@ function AddNewJob() {
           console.log(e);
         });
     } else {
-      setShowErrorModul("Kuniga faqat 4ta e'lon berishingiz mumkin!");
+      setShowErrorModul(language.addNewJob.errorModulText);
     }
   };
 
   return (
     <div>
-      <ExitHeader screenName="E'lonni to'ldiring" />
+      <ExitHeader screenName={language.addNewJob.headerText} />
       {loading && <LoadingModul />}
       {showErrorModul && (
         <ActionModul
           text={showErrorModul}
           exitFunction={() =>
-            showErrorModul === "Kuniga faqat 4ta e'lon berishingiz mumkin!"
+            showErrorModul === language.addNewJob.errorModulText
               ? navigate("/")
               : navigate(`/jobs/${user.currentJob}`)
           }
           errorModulExit
           buttonName={
-            showErrorModul === "Kuniga faqat 4ta e'lon berishingiz mumkin!"
-              ? "Chiqish"
-              : "Ishni ko'rish"
+            showErrorModul === language.addNewJob.errorModulText
+              ? language.addNewJob.errorModulBtn
+              : language.addNewJob.errorModulBtnJob
           }
         />
       )}
@@ -249,7 +249,7 @@ function AddNewJob() {
             <DriveFileRenameOutlineIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff] rounded-lg py-1 px-2 w-full"
-              placeholder="Ish nomini kiriting..."
+              placeholder={language.addNewJob.jobName}
               type="text"
               maxLength={100}
               value={jobName}
@@ -295,7 +295,7 @@ function AddNewJob() {
             <GroupsIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
-              placeholder="Nechta ishchi kerak?..."
+              placeholder={language.addNewJob.numOfWorkers}
               type="number"
               value={workersCount}
               onChange={(e) => {
@@ -311,7 +311,7 @@ function AddNewJob() {
             <PinDropIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
-              placeholder="Ishlash manzilini kiriting..."
+              placeholder={language.addNewJob.address}
               type="text"
               maxLength={100}
               value={workingPlace}
@@ -326,7 +326,7 @@ function AddNewJob() {
             <MessageOutlinedIcon style={{ fontSize: 18 }} />
             <textarea
               className="ml-2 text-sm border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
-              placeholder="Ish haqida kommentariya qoldiring..."
+              placeholder={language.addNewJob.comment}
               type="text"
               maxLength={300}
               rows="6"
@@ -358,7 +358,7 @@ function AddNewJob() {
             <div className="space-y-2 flex flex-col">
               <DateTimePicker
                 renderInput={(props) => <TextField {...props} />}
-                label="Ish boshlanish vaqti"
+                label={language.addNewJob.startingTime}
                 value={startingTime}
                 onChange={(newValue) => {
                   setStartingTime(newValue);
@@ -371,7 +371,7 @@ function AddNewJob() {
               </p>
               <DateTimePicker
                 renderInput={(props) => <TextField {...props} />}
-                label="Ish tugash vaqti"
+                label={language.addNewJob.endingTime}
                 value={endingTime}
                 onChange={(newValue) => {
                   setEndingTime(newValue);
@@ -387,8 +387,8 @@ function AddNewJob() {
           <div className="flex items-center mt-4">
             <PublicIcon style={{ fontSize: 20 }} />
             <div className="flex flex-col ml-5 space-y-4 text-sm font-[700] text-right">
-              <p>Davlat:</p>
-              <p>Region:</p>
+              <p>{language.addNewJob.country}</p>
+              <p>{language.addNewJob.region}</p>
             </div>
             <div className="flex flex-col ml-[11px] space-y-4 w-60">
               <CountryDropdown
@@ -397,14 +397,14 @@ function AddNewJob() {
                   setCountry(val);
                   setRegion("");
                 }}
-                defaultOptionLabel="Qaysi davlatdasiz?"
+                defaultOptionLabel={language.addNewJob.countryDefault}
                 disabled={formDisabled}
               />
               <RegionDropdown
                 country={country}
                 value={region}
                 onChange={(val) => setRegion(val)}
-                defaultOptionLabel="Qaysi regiondasiz?"
+                defaultOptionLabel={language.addNewJob.regionDefault}
                 disabled={formDisabled}
               />
             </div>
@@ -417,8 +417,8 @@ function AddNewJob() {
               <div className="flex items-center space-x-3 mt-4">
                 <DirectionsTransitIcon style={{ fontSize: 20 }} />
                 <div className="flex flex-col space-y-4 text-sm font-[700] text-right">
-                  <p>Liniya:</p>
-                  <p>Stansiya:</p>
+                  <p>{language.addNewJob.line}</p>
+                  <p>{language.addNewJob.station}</p>
                 </div>
                 <div className="flex flex-col space-y-4">
                   <select
@@ -467,7 +467,7 @@ function AddNewJob() {
               className="bg-black text-white my-2 text-sm py-1 rounded-lg w-[60%]"
               disabled={formDisabled}
             >
-              SAQLASH
+              {language.addNewJob.saveBtn}
             </button>
           </div>
         </div>

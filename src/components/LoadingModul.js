@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../features/languageSlice";
 
 function LoadingModul() {
+  const language = useSelector(selectLanguage);
+
   return (
     <>
       <div
@@ -24,7 +28,9 @@ function LoadingModul() {
               fill="currentFill"
             />
           </svg>
-          <p className="text-white text-sm -ml-1 mt-3">Yuklanyabdi...</p>
+          <p className="text-white text-sm -ml-1 mt-3">
+            {language.loadingModul.text}
+          </p>
         </div>
       </div>
       <div className="fixed max-w-2xl z-[99] flex items-center top-0 justify-center w-full h-screen bg-black opacity-20"></div>

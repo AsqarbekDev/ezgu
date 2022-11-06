@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { selectTheme } from "../../features/themeSlice";
+import { selectLanguage } from "../../features/languageSlice";
 import LoadingModul from "../LoadingModul";
 
 function AdminUserCard({
@@ -33,6 +34,7 @@ function AdminUserCard({
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const removeWorker = async () => {
     setShowRemoveUserModul(false);
@@ -47,8 +49,6 @@ function AdminUserCard({
       userName: user.username,
       notifyName: jobName,
       notifyID: jobId,
-      message:
-        "Foydalanuvchi! Siz ish beruvchi tomonidan ishdan chetlashtirildingiz!",
       to: uid,
       from: "jobs",
       messageType: "removed",
@@ -75,8 +75,6 @@ function AdminUserCard({
       userName: user.username,
       notifyName: jobName,
       notifyID: jobId,
-      message:
-        "Foydalanuvchi! Siz ish beruvchi tomonidan joriy ish uchun ban qilindingiz! Endi ushbu ishni qayta ololmaysiz!",
       to: uid,
       from: "jobs",
       messageType: "banned",
@@ -101,19 +99,19 @@ function AdminUserCard({
               onClick={removeWorker}
               className="border border-white rounded-lg py-2 w-[200px]"
             >
-              Ro'yxatdan chiqarish
+              {language.jobs.modulRemoveBtn}
             </button>
             <button
               onClick={banWorker}
               className="border border-white rounded-lg py-2 w-[200px] mt-3"
             >
-              Ban qilish
+              {language.jobs.modulBanBtn}
             </button>
             <button
               onClick={() => setShowRemoveUserModul(false)}
               className="bg-white text-black font-bold text-base rounded-lg w-[140px] mt-6"
             >
-              Bekor qilish
+              {language.jobs.modulCancelBtn}
             </button>
           </div>
         </div>
@@ -145,7 +143,7 @@ function AdminUserCard({
               theme.type === "dark" && "border"
             } bg-black px-2 py-1 text-white text-xs rounded-lg overflow-hidden`}
           >
-            Chiqarish
+            {language.jobs.removeUser}
           </button>
         )}
       </div>

@@ -22,6 +22,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LoadingModul from "../LoadingModul";
 import { selectTheme } from "../../features/themeSlice";
 import ActionModul from "../ActionModul";
+import { selectLanguage } from "../../features/languageSlice";
 
 function HomeCard({
   id,
@@ -54,6 +55,7 @@ function HomeCard({
   const [loading, setLoading] = useState(false);
 
   const user = useSelector(selectUser);
+  const language = useSelector(selectLanguage);
   const navigate = useNavigate();
   const locationPath = useLocation();
 
@@ -182,7 +184,7 @@ function HomeCard({
       {loading && <LoadingModul />}
       {showRemoveHomeModul && (
         <ActionModul
-          text="E'lonni o'chirishni xoxlaysizmi?"
+          text={language.homes.deleteModul}
           cancelFunction={(value) => setShowRemoveHomeModul(value)}
           confirmFunction={deleteHome}
         />
@@ -224,7 +226,7 @@ function HomeCard({
                   <ListItemIcon>
                     <DeleteForeverIcon fontSize="small" />
                   </ListItemIcon>
-                  o'chirish
+                  {language.homes.deleteBtn}
                 </MenuItem>
               </Menu>
             </div>
@@ -259,33 +261,35 @@ function HomeCard({
             );
           })}
         </div>
-        <div className="absolute z-10 top-[288px] w-full flex items-center justify-center space-x-2">
-          {images.map(({ image, id }, index) => {
-            return (
-              <div
-                key={index}
-                className="w-4 h-4 rounded-full border border-white flex items-center justify-center"
-                // onClick={() => {
-                //   scrollImage(index, id);
-                // }}
-              >
+        {images.length > 1 && (
+          <div className="absolute z-10 top-[288px] w-full flex items-center justify-center space-x-2">
+            {images.map(({ image, id }, index) => {
+              return (
                 <div
-                  className={`${
-                    current === index && "bg-white"
-                  } w-3 h-3 rounded-full`}
+                  key={index}
+                  className="w-4 h-4 rounded-full border border-white flex items-center justify-center"
+                  // onClick={() => {
+                  //   scrollImage(index, id);
+                  // }}
                 >
-                  {current !== index && (
-                    <img
-                      className="w-3 h-3 rounded-full object-cover"
-                      src={image}
-                      alt=""
-                    />
-                  )}
+                  <div
+                    className={`${
+                      current === index && "bg-white"
+                    } w-3 h-3 rounded-full`}
+                  >
+                    {current !== index && (
+                      <img
+                        className="w-3 h-3 rounded-full object-cover"
+                        src={image}
+                        alt=""
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
         <div className="px-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center font-bold text-lg">
@@ -339,7 +343,7 @@ function HomeCard({
               }}
               className={`ml-2 border rounded-lg px-2 text-xs`}
             >
-              {isCopied ? "Nusxalandi!" : "Nusxalash"}
+              {isCopied ? language.jobs.copied : language.jobs.copy}
             </button>
           </div>
           <div className="flex items-start text-sm font-[600] mt-[2px]">

@@ -16,6 +16,7 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BlockIcon from "@mui/icons-material/Block";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 
 function Header() {
   const location = useLocation();
@@ -23,6 +24,7 @@ function Header() {
   const notifications = useSelector(selectNotifications);
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const [currentScreen, setCurrentScreen] = useState("/");
   const [newNotifications, setNewNotifications] = useState([]);
@@ -99,7 +101,7 @@ function Header() {
             currentScreen !== "/chats" && "hidden"
           } absolute right-0 z-10 w-14 h-14 flex items-center justify-center`}
         >
-          <Tooltip title="Sozlamalar">
+          <Tooltip title={language.header.iconInfo}>
             <IconButton
               onClick={handleClick}
               size="medium"
@@ -149,7 +151,7 @@ function Header() {
               <ListItemIcon>
                 <BlockIcon fontSize="small" />
               </ListItemIcon>
-              bloklangan foydalanuvchilar
+              {language.header.blockedUsersText}
             </MenuItem>
           </Menu>
         </div>

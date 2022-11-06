@@ -11,6 +11,7 @@ import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
 import ExitHeader from "../components/ExitHeader";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 
 function SignUpwithEmail() {
   const avatarRef = useRef(null);
@@ -29,6 +30,7 @@ function SignUpwithEmail() {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const addImage = (e) => {
     const reader = new FileReader();
@@ -47,23 +49,23 @@ function SignUpwithEmail() {
     const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
     if (!image) {
-      errors.image = "Iltimos rasm joylang!";
+      errors.image = language.signUpWithEmail.imageError;
     }
     if (!username || username.replace(/\s/g, "").length <= 0) {
-      errors.username = "Ismingizni kiriting!";
+      errors.username = language.signUpWithEmail.nameError;
     }
     if (!email || email.replace(/\s/g, "").length <= 0) {
-      errors.email = "Emailingizni kiriting!";
+      errors.email = language.signUpWithEmail.emailError;
     } else if (!regex.test(email)) {
-      errors.email = "Emailingizni to'g'ri kiriting!";
+      errors.email = language.signUpWithEmail.emailFailedError;
     }
     if (!password || password.replace(/\s/g, "").length <= 0) {
-      errors.password = "Parol kiriting!";
+      errors.password = language.signUpWithEmail.passwordError;
     } else if (password.replace(/\s/g, "").length < 6) {
-      errors.password = "Parol kamida 6ta belgidan iborat bo'lishi kerak!";
+      errors.password = language.signUpWithEmail.passwordFailedError;
     }
     if (confirmPassword !== password) {
-      errors.confirmPassword = "Parolingizni to'g'ri kiriting!";
+      errors.confirmPassword = language.signUpWithEmail.passwordWrongError;
     }
 
     return errors;
@@ -91,6 +93,7 @@ function SignUpwithEmail() {
             lastSeen: dayjs().unix(),
             blockedUsers: [],
             theme: "light",
+            language: "uz",
           }).then(async () => {
             if (image) {
               const storageRef = ref(storage, `users/${user.uid}/image`);
@@ -125,11 +128,11 @@ function SignUpwithEmail() {
           const errorCode = error.code;
 
           if (errorCode === "auth/email-already-in-use") {
-            setSignUpError("Email allaqchon ro'yxatdan o'tgan!");
+            setSignUpError(language.signUpWithEmail.emailExistsError);
             setLoading(false);
             setShowError(true);
           } else {
-            setSignUpError("Xatolik yuz berdi! Qayta urinib ko'ring!");
+            setSignUpError(language.signUpWithEmail.errorText);
             setLoading(false);
             setShowError(true);
           }
@@ -139,7 +142,17 @@ function SignUpwithEmail() {
     } else {
       setFormDisabled(false);
     }
-  }, [formErrors, isSubmitted, email, image, password, username, navigate]);
+  }, [
+    formErrors,
+    isSubmitted,
+    email,
+    image,
+    password,
+    username,
+    navigate,
+    language.signUpWithEmail.emailExistsError,
+    language.signUpWithEmail.errorText,
+  ]);
 
   const handleSubmit = () => {
     if (!user) {
@@ -153,7 +166,10 @@ function SignUpwithEmail() {
 
   return (
     <>
-      <ExitHeader path="/signUp" screenName="Email orqali ro'yxatdan o'tish" />
+      <ExitHeader
+        path="/signUp"
+        screenName={language.signUpWithEmail.headerText}
+      />
       {loading && <LoadingModul />}
       <div className="max-w-md -mt-16 mx-auto h-screen px-4 flex items-center justify-center">
         <div
@@ -185,7 +201,7 @@ function SignUpwithEmail() {
             }}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Ismingizni kiriting!"
+            placeholder={language.signUpWithEmail.name}
             className="logInput p-1 m-1 border rounded-md w-full"
             type="text"
             disabled={formDisabled}
@@ -202,7 +218,7 @@ function SignUpwithEmail() {
             }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Emailingizni kiriting!"
+            placeholder={language.signUpWithEmail.email}
             className="logInput p-1 m-1 border rounded-md w-full"
             type="email"
             disabled={formDisabled}
@@ -217,7 +233,7 @@ function SignUpwithEmail() {
             }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Parol kiriting!"
+            placeholder={language.signUpWithEmail.password}
             className="logInput p-1 m-1 border rounded-md w-full"
             type="password"
             disabled={formDisabled}
@@ -234,7 +250,7 @@ function SignUpwithEmail() {
             }}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Parolni qayta kiriting!"
+            placeholder={language.signUpWithEmail.rePassword}
             className="logInput p-1 m-1 border rounded-md w-full"
             type="password"
             disabled={formDisabled}
@@ -256,12 +272,12 @@ function SignUpwithEmail() {
             onClick={handleSubmit}
             className="logButton border border-white mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
-            Ro'yxatdan o'tish
+            {language.signUpWithEmail.submitBtn}
           </button>
           <p className="text-xs">
-            Akkauntingiz allaqachon bormi?
+            {language.signUpWithEmail.question}
             <Link to="/signInwithEmail" className="text-blue-400 ml-1">
-              Kirish
+              {language.signUpWithEmail.navigateBtn}
             </Link>
           </p>
         </div>

@@ -15,11 +15,13 @@ import { db } from "../firebase";
 import { useState } from "react";
 import { selectTheme } from "../features/themeSlice";
 import ActionModul from "./ActionModul";
+import { selectLanguage } from "../features/languageSlice";
 
 function ExitHeader({ screenName, path, myjob }) {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const notifications = useSelector(selectNotifications);
   const [showDeleteModul, setShowDeleteModul] = useState(false);
 
@@ -51,13 +53,15 @@ function ExitHeader({ screenName, path, myjob }) {
     >
       {showDeleteModul && (
         <ActionModul
-          text="Bildirishnomalarni o'chirishni xoxlaysizmi?"
+          text={language.exitHeader.deleteModulText}
           cancelFunction={(value) => setShowDeleteModul(value)}
           confirmFunction={deleteNotifications}
         />
       )}
       <div className="relative h-14 flex items-center justify-center">
-        <h1 className="font-bold text-xl">{screenName}</h1>
+        <h1 className="font-bold text-xl text-center truncate w-[72%]">
+          {screenName}
+        </h1>
         {!myjob && (
           <div
             onClick={() => (path ? navigate(path) : navigate(-1))}
@@ -70,7 +74,7 @@ function ExitHeader({ screenName, path, myjob }) {
         )}
         {location.pathname === "/notifications" && (
           <div className="absolute right-0 z-10 w-14 h-14 flex items-center justify-center">
-            <Tooltip title="Sozlamalar">
+            <Tooltip title={language.exitHeader.iconInfo}>
               <IconButton
                 onClick={handleClick}
                 size="medium"
@@ -121,7 +125,7 @@ function ExitHeader({ screenName, path, myjob }) {
                   <ListItemIcon>
                     <DeleteForeverIcon fontSize="small" />
                   </ListItemIcon>
-                  hammasini o'chirish
+                  {language.exitHeader.deleteAllText}
                 </MenuItem>
               )}
             </Menu>

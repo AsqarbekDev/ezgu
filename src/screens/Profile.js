@@ -30,6 +30,7 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 import ActionModul from "../components/ActionModul";
 
 function Profile() {
@@ -37,6 +38,7 @@ function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const bImageRef = useRef(null);
   const userImageRef = useRef(null);
@@ -71,7 +73,7 @@ function Profile() {
   const changeUsername = async () => {
     const errors = {};
     if (!username || username.replace(/\s/g, "").length <= 0) {
-      errors.username = "Ismingizni kiriting!";
+      errors.username = language.profile.enterNameError;
     }
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
@@ -87,7 +89,7 @@ function Profile() {
   const changePhoneNumber = async () => {
     const errors = {};
     if (!phoneNumber || phoneNumber?.length < 10 || phoneNumber?.length > 20) {
-      errors.number = "Telefon raqamingizni kiriting!";
+      errors.number = language.profile.enterNumberError;
     }
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
@@ -103,7 +105,7 @@ function Profile() {
   const changeRegion = async () => {
     const errors = {};
     if (!country || !region) {
-      errors.country = "Davlat va Regionni kiriting!";
+      errors.country = language.profile.enterRegionError;
     }
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
@@ -264,7 +266,7 @@ function Profile() {
       {loading && <LoadingModul />}
       {showErrorModul && (
         <ActionModul
-          text="Xatolik yuz berdi! Qayta urinib ko'ring."
+          text={language.profile.errorModulText}
           cancelFunction={(value) => setShowErrorModul(value)}
           errorModul
         />
@@ -289,7 +291,7 @@ function Profile() {
               }}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Ismingizni kiriting!"
+              placeholder={language.profile.enterName}
               className="p-1 m-1 bg-white text-black border rounded-md w-full"
               type="text"
               maxLength={40}
@@ -305,18 +307,18 @@ function Profile() {
                 }}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm bg-black text-white px-2 py-[2px] rounded-lg`}
+                } text-sm bg-black text-white w-20 py-[2px] rounded-lg`}
               >
-                Qaytish
+                {language.profile.cancel}
               </button>
               <button
                 style={{ borderColor: theme.border }}
                 onClick={changeUsername}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm bg-black text-white px-2 py-[2px] rounded-lg`}
+                } text-sm bg-black text-white w-20 py-[2px] rounded-lg`}
               >
-                Saqlash
+                {language.profile.save}
               </button>
             </div>
           </div>
@@ -360,18 +362,18 @@ function Profile() {
                 }}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm text-white px-2 bg-black py-[2px] rounded-lg`}
+                } text-sm text-white w-20 bg-black py-[2px] rounded-lg`}
               >
-                Qaytish
+                {language.profile.cancel}
               </button>
               <button
                 style={{ borderColor: theme.border }}
                 onClick={changePhoneNumber}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm text-white bg-black px-2 py-[2px] rounded-lg`}
+                } text-sm text-white bg-black w-20 py-[2px] rounded-lg`}
               >
-                Saqlash
+                {language.profile.save}
               </button>
             </div>
           </div>
@@ -392,8 +394,8 @@ function Profile() {
             </p>
             <div className="flex items-center mt-1">
               <div className="flex flex-col space-y-4 text-sm font-[700] text-right">
-                <p>Davlat:</p>
-                <p>Region:</p>
+                <p>{language.profile.country}</p>
+                <p>{language.profile.region}</p>
               </div>
               <div className="flex text-black flex-col ml-[11px] space-y-4 w-60">
                 <CountryDropdown
@@ -402,13 +404,13 @@ function Profile() {
                     setCountry(val);
                     setRegion("");
                   }}
-                  defaultOptionLabel="Qaysi davlatdasiz?"
+                  defaultOptionLabel={language.profile.countryDefault}
                 />
                 <RegionDropdown
                   country={country}
                   value={region}
                   onChange={(val) => setRegion(val)}
-                  defaultOptionLabel="Qaysi regiondasiz?"
+                  defaultOptionLabel={language.profile.regionDefault}
                 />
               </div>
             </div>
@@ -420,15 +422,15 @@ function Profile() {
                   setRegion(user.region || "");
                   setFormErrors({});
                 }}
-                className="border text-sm text-white px-2 bg-black py-[2px] rounded-lg"
+                className="border text-sm text-white w-20 bg-black py-[2px] rounded-lg"
               >
-                Qaytish
+                {language.profile.cancel}
               </button>
               <button
                 onClick={changeRegion}
-                className="border text-sm text-white bg-black px-2 py-[2px] rounded-lg"
+                className="border text-sm text-white bg-black w-20 py-[2px] rounded-lg"
               >
-                Saqlash
+                {language.profile.save}
               </button>
             </div>
           </div>
@@ -436,7 +438,7 @@ function Profile() {
       )}
       {showLogOutModul && (
         <ActionModul
-          text="Tizimdan chiqishni xoxlaysizmi?"
+          text={language.profile.logoutModulText}
           cancelFunction={(value) => setShowLogOutModul(value)}
           confirmFunction={signOutUser}
         />
@@ -469,7 +471,7 @@ function Profile() {
             onClick={addImagesToDB}
             className="bottom-2 absolute z-20 right-2 bg-black text-white opacity-80 rounded-lg px-2 pb-[2px]"
           >
-            Saqlash
+            {language.profile.save}
           </button>
         )}
         {showSaveImageBtn && (
@@ -477,7 +479,7 @@ function Profile() {
             onClick={deleteImage}
             className="bottom-2 absolute z-20 left-2 bg-black text-white opacity-80 rounded-lg px-2 pb-[2px]"
           >
-            Bekor qilish
+            {language.profile.cancel}
           </button>
         )}
         <input
@@ -536,7 +538,7 @@ function Profile() {
                 />
               </span>
             </h4>
-            <p className="text-xs -mt-[4px]">Telefon raqamingiz</p>
+            <p className="text-xs -mt-[4px]">{language.profile.phone}</p>
           </div>
         </ListItemButton>
         <Divider
@@ -574,7 +576,7 @@ function Profile() {
           <div className="flex items-center">
             <PersonAddAlt1Icon style={{ fontSize: 20, color: "green" }} />
             <p className="ml-2 text-green-700">
-              {user.workedWith}ta odamni ish bilan ta'minlagansiz
+              {user.workedWith} {language.profile.gaveJobs}
             </p>
           </div>
           <div className="flex items-center">
@@ -587,7 +589,7 @@ function Profile() {
               }}
             />
             <p className="ml-2 text-blue-700">
-              {user.homeAdds}ta uy ijarasi uchun e'lon bergansiz
+              {user.homeAdds} {language.profile.addedHomeAds}
             </p>
           </div>
           <div className="flex items-center">
@@ -600,7 +602,7 @@ function Profile() {
               }}
             />
             <p className="ml-2 text-purple-900">
-              {user.jobAdds}ta ish uchun e'lon bergansiz
+              {user.jobAdds} {language.profile.addedJobAds}
             </p>
           </div>
           <div className="flex items-center">
@@ -608,11 +610,11 @@ function Profile() {
               style={{ fontSize: 20, color: "maroon", marginRight: -1 }}
             />
             <p className="ml-2 text-red-900">
-              {user.workedJobs}ta ish olgansiz
+              {user.workedJobs} {language.profile.takenJobs}
             </p>
           </div>
         </div>
-        <p className="font-bold ml-5 pt-3">Sozlamalar</p>
+        <p className="font-bold ml-5 pt-3">{language.profile.settings}</p>
         <ListItemButton
           onClick={() =>
             theme.type === "light"
@@ -631,7 +633,7 @@ function Profile() {
             inputProps={{ "aria-label": "controlled" }}
             className="-ml-[3px]"
           />
-          <p className="text-lg font-[600] ml-3">Ilova Ranggi</p>
+          <p className="text-lg font-[600] ml-3">{language.profile.theme}</p>
         </ListItemButton>
         <Divider
           sx={{
@@ -643,7 +645,9 @@ function Profile() {
           component="a"
         >
           <WorkHistoryIcon style={{ fontSize: 24, marginLeft: 4 }} />
-          <p className="text-lg font-[600] ml-5">Ishlar Tarixi</p>
+          <p className="text-lg font-[600] ml-5">
+            {language.profile.jobsHistory}
+          </p>
         </ListItemButton>
         <Divider
           sx={{
@@ -655,16 +659,23 @@ function Profile() {
           component="a"
         >
           <DomainAddIcon style={{ fontSize: 24, marginLeft: 4 }} />
-          <p className="text-lg font-[600] ml-5">Uy Ijaralari Tarixi</p>
+          <p className="text-lg font-[600] ml-5">
+            {language.profile.homesHistory}
+          </p>
         </ListItemButton>
         <Divider
           sx={{
             bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
           }}
         />
-        <ListItemButton component="a">
+        <ListItemButton
+          onClick={() => navigate("/profile/changeLanguage")}
+          component="a"
+        >
           <LanguageIcon style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }} />
-          <p className="text-lg font-[600] ml-5">Tilni O'zgartirish</p>
+          <p className="text-lg font-[600] ml-5">
+            {language.profile.changeLanguage}
+          </p>
         </ListItemButton>
         <Divider
           sx={{
@@ -675,7 +686,7 @@ function Profile() {
           <HeadsetMicIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
-          <p className="text-lg font-[600] ml-5">Yordam</p>
+          <p className="text-lg font-[600] ml-5">{language.profile.help}</p>
         </ListItemButton>
         <Divider
           sx={{
@@ -686,7 +697,7 @@ function Profile() {
           <PrivacyTipIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
-          <p className="text-lg font-[600] ml-5">Ilova Qoidalari</p>
+          <p className="text-lg font-[600] ml-5">{language.profile.rules}</p>
         </ListItemButton>
         <Divider
           sx={{
@@ -695,7 +706,7 @@ function Profile() {
         />
         <ListItemButton onClick={() => setShowLogOutModul(true)} component="a">
           <LogoutIcon style={{ fontSize: 24, marginTop: 1, marginLeft: 5 }} />
-          <p className="text-lg font-[600] ml-5">Tizimdan Chiqish</p>
+          <p className="text-lg font-[600] ml-5">{language.profile.logout}</p>
         </ListItemButton>
         <Divider
           sx={{

@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import dayjs from "dayjs";
 import { doc, updateDoc } from "firebase/firestore";
 import React from "react";
@@ -116,11 +116,11 @@ function ImageMessage({
       {showImage && (
         <div className="fixed max-w-2xl z-[100] top-0 w-full h-screen bg-black">
           <div className="relative flex items-center justify-center h-full w-full">
-            <CloseIcon
-              onClick={() => setShowImage(false)}
-              style={{ fontSize: 40, color: "white" }}
-              className="absolute z-10 right-2 top-2 cursor-pointer"
-            />
+            <div className="absolute z-10 right-2 top-2">
+              <IconButton onClick={() => setShowImage(false)} size="small">
+                <CloseIcon style={{ fontSize: 40, color: "white" }} />
+              </IconButton>
+            </div>
             <img src={image} alt="" className="object-contain w-full h-full" />
           </div>
         </div>
@@ -168,7 +168,7 @@ function ImageMessage({
           onClick={() => setShowImage(true)}
           className={`${
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
-          } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl cursor-pointer`}
+          } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl`}
         >
           <img
             onLoad={() => setLoaded(true)}

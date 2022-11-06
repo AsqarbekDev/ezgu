@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import BannedUserCard from "../components/chatsScreen/BannedUserCard";
 import ExitHeader from "../components/ExitHeader";
+import { selectLanguage } from "../features/languageSlice";
 import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
@@ -12,6 +13,7 @@ import { db } from "../firebase";
 function BlockedUsersChat() {
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const [bannedUsers, setBannedUsers] = useState([]);
   const [blockedUsers] = useState(user.blockedUsers);
 
@@ -36,13 +38,15 @@ function BlockedUsersChat() {
 
   return (
     <div className="pb-1">
-      <ExitHeader screenName="Bloklangan foydalanuvchilar" />
+      <ExitHeader screenName={language.blockedUsers.headerText} />
       {bannedUsers.length === 0 ? (
         <div
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-16"
         >
-          <p className="font-[600] text-xl">Bloklangan foydalanuvchilar yo'q</p>
+          <p className="font-[600] text-xl text-center">
+            {language.blockedUsers.noItem}
+          </p>
         </div>
       ) : (
         bannedUsers.map((item, index) => (

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import DefaultLoadingModul from "../components/DefaultLoadingModul";
 import ExitHeader from "../components/ExitHeader";
 import HomeCard from "../components/homesScreen/HomeCard";
+import { selectLanguage } from "../features/languageSlice";
 import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
@@ -14,6 +15,7 @@ import { db } from "../firebase";
 function HomesHistory() {
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const [homes, setHomes] = useState(null);
 
   useEffect(() => {
@@ -77,7 +79,7 @@ function HomesHistory() {
   }, [user.uid]);
   return (
     <div>
-      <ExitHeader screenName="Uy ijaralari tarixi" />
+      <ExitHeader screenName={language.homesHistory.headerText} />
       {!homes ? (
         <DefaultLoadingModul />
       ) : homes.length === 0 ? (
@@ -85,8 +87,8 @@ function HomesHistory() {
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-16"
         >
-          <p className="font-[600] text-xl">
-            Uy ijarasi uchun e'lonlar tarixi yo'q
+          <p className="font-[600] text-xl text-center">
+            {language.homesHistory.noItem}
           </p>
         </div>
       ) : (

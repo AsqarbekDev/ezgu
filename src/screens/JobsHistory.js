@@ -11,9 +11,12 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 
 function JobsHistory() {
   const theme = useSelector(selectTheme);
+  const user = useSelector(selectUser);
+  const language = useSelector(selectLanguage);
   const [showMyAdds, setShowMyAdds] = useState(false);
   const [iWorkedJobs, setIWorkedJobs] = useState([]);
   const [iAddedJobs, setIAddedJobs] = useState([]);
@@ -27,8 +30,6 @@ function JobsHistory() {
       setShowMyAdds(true);
     }
   };
-
-  const user = useSelector(selectUser);
 
   useEffect(() => {
     const getIAddedJobs = async () => {
@@ -150,7 +151,7 @@ function JobsHistory() {
 
   return (
     <div className="pb-1">
-      <ExitHeader screenName="Ishlar tarixi" />
+      <ExitHeader screenName={language.jobsHistory.headerText} />
       <div className="fixed z-30 w-full max-w-2xl">
         <Box
           sx={{
@@ -160,12 +161,12 @@ function JobsHistory() {
         >
           <Tabs value={value} onChange={handleChange} centered>
             <Tab
-              label="Ishlaganlarim"
+              label={language.jobsHistory.navWorked}
               style={{ color: theme.textColor }}
               className="w-[50%]"
             />
             <Tab
-              label="Bergan e'lonlarim"
+              label={language.jobsHistory.navAdded}
               style={{ color: theme.textColor }}
               className="w-[50%]"
             />
@@ -178,7 +179,9 @@ function JobsHistory() {
             style={{ color: theme.textColor }}
             className="flex items-center justify-center w-full h-screen -mt-28"
           >
-            <p className="font-[600] text-xl">Berilgan e'lonlar tarixi yo'q</p>
+            <p className="font-[600] text-xl text-center">
+              {language.jobsHistory.noItemAdded}
+            </p>
           </div>
         ) : showMyAdds && iAddedJobs?.length > 0 ? (
           iAddedJobs?.map(
@@ -221,7 +224,9 @@ function JobsHistory() {
             style={{ color: theme.textColor }}
             className="flex items-center justify-center w-full h-screen -mt-28"
           >
-            <p className="font-[600] text-xl">Olingan ishlar tarixi yo'q</p>
+            <p className="font-[600] text-xl text-center">
+              {language.jobsHistory.noItemWorked}
+            </p>
           </div>
         ) : (
           iWorkedJobs?.map(

@@ -4,6 +4,7 @@ import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { selectLanguage } from "../../features/languageSlice";
 import { selectTheme } from "../../features/themeSlice";
 import { selectUser } from "../../features/userSlice";
 import { db } from "../../firebase";
@@ -22,6 +23,7 @@ function AdminUserBanCard({
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const unbanWorker = async () => {
     setShowUnbanUserModul(false);
@@ -33,7 +35,6 @@ function AdminUserBanCard({
       userName: user.username,
       notifyName: jobName,
       notifyID: jobId,
-      message: "Ish beruvchi tomonidan joriy ish uchun bandan chiqarildingiz!",
       to: uid,
       from: "jobs",
       messageType: "unbanned",
@@ -48,7 +49,7 @@ function AdminUserBanCard({
       {loading && <LoadingModul />}
       {showUnbanUserModul && (
         <ActionModul
-          text="Foydalanuvchini bandan chiqarishni xoxlaysizmi?"
+          text={language.jobs.unbanModul}
           cancelFunction={(value) => setShowUnbanUserModul(value)}
           confirmFunction={unbanWorker}
         />
@@ -67,7 +68,7 @@ function AdminUserBanCard({
               theme.type === "dark" && "border"
             } bg-black px-2 py-1 text-white text-xs rounded-lg overflow-hidden`}
           >
-            Bandan olish
+            {language.jobs.unbanUser}
           </button>
         )}
       </div>

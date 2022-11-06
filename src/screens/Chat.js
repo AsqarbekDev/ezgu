@@ -3,12 +3,14 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import ChatCard from "../components/chatsScreen/ChatCard";
 import { selectChats } from "../features/chatsSlice";
+import { selectLanguage } from "../features/languageSlice";
 import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 
 function Chat() {
   const chats = useSelector(selectChats);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const user = useSelector(selectUser);
   const [chatsArray, setChatsArray] = useState([]);
 
@@ -47,7 +49,9 @@ function Chat() {
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-14 -mb-14"
         >
-          <p className="font-[600] text-xl">Xozircha xabarlar yo'q</p>
+          <p className="font-[600] text-xl text-center">
+            {language.chats.noItem}
+          </p>
         </div>
       ) : (
         chatsArray.map(

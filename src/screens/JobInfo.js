@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, ListItemButton } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import UserCard from "../components/jobsScreen/UserCard";
 import LoadingModul from "../components/LoadingModul";
@@ -30,6 +30,7 @@ import ExitHeader from "../components/ExitHeader";
 import BottomNavigation from "../components/BottomNavigation";
 import { selectTheme } from "../features/themeSlice";
 import ActionModul from "../components/ActionModul";
+import { selectLanguage } from "../features/languageSlice";
 
 function JobInfo() {
   const [job, setJob] = useState(null);
@@ -48,6 +49,7 @@ function JobInfo() {
   const { jobId } = useParams();
   const waiting = useSelector(selectWaiting);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   useEffect(() => {
     if (getNavigate) {
@@ -86,7 +88,7 @@ function JobInfo() {
         doc(db, "jobs", jobId),
         async (snapshot) => {
           if (snapshot.exists()) {
-            if (user?.currentJob) {
+            if (user?.currentJob === jobId) {
               if (snapshot.data().deleted === false) {
                 if (snapshot.data().currentWorkers.includes(user.uid)) {
                   if (
@@ -105,7 +107,6 @@ function JobInfo() {
                       userName: snapshot.data().userName,
                       notifyName: snapshot.data().jobName,
                       notifyID: snapshot.id,
-                      message: "Ishni muvaffaqiyat tamomladingiz!",
                       to: user.uid,
                       from: "jobs",
                       messageType: "success",
@@ -257,8 +258,6 @@ function JobInfo() {
         userName: user.username,
         notifyName: job.jobName,
         notifyID: job.id,
-        message:
-          "Foydalanuvchi! Siz olgan ishingiz e'lon beruvchi tomonidan o'chirib tashlandi!",
         to: worker.uid,
         from: "jobs",
         messageType: "deleted",
@@ -288,17 +287,17 @@ function JobInfo() {
     <div className="pb-14 xl:pb-1">
       <ExitHeader
         myjob={user?.currentJob ? true : false}
-        screenName="Ish haqida malumotlar"
+        screenName={language.jobs.headerText}
       />
       {loading && <LoadingModul />}
       {showModul && (
         <ActionModul
           text={
             job?.userID === user?.uid
-              ? "Elonni o'chirishni xoxlaysizmi?"
+              ? language.jobs.modulTextDelete
               : user?.currentJob === job?.id
-              ? "Ishni bekor qilishni xoxlaysizmi?"
-              : "Ishni olishni xoxlaysizmi?"
+              ? language.jobs.modulTextExit
+              : language.jobs.modulTextGet
           }
           cancelFunction={() => setShowModul(false)}
           confirmFunction={
@@ -312,10 +311,10 @@ function JobInfo() {
       )}
       {showBanErrorModul && (
         <ActionModul
-          text="Ish beruvchi sizni ban qilgan!"
+          text={language.jobs.banErrorModulText}
           exitFunction={() => navigate("/")}
           errorModulExit
-          buttonName={"Chiqish"}
+          buttonName={language.jobs.banErrorModulBtn}
         />
       )}
       {!job ? (
@@ -342,7 +341,7 @@ function JobInfo() {
                 <div className="flex items-center -mt-[4px]">
                   <PersonAddAlt1Icon style={{ fontSize: 14, color: "green" }} />
                   <p className="text-xs ml-[2px] ">
-                    {job?.userWorkedWith}ta odamga ish bergan
+                    {job?.userWorkedWith} {language.jobs.workedWith}
                   </p>
                 </div>
               </div>
@@ -364,7 +363,7 @@ function JobInfo() {
                 {job?.jobName}
               </h4>
               <div className="flex items-center font-bold">
-                <h4>Ish xaqqi:</h4>
+                <h4>{language.jobs.salary}</h4>
                 <p className="text-[#34b804] text-xl ml-2">
                   {job?.salary}{" "}
                   <span>
@@ -384,7 +383,7 @@ function JobInfo() {
                 </p>
               </div>
               <div className="flex items-start font-bold">
-                <h4>Ishchilar soni:</h4>
+                <h4>{language.jobs.numOfWorkers}</h4>
                 <p style={{ color: theme.iconColor }} className="ml-2">
                   <span className="text-blue-700">{workers.length}</span>/
                   {job?.workersCount}
@@ -393,7 +392,7 @@ function JobInfo() {
               {user?.currentJob === job?.id &&
               job?.endingTime > dayjs().unix() ? (
                 <div className="flex items-start font-bold">
-                  <h4 className="">Telefon:</h4>
+                  <h4 className="">{language.jobs.phone}</h4>
                   <p style={{ color: theme.iconColor }} className="ml-2">
                     {job?.userPhoneNumber}
                   </p>
@@ -407,12 +406,12 @@ function JobInfo() {
                     onClick={handleCopyClick}
                     className={`ml-2 mt-[3px] border rounded-lg px-2 pb-[1px] text-sm`}
                   >
-                    {isCopied ? "Nusxalandi!" : "Nusxalash"}
+                    {isCopied ? language.jobs.copied : language.jobs.copy}
                   </button>
                 </div>
               ) : job?.userID === user?.uid ? (
                 <div className="flex items-start font-bold">
-                  <h4 className="">Telefon:</h4>
+                  <h4 className="">{language.jobs.phone}</h4>
                   <p
                     style={{ color: theme.iconColor }}
                     className="ml-2 truncate"
@@ -429,12 +428,12 @@ function JobInfo() {
                     onClick={handleCopyClick}
                     className={`ml-2 mt-[3px] border rounded-lg px-2 pb-[1px] text-sm`}
                   >
-                    {isCopied ? "Nusxalandi!" : "Nusxalash"}
+                    {isCopied ? language.jobs.copied : language.jobs.copy}
                   </button>
                 </div>
               ) : null}
               <div className="flex items-start font-bold">
-                <h4>Ish vaqti:</h4>
+                <h4>{language.jobs.time}</h4>
                 <p style={{ color: theme.iconColor }} className="ml-2">
                   {dayjs.unix(job?.startingTime).format("D/M/YYYY")}
                 </p>
@@ -444,27 +443,27 @@ function JobInfo() {
                 </p>
               </div>
               <div className="flex items-start font-bold">
-                <h4 className="">Davlat:</h4>
+                <h4 className="">{language.jobs.country}</h4>
                 <p style={{ color: theme.iconColor }} className="ml-2">
                   {job?.country}
                 </p>
               </div>
               <div className="flex items-start font-bold">
-                <h4 className="">Region:</h4>
+                <h4 className="">{language.jobs.region}</h4>
                 <p style={{ color: theme.iconColor }} className="ml-2">
                   {job?.region}
                 </p>
               </div>
               {job?.line !== "Неизвестный" && (
                 <div className="flex items-start font-bold">
-                  <h4 className="">Metro:</h4>
+                  <h4 className="">{language.jobs.metro}</h4>
                   <p style={{ color: theme.iconColor }} className="ml-2">
                     {job?.line} {job?.station}
                   </p>
                 </div>
               )}
               <div className="flex items-start font-bold">
-                <h4 className="">Manzil:</h4>
+                <h4 className="">{language.jobs.address}</h4>
                 <p
                   style={{ color: theme.iconColor }}
                   className="ml-2 overflow-hidden"
@@ -475,7 +474,7 @@ function JobInfo() {
               {user?.currentJob === job?.id || job?.userID === user?.uid ? (
                 <div className="flex items-start">
                   <h4 className="font-bold leading-3 overflow-hidden">
-                    Kommentariya:{" "}
+                    {language.jobs.comment}{" "}
                     <span
                       style={{ color: theme.iconColor }}
                       className="font-medium text-base"
@@ -489,7 +488,7 @@ function JobInfo() {
             <div>
               <div className="border-b-[1px] pb-2 pt-4 flex items-center justify-between">
                 <p className="font-bold">
-                  {showBan ? "BAN QILINGANLAR" : "ISHCHILAR"}
+                  {showBan ? language.jobs.banned : language.jobs.workers}
                 </p>
                 {job?.userID === user?.uid && (
                   <button
@@ -560,20 +559,24 @@ function JobInfo() {
               </div>
               {job?.endingTime > dayjs().unix() && job?.deleted === false && (
                 <div className="flex items-center justify-center mb-4 mt-6">
-                  <button
+                  <div
                     style={{ borderColor: theme.border }}
                     disabled={loading}
                     onClick={() => setShowModul(true)}
                     className={`${
                       theme.type === "dark" && "border"
-                    } bg-black text-white w-[60%] py-1 rounded-lg overflow-hidden`}
+                    } bg-black text-white w-[60%] rounded-lg overflow-hidden`}
                   >
-                    {job?.userID === user?.uid
-                      ? "Elonni o'chirish"
-                      : user?.currentJob === job?.id
-                      ? "Bekor qilish"
-                      : "Ishni olish"}
-                  </button>
+                    <ListItemButton>
+                      <p className="w-full text-center -my-1">
+                        {job?.userID === user?.uid
+                          ? language.jobs.deleteJob
+                          : user?.currentJob === job?.id
+                          ? language.jobs.cancelJob
+                          : language.jobs.getJob}
+                      </p>
+                    </ListItemButton>
+                  </div>
                 </div>
               )}
             </div>

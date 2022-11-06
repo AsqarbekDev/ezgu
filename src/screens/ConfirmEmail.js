@@ -11,6 +11,7 @@ import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
 import { useCookies } from "react-cookie";
+import { selectLanguage } from "../features/languageSlice";
 
 function ConfirmEmail() {
   const [loginError, setLoginError] = useState("");
@@ -24,6 +25,7 @@ function ConfirmEmail() {
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   useEffect(() => {
     if (!user || user?.emailVerified) {
@@ -48,7 +50,7 @@ function ConfirmEmail() {
         window.location.href = "/signUpwithEmail";
       })
       .catch((error) => {
-        setLoginError("Xatolik yuz berdi! Qayta urinib ko'ring!");
+        setLoginError(language.confirm.errorModulText);
         setShowError(true);
         setReSignDisabled(false);
         setLoading(false);
@@ -61,12 +63,12 @@ function ConfirmEmail() {
       sendEmailVerification(auth.currentUser)
         .then(() => {
           setLoginError(
-            `Emailingizga tasdiqlash xabari yuborildi! (${auth.currentUser.email})`
+            `${language.confirm.successModulText} (${auth.currentUser.email})`
           );
           setShowSuccess(true);
         })
         .catch((error) => {
-          setLoginError("Xatolik yuz berdi! Qayta urinib ko'ring!");
+          setLoginError(language.confirm.errorModulText);
           setShowError(true);
         });
     }
@@ -103,7 +105,7 @@ function ConfirmEmail() {
                   color="inherit"
                   size="small"
                 >
-                  Chiqish
+                  {language.confirm.successModulBtn}
                 </Button>
               }
             >
@@ -111,26 +113,24 @@ function ConfirmEmail() {
             </Alert>
           )}
           <h2 className="mb-2 text-center text-lg font-bold tracking-tight leading-5">
-            Emailingizni tasdiqlang!
+            {language.confirm.headerText}
           </h2>
           <p className="text-center text-sm tracking-tight leading-5">
-            Tasdiqlash xabarini olish uchun yuborish tugmasini bosing va
-            Emailigizga kirib tasdiqlang! (Agarda Emailni topolmasangiz Spam
-            bo'limini tekshirib ko'ring!)
+            {language.confirm.infoText}
           </p>
           <button
             disabled={formDisabled}
             onClick={sendConfirm}
             className="logButton border border-white mb-2 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
           >
-            Yuborish
+            {language.confirm.sendBtn}
           </button>
           <button
             disabled={reSignDisabled}
             onClick={reSignUp}
             className="text-blue-400 mt-2 text-xs font-[600]"
           >
-            Qayta ro'yxatdan o'tish
+            {language.confirm.retryBtn}
           </button>
         </div>
       </div>

@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import ExitHeader from "../components/ExitHeader";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 import ActionModul from "../components/ActionModul";
 
 function SignUp() {
@@ -19,6 +20,7 @@ function SignUp() {
 
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const provider = new GoogleAuthProvider();
   auth.languageCode = "uz";
@@ -51,6 +53,7 @@ function SignUp() {
             lastSeen: dayjs().unix(),
             blockedUsers: [],
             theme: "light",
+            language: "uz",
           });
         }
       })
@@ -66,11 +69,11 @@ function SignUp() {
 
   return (
     <>
-      <ExitHeader path="/" screenName="Ro'yxatdan o'tish" />
+      <ExitHeader path="/" screenName={language.signUp.headerText} />
       {loading && <LoadingModul />}
       {showErrorModul && (
         <ActionModul
-          text="Xatolik yuz berdi! Qayta urinib ko'ring."
+          text={language.signUp.errorModulText}
           cancelFunction={(value) => setShowErrorModul(value)}
           errorModul
         />
@@ -81,8 +84,7 @@ function SignUp() {
           className="flex flex-col items-center justify-center shadow-lg px-4 pb-8 pt-6 rounded-lg"
         >
           <h2 className="mb-6 text-center font-bold tracking-tight leading-5">
-            Ilovaning to'liq imkoniyatlaridan foydalanish uchun ro'yxatdan
-            o'tishingiz kerak!
+            {language.signUp.headerInfo}
           </h2>
           <button
             disabled={formDisabled}
@@ -90,7 +92,7 @@ function SignUp() {
             className="flex border border-white items-center bg-black p-2 text-white rounded-lg"
           >
             <img className="w-8 h-8 object-contain" src={googleLogo} alt="G" />
-            <p className="ml-2 font-[600]">Google orqali ro'yxatdan o'tish</p>
+            <p className="ml-2 font-[600]">{language.signUp.googleBtn}</p>
           </button>
           <button
             disabled={formDisabled}
@@ -98,7 +100,7 @@ function SignUp() {
             className="flex border border-white items-center bg-black p-2 text-white rounded-lg mt-2"
           >
             <img className="w-8 h-8 object-contain" src={emailLogo} alt="E" />
-            <p className="ml-2 font-[600]">Email orqali ro'yxatdan o'tish</p>
+            <p className="ml-2 font-[600]">{language.signUp.emailBtn}</p>
           </button>
         </div>
       </div>

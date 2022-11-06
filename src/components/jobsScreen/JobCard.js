@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../../features/themeSlice";
+import { selectLanguage } from "../../features/languageSlice";
 
 function JobCard({
   id,
@@ -27,6 +28,7 @@ function JobCard({
 }) {
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   const navigateToJob = () => {
     navigate(`/jobs/${id}`);
@@ -37,7 +39,7 @@ function JobCard({
       {deleted && (
         <div className="flex justify-end -mb-1 mt-1">
           <p className="bg-red-500 w-max mr-4 px-6 rounded-t-lg">
-            O'chirilgan!
+            {language.jobs.deleted}
           </p>
         </div>
       )}
@@ -54,8 +56,8 @@ function JobCard({
             </h5>
             <div className="flex items-center -mt-[1px]">
               <PersonAddAlt1Icon style={{ fontSize: 14, color: "green" }} />
-              <p className="text-xs ml-[2px] ">
-                {userWorkedWith}ta odamga ish bergan
+              <p className="text-xs ml-[2px]">
+                {userWorkedWith} {language.jobs.workedWith}
               </p>
             </div>
           </div>

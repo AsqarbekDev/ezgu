@@ -6,11 +6,13 @@ import { selectJobs } from "../features/jobsSlice";
 import { selectUser, selectWaiting } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 
 function Jobs() {
   const user = useSelector(selectUser);
   const jobs = useSelector(selectJobs);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const waiting = useSelector(selectWaiting);
   const navigate = useNavigate();
 
@@ -29,7 +31,9 @@ function Jobs() {
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-14"
         >
-          <p className="font-[600] text-xl">Xozircha ish uchun e'lonlar yo'q</p>
+          <p className="font-[600] text-xl text-center">
+            {language.jobs.noItem}
+          </p>
         </div>
       ) : (
         <div className="pb-14 xl:pb-1">

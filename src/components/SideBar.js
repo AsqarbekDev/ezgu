@@ -24,6 +24,7 @@ import { selectNotifications } from "../features/notificationsSlice";
 import { Divider, ListItemButton, Switch } from "@mui/material";
 import { selectTheme } from "../features/themeSlice";
 import { useCookies } from "react-cookie";
+import { selectLanguage } from "../features/languageSlice";
 
 function SideBar({ jobId }) {
   const [currentScreen, setCurrentScreen] = useState("/");
@@ -35,6 +36,7 @@ function SideBar({ jobId }) {
   const notifications = useSelector(selectNotifications);
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
   const [, setCookie] = useCookies(["theme"]);
 
   useEffect(() => {
@@ -96,7 +98,7 @@ function SideBar({ jobId }) {
         ) : (
           <WorkOutlineIcon style={{ fontSize: 30, color: theme.textColor }} />
         )}
-        <p className="text-lg font-[600] ml-4">Ish uchun e'lonlar</p>
+        <p className="text-lg font-[600] ml-4">{language.sidebar.jobs}</p>
       </button>
       <Divider
         sx={{
@@ -120,7 +122,7 @@ function SideBar({ jobId }) {
             style={{ fontSize: 30, color: theme.textColor }}
           />
         )}
-        <p className="text-lg font-[600] ml-4">Uy ijarasi uchun e'lonlar</p>
+        <p className="text-lg font-[600] ml-4">{language.sidebar.homes}</p>
       </button>
       <Divider
         sx={{
@@ -150,7 +152,7 @@ function SideBar({ jobId }) {
             style={{ fontSize: 30, color: theme.textColor }}
           />
         )}
-        <p className="text-lg font-[600] ml-4">E'lon qo'shish</p>
+        <p className="text-lg font-[600] ml-4">{language.sidebar.add}</p>
       </button>
       <Divider
         sx={{
@@ -200,7 +202,7 @@ function SideBar({ jobId }) {
             />
           </div>
         )}
-        <p className="text-lg font-[600] ml-4">Xabarlar</p>
+        <p className="text-lg font-[600] ml-4">{language.sidebar.chat}</p>
       </button>
       <Divider
         sx={{
@@ -227,7 +229,7 @@ function SideBar({ jobId }) {
             style={{ fontSize: 30, color: theme.textColor }}
           />
         )}
-        <p className="text-lg font-[600] ml-4">Foydalanuvchi</p>
+        <p className="text-lg font-[600] ml-4">{language.sidebar.profile}</p>
       </button>
       <Divider
         sx={{
@@ -272,7 +274,9 @@ function SideBar({ jobId }) {
             )}
           </div>
         )}
-        <p className="text-lg font-[600] ml-4">Bildirishnomalar</p>
+        <p className="text-lg font-[600] ml-4">
+          {language.sidebar.notifications}
+        </p>
       </button>
       <Divider
         sx={{
@@ -303,7 +307,10 @@ function SideBar({ jobId }) {
             style={{ fontSize: 30, color: theme.textColor }}
           />
         )}
-        <p className="text-lg font-[600] ml-4">Ishlar tarixi</p>
+        <p className="text-lg font-[600] ml-4">
+          {" "}
+          {language.sidebar.jobsHistory}
+        </p>
       </button>
       <Divider
         sx={{
@@ -332,7 +339,9 @@ function SideBar({ jobId }) {
         ) : (
           <DomainAddIcon style={{ fontSize: 30, color: theme.textColor }} />
         )}
-        <p className="text-lg font-[600] ml-4">Uy ijaralari tarixi</p>
+        <p className="text-lg font-[600] ml-4">
+          {language.sidebar.homesHistory}
+        </p>
       </button>
       <Divider
         sx={{
@@ -359,7 +368,9 @@ function SideBar({ jobId }) {
             inputProps={{ "aria-label": "controlled" }}
             className="-ml-1"
           />
-          <p className="text-lg font-[600] ml-[10px]">Ilova Ranggi</p>
+          <p className="text-lg font-[600] ml-[10px]">
+            {language.sidebar.theme}
+          </p>
         </ListItemButton>
       </div>
     </div>

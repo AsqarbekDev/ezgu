@@ -4,10 +4,12 @@ import DefaultLoadingModul from "../components/DefaultLoadingModul";
 import { useSelector } from "react-redux";
 import { selectHomes } from "../features/homesSlice";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 
 function Homes() {
   const homes = useSelector(selectHomes);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   return (
     <div>
@@ -18,8 +20,8 @@ function Homes() {
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-14"
         >
-          <p className="font-[600] text-xl">
-            Xozircha uy ijarasi uchun e'lonlar yo'q
+          <p className="font-[600] text-xl text-center">
+            {language.homes.noItem}
           </p>
         </div>
       ) : (

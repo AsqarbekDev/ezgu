@@ -5,6 +5,7 @@ import homesReducer from "../features/homesSlice";
 import chatsReducer from "../features/chatsSlice";
 import notificationsReducer from "../features/notificationsSlice";
 import themeReducer from "../features/themeSlice";
+import languageReducer from "../features/languageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     chats: chatsReducer,
     notifications: notificationsReducer,
     theme: themeReducer,
+    language: languageReducer,
   },
 });

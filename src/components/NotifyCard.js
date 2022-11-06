@@ -13,6 +13,7 @@ import { db } from "../firebase";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { selectTheme } from "../features/themeSlice";
+import { selectLanguage } from "../features/languageSlice";
 
 function NotifyCard({
   id,
@@ -30,6 +31,7 @@ function NotifyCard({
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
 
   useEffect(() => {
     const updateSeen = () => {
@@ -143,7 +145,19 @@ function NotifyCard({
               : "text-blue-600"
           } overflow-hidden`}
         >
-          {message}
+          {messageType === "mySuccess" && language.allNotifications.successJob}
+          {messageType === "deletedHome" &&
+            language.allNotifications.deletedHome}
+          {messageType === "success" &&
+            language.allNotifications.successNotification}
+          {messageType === "deleted" &&
+            language.allNotifications.deleteNotification}
+          {messageType === "unbanned" &&
+            language.allNotifications.unbanNotification}
+          {messageType === "removed" &&
+            language.allNotifications.removeNotification}
+          {messageType === "banned" &&
+            language.allNotifications.banNotification}
         </p>
       </div>
     </div>

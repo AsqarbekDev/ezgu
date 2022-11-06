@@ -30,6 +30,7 @@ import LoadingModul from "../components/LoadingModul";
 import dayjs from "dayjs";
 import ExitHeader from "../components/ExitHeader";
 import ActionModul from "../components/ActionModul";
+import { selectLanguage } from "../features/languageSlice";
 
 function AddNewHome() {
   const image1Ref = useRef(null);
@@ -54,6 +55,7 @@ function AddNewHome() {
   const [addedHomes, setAddedHomes] = useState([]);
 
   const user = useSelector(selectUser);
+  const language = useSelector(selectLanguage);
 
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
   const [country, setCountry] = useState(user.country || "");
@@ -112,29 +114,29 @@ function AddNewHome() {
 
     if (image1 || image2 || image3 || image4) {
     } else {
-      errors.images = "Iltimos rasm joylang!";
+      errors.images = language.addNewHome.imageError;
     }
 
     if (!salary || salary.replace(/\s/g, "").length <= 0) {
-      errors.salary = "Oylik to'lov narxini kiriting!";
+      errors.salary = language.addNewHome.rentError;
     }
 
     if (!workingPlace || workingPlace.replace(/\s/g, "").length <= 0) {
-      errors.workingPlace = "Uy manzilini kiriting!";
+      errors.workingPlace = language.addNewHome.addressError;
     }
     if (!comment || comment.replace(/\s/g, "").length <= 0) {
-      errors.comment = "Kommentariya kiriting!";
+      errors.comment = language.addNewHome.commentError;
     }
     if (!country || !region) {
-      errors.country = "Davlat va Regionni kiriting!";
+      errors.country = language.addNewHome.regionError;
     }
     if (country === "Russian Federation" && region === "Moscow") {
       if (line === moscowMetroList[0].line) {
-        errors.metro = "Uyga yaqin metroni kiriting!";
+        errors.metro = language.addNewHome.metroError;
       }
     }
     if (!phoneNumber || phoneNumber?.length < 10 || phoneNumber?.length > 20) {
-      errors.number = "Telefon raqamingizni kiriting!";
+      errors.number = language.addNewHome.numberError;
     }
 
     if (Object.keys(errors).length === 0) {
@@ -302,7 +304,7 @@ function AddNewHome() {
           console.log(e);
         });
     } else {
-      setShowErrorModul("Kuniga faqat 4ta e'lon berishingiz mumkin!");
+      setShowErrorModul(language.addNewHome.errorModulText);
     }
   };
 
@@ -369,14 +371,14 @@ function AddNewHome() {
 
   return (
     <div>
-      <ExitHeader screenName="E'lonni to'ldiring" />
+      <ExitHeader screenName={language.addNewHome.headerText} />
       {loading && <LoadingModul />}
       {showErrorModul && (
         <ActionModul
           text={showErrorModul}
           exitFunction={() => navigate("/homes")}
           errorModulExit
-          buttonName={"Chiqish"}
+          buttonName={language.addNewHome.errorModulBtn}
         />
       )}
       <div className="p-2">
@@ -539,7 +541,7 @@ function AddNewHome() {
             <LocalAtmIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
-              placeholder="Oylik to'lov narxini kiriting..."
+              placeholder={language.addNewHome.rent}
               type="number"
               value={salary}
               onChange={(e) => {
@@ -570,7 +572,7 @@ function AddNewHome() {
             <PinDropIcon style={{ fontSize: 20 }} />
             <input
               className="ml-2 border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
-              placeholder="Uy manzilini kiriting..."
+              placeholder={language.addNewHome.address}
               type="text"
               maxLength={100}
               value={workingPlace}
@@ -585,7 +587,7 @@ function AddNewHome() {
             <MessageOutlinedIcon style={{ fontSize: 18 }} />
             <textarea
               className="ml-2 text-sm border border-black outline-[#0fdbff]  rounded-lg py-1 px-2 w-full"
-              placeholder="Kommentariya qoldiring..."
+              placeholder={language.addNewHome.comment}
               type="text"
               maxLength={300}
               rows="6"
@@ -615,8 +617,8 @@ function AddNewHome() {
           <div className="flex items-center mt-4">
             <PublicIcon style={{ fontSize: 20 }} />
             <div className="flex flex-col ml-5 space-y-4 text-sm font-[700] text-right">
-              <p>Davlat:</p>
-              <p>Region:</p>
+              <p>{language.addNewHome.country}</p>
+              <p>{language.addNewHome.region}</p>
             </div>
             <div className="flex flex-col ml-[11px] space-y-4 w-60">
               <CountryDropdown
@@ -625,14 +627,14 @@ function AddNewHome() {
                   setCountry(val);
                   setRegion("");
                 }}
-                defaultOptionLabel="Qaysi davlatdasiz?"
+                defaultOptionLabel={language.addNewHome.countryDefault}
                 disabled={formDisabled}
               />
               <RegionDropdown
                 country={country}
                 value={region}
                 onChange={(val) => setRegion(val)}
-                defaultOptionLabel="Qaysi regiondasiz?"
+                defaultOptionLabel={language.addNewHome.regionDefault}
                 disabled={formDisabled}
               />
             </div>
@@ -645,8 +647,8 @@ function AddNewHome() {
               <div className="flex items-center space-x-3 mt-4">
                 <DirectionsTransitIcon style={{ fontSize: 20 }} />
                 <div className="flex flex-col space-y-4 text-sm font-[700] text-right">
-                  <p>Liniya:</p>
-                  <p>Stansiya:</p>
+                  <p>{language.addNewHome.line}</p>
+                  <p>{language.addNewHome.station}</p>
                 </div>
                 <div className="flex flex-col space-y-4">
                   <select
@@ -695,7 +697,7 @@ function AddNewHome() {
               className="bg-black text-white my-2 text-sm py-1 rounded-lg w-[60%]"
               disabled={formDisabled}
             >
-              SAQLASH
+              {language.addNewHome.saveBtn}
             </button>
           </div>
         </div>
