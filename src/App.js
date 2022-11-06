@@ -129,17 +129,14 @@ function App() {
   useEffect(() => {
     // Setting language
     if (user && !cookies.language && user.language !== language.type) {
-      console.log("user");
       dispatch(setLanguage(user.language));
     } else if (
       cookies.language &&
       cookies.language === "eng" &&
       language.type !== "eng"
     ) {
-      console.log("eng");
       dispatch(setLanguage("eng"));
       if (user && user.language !== "eng") {
-        console.log("updateEng");
         const updateLanguage = async () => {
           await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
             language: "eng",
@@ -152,10 +149,8 @@ function App() {
       cookies.language === "ru" &&
       language.type !== "ru"
     ) {
-      console.log("ru");
       dispatch(setLanguage("ru"));
       if (user && user.language !== "ru") {
-        console.log("updateRu");
         const updateLanguage = async () => {
           await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
             language: "ru",
@@ -168,10 +163,8 @@ function App() {
       cookies.language === "uz" &&
       language.type !== "uz"
     ) {
-      console.log("uz");
       dispatch(setLanguage("uz"));
       if (user && user.language !== "uz") {
-        console.log("updateUz");
         const updateLanguage = async () => {
           await updateDoc(doc(db, "users", auth?.currentUser?.uid), {
             language: "uz",

@@ -1,9 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "../features/languageSlice";
+import { selectTheme } from "../features/themeSlice";
 
 function LoadingModul() {
   const language = useSelector(selectLanguage);
+  const theme = useSelector(selectTheme);
 
   return (
     <>
@@ -11,7 +13,11 @@ function LoadingModul() {
         role="status"
         className="fixed z-[100] flex max-w-2xl items-center -mt-11 justify-center w-full h-screen"
       >
-        <div className="w-40 h-40 rounded-3xl pl-2 bg-black flex flex-col items-center justify-center">
+        <div
+          className={`${
+            theme.type === "dark" && "border border-white"
+          } w-40 h-40 rounded-3xl pl-2 bg-black flex flex-col items-center justify-center`}
+        >
           <svg
             aria-hidden="true"
             className="mr-2 w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-black"

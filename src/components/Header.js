@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import LanguageIcon from "@mui/icons-material/Language";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { selectNotifications } from "../features/notificationsSlice";
@@ -77,6 +78,16 @@ function Header() {
     >
       <div className="relative w-full flex items-center justify-center">
         <h1 className="font-bold text-3xl">EZGU</h1>
+        <div
+          onClick={() => navigate("/profile/changeLanguage")}
+          className={`${
+            user ? "hidden" : null
+          } absolute right-0 z-10 w-14 h-14 flex items-center justify-center`}
+        >
+          <IconButton size="small">
+            <LanguageIcon style={{ fontSize: 28, color: theme.textColor }} />
+          </IconButton>
+        </div>
         <div
           onClick={() => navigate("/notifications")}
           className={`${
