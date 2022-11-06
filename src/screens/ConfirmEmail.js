@@ -33,21 +33,23 @@ function ConfirmEmail() {
     }
   }, [user?.emailVerified, navigate, user]);
 
-  const reSignUp = async () => {
+  const reSignUp = () => {
+    const userID = auth.currentUser.uid;
     setReSignDisabled(true);
     setLoading(true);
-    removeCookie("user", { path: "/" });
-    const storageRef = ref(storage, `users/${auth.currentUser.uid}/image`);
-    deleteObject(storageRef)
-      .then(() => {})
-      .catch((error) => {
-        console.log("error");
-      });
-    await deleteDoc(doc(db, "users", auth.currentUser.uid));
     deleteUser(auth.currentUser)
-      .then(() => {
-        setLoading(false);
-        window.location.href = "/signUpwithEmail";
+      .then(async () => {
+        removeCookie("user", { path: "/" });
+        await deleteDoc(doc(db, "users", userID));
+        const storageRef = ref(storage, `users/${userID}/image`);
+        deleteObject(storageRef)
+          .then(() => {
+            setLoading(false);
+            window.location.href = "/signUpwithEmail";
+          })
+          .catch((error) => {
+            console.log("error");
+          });
       })
       .catch((error) => {
         setLoginError(language.confirm.errorModulText);
