@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, ListItemButton } from "@mui/material";
 import dayjs from "dayjs";
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import React from "react";
@@ -61,15 +61,18 @@ function AdminUserBanCard({
         <Avatar src={image} alt="Avatar" style={{ height: 36, width: 36 }} />
         <p className="ml-2 -mt-1 flex-1 font-bold truncate">{username}</p>
         {jobEndingTime > dayjs().unix() && (
-          <button
+          <div
             style={{ borderColor: theme.border }}
-            onClick={() => setShowUnbanUserModul(true)}
             className={`${
               theme.type === "dark" && "border"
-            } bg-black px-2 py-1 text-white text-xs rounded-lg overflow-hidden`}
+            } bg-black text-white text-xs rounded-lg overflow-hidden`}
           >
-            {language.jobs.unbanUser}
-          </button>
+            <ListItemButton onClick={() => setShowUnbanUserModul(true)}>
+              <p className="w-full text-center -my-1">
+                {language.jobs.unbanUser}
+              </p>
+            </ListItemButton>
+          </div>
         )}
       </div>
     </>

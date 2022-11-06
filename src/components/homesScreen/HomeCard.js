@@ -1,4 +1,9 @@
-import { Avatar, IconButton, ListItemIcon } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  ListItemButton,
+  ListItemIcon,
+} from "@mui/material";
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
@@ -333,7 +338,7 @@ function HomeCard({
               }}
             />
             <p className="-mt-[0.5px]">{userPhoneNumber}</p>
-            <button
+            <div
               onClick={handleCopyClick}
               style={{
                 backgroundColor: isCopied
@@ -341,10 +346,14 @@ function HomeCard({
                   : theme.background,
                 borderColor: theme.border,
               }}
-              className={`ml-2 border rounded-lg px-2 text-xs`}
+              className={`ml-2 border rounded-lg text-xs overflow-hidden`}
             >
-              {isCopied ? language.jobs.copied : language.jobs.copy}
-            </button>
+              <ListItemButton>
+                <p className="w-full text-center -my-2">
+                  {isCopied ? language.jobs.copied : language.jobs.copy}
+                </p>
+              </ListItemButton>
+            </div>
           </div>
           <div className="flex items-start text-sm font-[600] mt-[2px]">
             <LocationCityIcon

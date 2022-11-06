@@ -298,7 +298,7 @@ function Profile() {
               ref={usernameRef}
             />
             <div className="flex items-center justify-around mt-6">
-              <button
+              <div
                 style={{ borderColor: theme.border }}
                 onClick={() => {
                   setShowUsernameModul(false);
@@ -307,19 +307,27 @@ function Profile() {
                 }}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm bg-black text-white w-20 py-[2px] rounded-lg`}
+                } text-sm bg-black text-white w-20 rounded-lg overflow-hidden`}
               >
-                {language.profile.cancel}
-              </button>
-              <button
+                <ListItemButton>
+                  <p className="w-full text-center -my-1">
+                    {language.profile.cancel}
+                  </p>
+                </ListItemButton>
+              </div>
+              <div
                 style={{ borderColor: theme.border }}
                 onClick={changeUsername}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm bg-black text-white w-20 py-[2px] rounded-lg`}
+                } text-sm bg-black text-white w-20 rounded-lg overflow-hidden`}
               >
-                {language.profile.save}
-              </button>
+                <ListItemButton>
+                  <p className="w-full text-center -my-1">
+                    {language.profile.save}
+                  </p>
+                </ListItemButton>
+              </div>
             </div>
           </div>
         </div>
@@ -353,7 +361,7 @@ function Profile() {
               />
             </div>
             <div className="flex items-center justify-around mt-6">
-              <button
+              <div
                 style={{ borderColor: theme.border }}
                 onClick={() => {
                   setShowNumberModul(false);
@@ -362,19 +370,27 @@ function Profile() {
                 }}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm text-white w-20 bg-black py-[2px] rounded-lg`}
+                } text-sm text-white w-20 bg-black rounded-lg overflow-hidden`}
               >
-                {language.profile.cancel}
-              </button>
-              <button
+                <ListItemButton>
+                  <p className="w-full text-center -my-1">
+                    {language.profile.cancel}
+                  </p>
+                </ListItemButton>
+              </div>
+              <div
                 style={{ borderColor: theme.border }}
                 onClick={changePhoneNumber}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm text-white bg-black w-20 py-[2px] rounded-lg`}
+                } text-sm text-white bg-black w-20 rounded-lg overflow-hidden`}
               >
-                {language.profile.save}
-              </button>
+                <ListItemButton>
+                  <p className="w-full text-center -my-1">
+                    {language.profile.save}
+                  </p>
+                </ListItemButton>
+              </div>
             </div>
           </div>
         </div>
@@ -415,23 +431,31 @@ function Profile() {
               </div>
             </div>
             <div className="flex items-center justify-around mt-6">
-              <button
+              <div
                 onClick={() => {
                   setShowRegionModul(false);
                   setCountry(user.country || "");
                   setRegion(user.region || "");
                   setFormErrors({});
                 }}
-                className="border text-sm text-white w-20 bg-black py-[2px] rounded-lg"
+                className="border text-sm text-white w-20 bg-black rounded-lg overflow-hidden"
               >
-                {language.profile.cancel}
-              </button>
-              <button
+                <ListItemButton>
+                  <p className="w-full text-center -my-1">
+                    {language.profile.cancel}
+                  </p>
+                </ListItemButton>
+              </div>
+              <div
                 onClick={changeRegion}
-                className="border text-sm text-white bg-black w-20 py-[2px] rounded-lg"
+                className="border text-sm text-white bg-black w-20 rounded-lg overflow-hidden"
               >
-                {language.profile.save}
-              </button>
+                <ListItemButton>
+                  <p className="w-full text-center -my-1">
+                    {language.profile.save}
+                  </p>
+                </ListItemButton>
+              </div>
             </div>
           </div>
         </div>
@@ -467,20 +491,28 @@ function Profile() {
           className="absolute z-20 overflow-hidden"
         />
         {showSaveImageBtn && (
-          <button
+          <div
             onClick={addImagesToDB}
-            className="bottom-2 absolute z-20 right-2 bg-black text-white opacity-80 rounded-lg px-2 pb-[2px]"
+            className="bottom-2 absolute z-20 right-2 bg-black text-white opacity-80 rounded-lg overflow-hidden"
           >
-            {language.profile.save}
-          </button>
+            <ListItemButton>
+              <p className="w-full text-center -my-1">
+                {language.profile.save}
+              </p>
+            </ListItemButton>
+          </div>
         )}
         {showSaveImageBtn && (
-          <button
+          <div
             onClick={deleteImage}
-            className="bottom-2 absolute z-20 left-2 bg-black text-white opacity-80 rounded-lg px-2 pb-[2px]"
+            className="bottom-2 absolute z-20 left-2 bg-black text-white opacity-80 rounded-lg overflow-hidden"
           >
-            {language.profile.cancel}
-          </button>
+            <ListItemButton>
+              <p className="w-full text-center -my-1">
+                {language.profile.cancel}
+              </p>
+            </ListItemButton>
+          </div>
         )}
         <input
           type="file"

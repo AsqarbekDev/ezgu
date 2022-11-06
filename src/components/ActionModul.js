@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../features/themeSlice";
 import { selectLanguage } from "../features/languageSlice";
+import { ListItemButton } from "@mui/material";
 
 function ActionModul({
   text,
@@ -26,32 +27,42 @@ function ActionModul({
         <p>{text}</p>
         <div className="flex items-center justify-around mt-6 space-x-4">
           {errorModulExit && (
-            <button
+            <div
               onClick={() => exitFunction()}
-              className="border border-white px-4 rounded-lg"
+              className="border border-white rounded-lg overflow-hidden"
             >
-              {buttonName}
-            </button>
+              <ListItemButton>
+                <p className="w-full text-center -my-2">{buttonName}</p>
+              </ListItemButton>
+            </div>
           )}
           {!errorModulExit && (
-            <button
+            <div
               onClick={() => cancelFunction(false)}
               className={`border border-white ${
-                errorModul ? "px-4" : "w-16"
-              } rounded-lg`}
+                errorModul ? "" : "w-16"
+              } rounded-lg overflow-hidden`}
             >
-              {errorModul
-                ? language.actionModul.exitBtn
-                : language.actionModul.noBtn}
-            </button>
+              <ListItemButton>
+                <p className="w-full text-center -my-2">
+                  {errorModul
+                    ? language.actionModul.exitBtn
+                    : language.actionModul.noBtn}
+                </p>
+              </ListItemButton>
+            </div>
           )}
           {!errorModul && !errorModulExit && (
-            <button
+            <div
               onClick={confirmFunction}
-              className="border border-white w-16 rounded-lg"
+              className="border border-white w-16 rounded-lg overflow-hidden"
             >
-              {language.actionModul.yesBtn}
-            </button>
+              <ListItemButton>
+                <p className="w-full text-center -my-2">
+                  {language.actionModul.yesBtn}
+                </p>
+              </ListItemButton>
+            </div>
           )}
         </div>
       </div>

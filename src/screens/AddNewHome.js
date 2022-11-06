@@ -8,7 +8,7 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import PublicIcon from "@mui/icons-material/Public";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { moscowMetroList } from "../assets/moscowMetroList";
-import { Avatar, MenuItem, TextField } from "@mui/material";
+import { Avatar, ListItemButton, MenuItem, TextField } from "@mui/material";
 import {
   collection,
   addDoc,
@@ -692,13 +692,13 @@ function AddNewHome() {
             </>
           )}
           <div className="flex justify-center mt-6 mb-2">
-            <button
-              onClick={handleSubmit}
-              className="bg-black text-white my-2 text-sm py-1 rounded-lg w-[60%]"
-              disabled={formDisabled}
-            >
-              {language.addNewHome.saveBtn}
-            </button>
+            <div className="bg-black text-white my-2 text-sm rounded-lg w-[60%] overflow-hidden">
+              <ListItemButton onClick={handleSubmit} disabled={formDisabled}>
+                <p className="w-full text-center -my-1">
+                  {language.addNewHome.saveBtn}
+                </p>
+              </ListItemButton>
+            </div>
           </div>
         </div>
       </div>

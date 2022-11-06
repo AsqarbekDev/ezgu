@@ -1,4 +1,4 @@
-import { Alert } from "@mui/material";
+import { Alert, ListItemButton } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -133,13 +133,13 @@ function SignInwithEmail() {
           <p className="text-red-600 font-[600] text-xs">
             {formErrors.password}
           </p>
-          <button
-            disabled={formDisabled}
-            onClick={handleSubmit}
-            className="logButton border border-white mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
-          >
-            {language.signIn.enterBtn}
-          </button>
+          <div className="logButton border border-white mb-3 mt-4 bg-black rounded-md text-sm text-white w-[60%] overflow-hidden">
+            <ListItemButton onClick={handleSubmit} disabled={formDisabled}>
+              <p className="w-full text-center -my-1">
+                {language.signIn.enterBtn}
+              </p>
+            </ListItemButton>
+          </div>
           <p className="text-xs">
             {language.signIn.question}
             <Link to="/signUpwithEmail" className="text-blue-400 ml-1">

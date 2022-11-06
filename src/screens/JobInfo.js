@@ -396,18 +396,21 @@ function JobInfo() {
                   <p style={{ color: theme.iconColor }} className="ml-2">
                     {job?.userPhoneNumber}
                   </p>
-                  <button
+                  <div
                     style={{
                       backgroundColor: isCopied
                         ? theme.buttonOpacityColor
                         : theme.background,
                       borderColor: theme.border,
                     }}
-                    onClick={handleCopyClick}
-                    className={`ml-2 mt-[3px] border rounded-lg px-2 pb-[1px] text-sm`}
+                    className={`ml-2 mt-[3px] border rounded-lg overflow-hidden text-sm`}
                   >
-                    {isCopied ? language.jobs.copied : language.jobs.copy}
-                  </button>
+                    <ListItemButton onClick={handleCopyClick}>
+                      <p className="w-full text-center -my-2">
+                        {isCopied ? language.jobs.copied : language.jobs.copy}
+                      </p>
+                    </ListItemButton>
+                  </div>
                 </div>
               ) : job?.userID === user?.uid ? (
                 <div className="flex items-start font-bold">
@@ -418,18 +421,21 @@ function JobInfo() {
                   >
                     {job?.userPhoneNumber}
                   </p>
-                  <button
+                  <div
                     style={{
                       backgroundColor: isCopied
                         ? theme.buttonOpacityColor
                         : theme.background,
                       borderColor: theme.border,
                     }}
-                    onClick={handleCopyClick}
-                    className={`ml-2 mt-[3px] border rounded-lg px-2 pb-[1px] text-sm`}
+                    className={`ml-2 mt-[3px] border rounded-lg overflow-hidden text-sm`}
                   >
-                    {isCopied ? language.jobs.copied : language.jobs.copy}
-                  </button>
+                    <ListItemButton onClick={handleCopyClick}>
+                      <p className="w-full text-center -my-2">
+                        {isCopied ? language.jobs.copied : language.jobs.copy}
+                      </p>
+                    </ListItemButton>
+                  </div>
                 </div>
               ) : null}
               <div className="flex items-start font-bold">
@@ -491,7 +497,7 @@ function JobInfo() {
                   {showBan ? language.jobs.banned : language.jobs.workers}
                 </p>
                 {job?.userID === user?.uid && (
-                  <button
+                  <div
                     onClick={() => setShowBan(!showBan)}
                     style={{
                       backgroundColor: showBan
@@ -500,7 +506,7 @@ function JobInfo() {
                       borderColor: showBan ? theme.border : theme.background,
                       color: showBan ? theme.textColor : theme.background,
                     }}
-                    className={`border rounded-lg overflow-hidden h-6 w-16 flex items-center justify-between px-[6px] ${
+                    className={`border rounded-lg overflow-hidden h-6 w-16 ${
                       showBan && theme.type === "dark"
                         ? "font-[600]"
                         : !showBan && theme.type === "dark"
@@ -512,14 +518,18 @@ function JobInfo() {
                         : ""
                     }`}
                   >
-                    <p>Ban</p>
-                    <BlockIcon
-                      style={{
-                        fontSize: 18,
-                        color: showBan ? theme.textColor : theme.background,
-                      }}
-                    />
-                  </button>
+                    <ListItemButton>
+                      <p className="h-6 w-16 flex items-center justify-center pb-[18px] pr-8">
+                        <span>Ban</span>
+                        <BlockIcon
+                          style={{
+                            fontSize: 18,
+                            color: showBan ? theme.textColor : theme.background,
+                          }}
+                        />
+                      </p>
+                    </ListItemButton>
+                  </div>
                 )}
               </div>
               <div className="space-y-2 mt-2">
@@ -561,13 +571,14 @@ function JobInfo() {
                 <div className="flex items-center justify-center mb-4 mt-6">
                   <div
                     style={{ borderColor: theme.border }}
-                    disabled={loading}
-                    onClick={() => setShowModul(true)}
                     className={`${
                       theme.type === "dark" && "border"
                     } bg-black text-white w-[60%] rounded-lg overflow-hidden`}
                   >
-                    <ListItemButton>
+                    <ListItemButton
+                      disabled={loading}
+                      onClick={() => setShowModul(true)}
+                    >
                       <p className="w-full text-center -my-1">
                         {job?.userID === user?.uid
                           ? language.jobs.deleteJob

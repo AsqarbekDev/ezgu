@@ -1,4 +1,4 @@
-import { Alert, Button } from "@mui/material";
+import { Alert, Button, ListItemButton } from "@mui/material";
 import { deleteUser, sendEmailVerification } from "firebase/auth";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
@@ -118,13 +118,13 @@ function ConfirmEmail() {
           <p className="text-center text-sm tracking-tight leading-5">
             {language.confirm.infoText}
           </p>
-          <button
-            disabled={formDisabled}
-            onClick={sendConfirm}
-            className="logButton border border-white mb-2 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
-          >
-            {language.confirm.sendBtn}
-          </button>
+          <div className="logButton border border-white mb-2 mt-4 bg-black rounded-md text-sm text-white w-[60%] overflow-hidden">
+            <ListItemButton onClick={sendConfirm} disabled={formDisabled}>
+              <p className="w-full text-center -my-1">
+                {language.confirm.sendBtn}
+              </p>
+            </ListItemButton>
+          </div>
           <button
             disabled={reSignDisabled}
             onClick={reSignUp}

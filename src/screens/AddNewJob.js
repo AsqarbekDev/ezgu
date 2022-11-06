@@ -8,7 +8,7 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import PublicIcon from "@mui/icons-material/Public";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { moscowMetroList } from "../assets/moscowMetroList";
-import { Avatar } from "@mui/material";
+import { Avatar, ListItemButton } from "@mui/material";
 import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
@@ -462,13 +462,13 @@ function AddNewJob() {
             </>
           )}
           <div className="flex justify-center mt-6 mb-2">
-            <button
-              onClick={handleSubmit}
-              className="bg-black text-white my-2 text-sm py-1 rounded-lg w-[60%]"
-              disabled={formDisabled}
-            >
-              {language.addNewJob.saveBtn}
-            </button>
+            <div className="bg-black text-white my-2 text-sm rounded-lg w-[60%] overflow-hidden">
+              <ListItemButton onClick={handleSubmit} disabled={formDisabled}>
+                <p className="w-full text-center -my-1">
+                  {language.addNewJob.saveBtn}
+                </p>
+              </ListItemButton>
+            </div>
           </div>
         </div>
       </div>

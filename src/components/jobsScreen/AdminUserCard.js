@@ -1,4 +1,4 @@
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, ListItemButton } from "@mui/material";
 import React, { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -95,24 +95,36 @@ function AdminUserCard({
               theme.type === "dark" && "border-2"
             } rounded-xl bg-black text-white text-lg p-6 flex flex-col items-center`}
           >
-            <button
+            <div
               onClick={removeWorker}
-              className="border border-white rounded-lg py-2 w-[200px]"
+              className="border border-white rounded-lg w-[200px] overflow-hidden"
             >
-              {language.jobs.modulRemoveBtn}
-            </button>
-            <button
+              <ListItemButton>
+                <p className="w-full text-center">
+                  {language.jobs.modulRemoveBtn}
+                </p>
+              </ListItemButton>
+            </div>
+            <div
               onClick={banWorker}
-              className="border border-white rounded-lg py-2 w-[200px] mt-3"
+              className="border border-white rounded-lg w-[200px] mt-3 overflow-hidden"
             >
-              {language.jobs.modulBanBtn}
-            </button>
-            <button
+              <ListItemButton>
+                <p className="w-full text-center">
+                  {language.jobs.modulBanBtn}
+                </p>
+              </ListItemButton>
+            </div>
+            <div
               onClick={() => setShowRemoveUserModul(false)}
-              className="bg-white text-black font-bold text-base rounded-lg w-[140px] mt-6"
+              className="bg-white text-black font-bold text-base rounded-lg w-[140px] mt-6 overflow-hidden"
             >
-              {language.jobs.modulCancelBtn}
-            </button>
+              <ListItemButton>
+                <p className="w-full text-center -my-1">
+                  {language.jobs.modulCancelBtn}
+                </p>
+              </ListItemButton>
+            </div>
           </div>
         </div>
       )}
@@ -136,15 +148,19 @@ function AdminUserCard({
           </IconButton>
         </div>
         {jobEndingTime > dayjs().unix() && (
-          <button
+          <div
             style={{ borderColor: theme.border }}
             onClick={() => setShowRemoveUserModul(true)}
             className={`${
               theme.type === "dark" && "border"
-            } bg-black px-2 py-1 text-white text-xs rounded-lg overflow-hidden`}
+            } bg-black text-white text-xs rounded-lg overflow-hidden`}
           >
-            {language.jobs.removeUser}
-          </button>
+            <ListItemButton>
+              <p className="w-full text-center -my-1">
+                {language.jobs.removeUser}
+              </p>
+            </ListItemButton>
+          </div>
         )}
       </div>
     </>

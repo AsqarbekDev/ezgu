@@ -1,4 +1,4 @@
-import { Alert, Avatar } from "@mui/material";
+import { Alert, Avatar, ListItemButton } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -267,13 +267,13 @@ function SignUpwithEmail() {
             disabled={formDisabled}
             accept="image/*"
           />
-          <button
-            disabled={formDisabled}
-            onClick={handleSubmit}
-            className="logButton border border-white mb-3 mt-4 bg-black py-1 rounded-md text-sm text-white w-[60%]"
-          >
-            {language.signUpWithEmail.submitBtn}
-          </button>
+          <div className="logButton border border-white mb-3 mt-4 bg-black rounded-md text-sm text-white w-[60%] overflow-hidden">
+            <ListItemButton onClick={handleSubmit} disabled={formDisabled}>
+              <p className="w-full text-center -my-1">
+                {language.signUpWithEmail.submitBtn}
+              </p>
+            </ListItemButton>
+          </div>
           <p className="text-xs">
             {language.signUpWithEmail.question}
             <Link to="/signInwithEmail" className="text-blue-400 ml-1">

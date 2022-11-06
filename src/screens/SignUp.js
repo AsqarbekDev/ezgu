@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { selectTheme } from "../features/themeSlice";
 import { selectLanguage } from "../features/languageSlice";
 import ActionModul from "../components/ActionModul";
+import { ListItemButton } from "@mui/material";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -86,22 +87,37 @@ function SignUp() {
           <h2 className="mb-6 text-center font-bold tracking-tight leading-5">
             {language.signUp.headerInfo}
           </h2>
-          <button
-            disabled={formDisabled}
-            onClick={signInWithGoogle}
-            className="flex border border-white items-center bg-black p-2 text-white rounded-lg"
-          >
-            <img className="w-8 h-8 object-contain" src={googleLogo} alt="G" />
-            <p className="ml-2 font-[600]">{language.signUp.googleBtn}</p>
-          </button>
-          <button
-            disabled={formDisabled}
-            onClick={() => navigate("/signUpwithEmail")}
-            className="flex border border-white items-center bg-black p-2 text-white rounded-lg mt-2"
-          >
-            <img className="w-8 h-8 object-contain" src={emailLogo} alt="E" />
-            <p className="ml-2 font-[600]">{language.signUp.emailBtn}</p>
-          </button>
+          <div className="border border-white bg-black text-white rounded-lg overflow-hidden">
+            <ListItemButton onClick={signInWithGoogle} disabled={formDisabled}>
+              <p className="w-full text-center flex items-center">
+                <img
+                  className="w-8 h-8 object-contain"
+                  src={googleLogo}
+                  alt="G"
+                />
+                <span className="ml-2 font-[600]">
+                  {language.signUp.googleBtn}
+                </span>
+              </p>
+            </ListItemButton>
+          </div>
+          <div className="border border-white bg-black text-white rounded-lg mt-2 overflow-hidden">
+            <ListItemButton
+              onClick={() => navigate("/signUpwithEmail")}
+              disabled={formDisabled}
+            >
+              <p className="w-full text-center flex items-center">
+                <img
+                  className="w-8 h-8 object-contain"
+                  src={emailLogo}
+                  alt="E"
+                />
+                <span className="ml-2 font-[600]">
+                  {language.signUp.emailBtn}
+                </span>
+              </p>
+            </ListItemButton>
+          </div>
         </div>
       </div>
     </>
