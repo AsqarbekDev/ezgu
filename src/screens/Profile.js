@@ -714,7 +714,10 @@ function Profile() {
             bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
           }}
         />
-        <ListItemButton component="a">
+        <ListItemButton
+          onClick={() => navigate("/chats/vqd01tM0yxQZrtck92vHNafMvgg1")}
+          component="a"
+        >
           <HeadsetMicIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />
