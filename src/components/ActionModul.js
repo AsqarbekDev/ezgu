@@ -40,7 +40,7 @@ function ActionModul({
             <div
               onClick={() => cancelFunction(false)}
               className={`border border-white ${
-                errorModul ? "" : "w-16"
+                errorModul ? "" : "w-20"
               } rounded-lg overflow-hidden`}
             >
               <ListItemButton>
@@ -55,7 +55,7 @@ function ActionModul({
           {!errorModul && !errorModulExit && (
             <div
               onClick={confirmFunction}
-              className="border border-white w-16 rounded-lg overflow-hidden"
+              className="border border-white w-20 rounded-lg overflow-hidden"
             >
               <ListItemButton>
                 <p className="w-full text-center -my-2">
