@@ -46,7 +46,7 @@ function HomeCard({
   uploadedTime,
   userPhoneNumber,
   history,
-  userRegion,
+  region,
   currency,
 }) {
   const target = useRef(null);
@@ -364,7 +364,7 @@ function HomeCard({
                 marginRight: 3,
               }}
             />
-            <p className="overflow-hidden">{userRegion}</p>
+            <p className="overflow-hidden">{region}</p>
           </div>
           <div className="flex items-start text-sm font-[600] mt-[2px]">
             <PlaceIcon

@@ -4,6 +4,7 @@ const initialState = {
   value: {},
   chatRooms: null,
   deletingChat: null,
+  checkingChat: null,
 };
 
 export const chatsSlice = createSlice({
@@ -41,15 +42,24 @@ export const chatsSlice = createSlice({
     deleteChat: (state, action) => {
       state.deletingChat = action.payload;
     },
+    checkChat: (state, action) => {
+      state.checkingChat = action.payload;
+    },
   },
 });
 
-export const { setChatRooms, setMessagingUsers, setChats, deleteChat } =
-  chatsSlice.actions;
+export const {
+  setChatRooms,
+  setMessagingUsers,
+  setChats,
+  deleteChat,
+  checkChat,
+} = chatsSlice.actions;
 
 export const selectChatRooms = (state) => state.chats.chatRooms;
 export const selectMessagingUsers = (state) => state.chats.messagingUsers;
 export const selectChats = (state) => state.chats.value;
 export const selectDeletingChat = (state) => state.chats.deletingChat;
+export const selectCheckingChat = (state) => state.chats.checkingChat;
 
 export default chatsSlice.reducer;

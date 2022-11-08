@@ -27,16 +27,16 @@ import {
   arrayUnion,
   collection,
   doc,
-  getDoc,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db, storage } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import {
+  checkChat,
   deleteChat,
   selectChatRooms,
   selectChats,
@@ -65,7 +65,6 @@ function ChatRoom() {
   const [isChatRoomExists, setIsChatRoomExists] = useState(false);
   const [chatRoomID, setChatRoomID] = useState(null);
   const [newMessageID, setNewMessageID] = useState(null);
-  const [messagingUserChat, setMessagingUserChat] = useState(null);
   const [waitingUser, setWaitingUser] = useState(true);
   const [showModul, setShowModul] = useState("");
   const [currentShowingDate, setCurrentShowingDate] = useState(null);
@@ -73,13 +72,7 @@ function ChatRoom() {
   const [showDate, setShowDate] = useState(null);
   const [timestampDate, setTimestampDate] = useState(null);
   const [dateShowingMessages, setDateShowingMessages] = useState([]);
-
-  const disabledFirst =
-    messagingUserChat && messagingUserChat?.blockedUsers?.includes(user.uid)
-      ? true
-      : messagingUserChat && user?.blockedUsers?.includes(messagingUserChat?.id)
-      ? true
-      : false;
+  const [messages, setMessages] = useState([]);
 
   const disabledSecond =
     chats[chatRoomID] &&
@@ -101,9 +94,7 @@ function ChatRoom() {
 
   const blockUser = async () => {
     setShowModul("");
-    const blockingUser = messagingUserChat
-      ? messagingUserChat.id
-      : chats[chatRoomID]?.messagingUser.uid;
+    const blockingUser = chats[chatRoomID]?.messagingUser.uid;
 
     await updateDoc(doc(db, "users", user.uid), {
       blockedUsers: arrayUnion(blockingUser),
@@ -112,9 +103,7 @@ function ChatRoom() {
 
   const unBlockUser = async () => {
     setShowModul("");
-    const unBlockingUser = messagingUserChat
-      ? messagingUserChat.id
-      : chats[chatRoomID]?.messagingUser.uid;
+    const unBlockingUser = chats[chatRoomID]?.messagingUser.uid;
 
     await updateDoc(doc(db, "users", user.uid), {
       blockedUsers: arrayRemove(unBlockingUser),
@@ -124,12 +113,18 @@ function ChatRoom() {
   const deleteMessages = async () => {
     setShowModul("");
 
+    dispatch(deleteChat(chatRoomID));
+
     await updateDoc(doc(db, "chats", chatRoomID), {
       deleted: true,
     });
-
-    dispatch(deleteChat(chatRoomID));
   };
+
+  useEffect(() => {
+    if (chats[chatRoomID]?.messages.length > 0) {
+      setMessages(chats[chatRoomID]?.messages);
+    }
+  }, [chatRoomID, chats]);
 
   useEffect(() => {
     if (chats[chatRoomID]?.deleted) {
@@ -230,60 +225,8 @@ function ChatRoom() {
             }
           })
           .catch((error) => {});
-      } else {
-        createChatRoom(sendingMessage);
       }
     }
-  };
-
-  const createChatRoom = (sendingMessage) => {
-    addDoc(collection(db, "chats"), {
-      users: [user.uid, uid],
-      deleted: false,
-    })
-      .then((docSnap) => {
-        addDoc(collection(db, "chats", docSnap.id, "messages"), {
-          message: sendingMessage,
-          timestamp: dayjs().unix(),
-          uploadedTime: serverTimestamp(),
-          uid: user.uid,
-          image: "",
-          seen: false,
-        })
-          .then(async (snapDoc) => {
-            if (image) {
-              const storageRef = ref(
-                storage,
-                `chats/${docSnap.id}/${snapDoc.id}`
-              );
-              const uploadTask = uploadBytesResumable(
-                storageRef,
-                imageRef.current.files[0]
-              );
-              uploadTask.on(
-                "state_changed",
-                (snapshot) => {},
-                (error) => {
-                  console.log(error);
-                },
-                () => {
-                  getDownloadURL(uploadTask.snapshot.ref).then(
-                    async (downloadURL) => {
-                      await updateDoc(
-                        doc(db, "chats", docSnap.id, "messages", snapDoc.id),
-                        {
-                          image: downloadURL,
-                        }
-                      );
-                    }
-                  );
-                }
-              );
-            }
-          })
-          .catch((error) => {});
-      })
-      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -291,7 +234,6 @@ function ChatRoom() {
     if (chatRooms) {
       chatRooms.map((item) => {
         if (item.messagingUser === uid) {
-          setMessagingUserChat(null);
           setIsChatRoomExists(true);
           chatRoomExists = true;
           setChatRoomID(item.id);
@@ -306,20 +248,25 @@ function ChatRoom() {
   }, [chatRooms, uid]);
 
   useEffect(() => {
-    const getUser = async () => {
-      const docSnap = await getDoc(doc(db, "users", uid));
-      if (docSnap.exists()) {
-        setMessagingUserChat({
-          id: docSnap.id,
-          ...docSnap.data(),
-        });
-      }
+    const createChatRoom = async () => {
+      await addDoc(collection(db, "chats"), {
+        users: [auth.currentUser.uid, uid],
+        deleted: false,
+      });
     };
 
     if (!isChatRoomExists && !waitingUser) {
-      getUser();
+      createChatRoom();
     }
   }, [isChatRoomExists, uid, waitingUser]);
+
+  useEffect(() => {
+    return () => {
+      if (isChatRoomExists) {
+        dispatch(checkChat(chatRoomID));
+      }
+    };
+  }, [dispatch, chatRoomID, isChatRoomExists]);
 
   useEffect(() => {
     if (newMessageID) {
@@ -404,38 +351,9 @@ function ChatRoom() {
           </IconButton>
         </div>
         <div>
-          {messagingUserChat ? (
-            messagingUserChat.lastSeen > dayjs().unix() - 70 &&
-            !messagingUserChat.blockedUsers.includes(user.uid) &&
-            !user.blockedUsers.includes(messagingUserChat.id) ? (
-              <StyledBadge
-                className="mr-2"
-                overlap="circular"
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                variant="dot"
-              >
-                <Avatar
-                  alt={messagingUserChat.username}
-                  src={messagingUserChat.image}
-                />
-              </StyledBadge>
-            ) : (
-              <Avatar
-                src={
-                  !messagingUserChat.blockedUsers.includes(user.uid) &&
-                  !user.blockedUsers.includes(messagingUserChat.id)
-                    ? messagingUserChat.image
-                    : null
-                }
-                className="mr-2"
-                alt={messagingUserChat.username}
-              />
-            )
-          ) : chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 &&
-            !chats[chatRoomID]?.messagingUser.blockedUsers.includes(user.uid) &&
-            !user.blockedUsers.includes(
-              chats[chatRoomID]?.messagingUser.uid
-            ) ? (
+          {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 &&
+          !chats[chatRoomID]?.messagingUser.blockedUsers.includes(user.uid) &&
+          !user.blockedUsers.includes(chats[chatRoomID]?.messagingUser.uid) ? (
             <StyledBadge
               className="mr-2"
               overlap="circular"
@@ -465,42 +383,10 @@ function ChatRoom() {
           )}
         </div>
         <div className="flex-1 truncate">
-          {messagingUserChat ? (
-            <p className="font-[600] text-lg -mt-[2px] truncate">
-              {messagingUserChat.username}
-            </p>
-          ) : (
-            <p className="font-[600] text-lg -mt-[2px] truncate">
-              {chats[chatRoomID]?.messagingUser.username}
-            </p>
-          )}
-          {messagingUserChat ? (
-            <p
-              style={{ color: theme.chatTimeColor }}
-              className="text-xs -mt-[2px]"
-            >
-              {user?.blockedUsers?.includes(messagingUserChat.id)
-                ? "bloklangan!"
-                : messagingUserChat?.blockedUsers?.includes(user.uid)
-                ? "Foydalanuvchi sizni bloklagan!"
-                : dayjs
-                    .unix(messagingUserChat?.lastSeen)
-                    .format("DD/MM/YYYY") !==
-                  dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
-                ? dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY")
-                : messagingUserChat?.lastSeen > dayjs().unix() - 70
-                ? "online"
-                : dayjs.unix(messagingUserChat?.lastSeen).format("HH:mm")}
-              {dayjs.unix(messagingUserChat?.lastSeen).format("DD/MM/YYYY") !==
-                dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
-                !user.blockedUsers.includes(messagingUserChat?.id) &&
-                !messagingUserChat?.blockedUsers?.includes(user.uid)(
-                  <span className="ml-2">
-                    {dayjs.unix(messagingUserChat?.lastSeen).format("HH:mm")}
-                  </span>
-                )}
-            </p>
-          ) : (
+          <p className="font-[600] text-lg -mt-[2px] truncate">
+            {chats[chatRoomID]?.messagingUser.username}
+          </p>
+          {chats[chatRoomID]?.messagingUser.lastSeen && (
             <p
               style={{
                 color: theme.chatTimeColor,
@@ -603,9 +489,7 @@ function ChatRoom() {
               </MenuItem>
             )}
             {user.blockedUsers.includes(
-              messagingUserChat
-                ? messagingUserChat.id
-                : chats[chatRoomID]?.messagingUser.uid
+              chats[chatRoomID]?.messagingUser.uid
             ) ? (
               <MenuItem onClick={() => setShowModul("unBlock")}>
                 <ListItemIcon>
@@ -625,7 +509,7 @@ function ChatRoom() {
         </div>
       </div>
       <div>
-        {chats[chatRoomID]?.messages.map((item, index) =>
+        {messages.map((item, index) =>
           item.image ? (
             <div key={index}>
               {item.id === newMessageID && (
@@ -755,7 +639,7 @@ function ChatRoom() {
           className="w-full"
           autoFocus
           onFocus={scrollToBottom}
-          disabled={messagingUserChat ? disabledFirst : disabledSecond}
+          disabled={disabledSecond}
         />
         <button onClick={sendMessage} className="px-3 h-12 outline-none">
           <SendIcon style={{ fontSize: 26 }} />
@@ -766,7 +650,7 @@ function ChatRoom() {
           hidden
           onChange={addImage}
           accept="image/*"
-          disabled={messagingUserChat ? disabledFirst : disabledSecond}
+          disabled={disabledSecond}
         />
       </div>
       <div ref={bottomRef}></div>

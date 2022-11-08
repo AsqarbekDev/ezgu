@@ -44,8 +44,8 @@ function Homes() {
                 comment,
                 uploadedTime,
                 userPhoneNumber,
-                userRegion,
                 currency,
+                region,
               },
               index
             ) => (
@@ -66,7 +66,7 @@ function Homes() {
                 image3={image3}
                 image4={image4}
                 userID={userID}
-                userRegion={userRegion}
+                region={region}
                 currency={currency}
               />
             )

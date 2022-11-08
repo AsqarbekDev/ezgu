@@ -52,7 +52,7 @@ function MyHomeAddsCard() {
                 uploadedTime,
                 userPhoneNumber,
                 userID,
-                userRegion,
+                region,
                 currency,
               },
               index
@@ -74,7 +74,7 @@ function MyHomeAddsCard() {
                 image3={image3}
                 image4={image4}
                 userID={userID}
-                userRegion={userRegion}
+                region={region}
                 currency={currency}
               />
             )

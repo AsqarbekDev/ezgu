@@ -272,13 +272,13 @@ function JobInfo() {
   const exitJob = async () => {
     setShowModul(false);
     setLoading(true);
-    await deleteDoc(doc(db, "jobs", job?.id, "workers", user?.uid));
-    await updateDoc(doc(db, "jobs", job?.id), {
-      currentWorkers: arrayRemove(user?.uid),
-    });
     await updateDoc(doc(db, "users", user?.uid), {
       currentJob: "",
       workedJobs: user?.workedJobs - 1,
+    });
+    await deleteDoc(doc(db, "jobs", job?.id, "workers", user?.uid));
+    await updateDoc(doc(db, "jobs", job?.id), {
+      currentWorkers: arrayRemove(user?.uid),
     });
     setLoading(false);
   };

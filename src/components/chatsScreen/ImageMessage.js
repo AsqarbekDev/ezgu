@@ -5,7 +5,6 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { db } from "../../firebase";
-import DefaultLoadingModul from "../DefaultLoadingModul";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRef } from "react";
@@ -31,7 +30,6 @@ function ImageMessage({
   setTimestampDate,
   showAvatar,
 }) {
-  const [loaded, setLoaded] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const textRef = useRef(null);
   const mRef = useRef(null);
@@ -175,21 +173,11 @@ function ImageMessage({
           } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl`}
         >
           <img
-            onLoad={() => setLoaded(true)}
             className="rounded-t-xl object-cover max-h-72"
             src={image}
             alt=""
           />
           <div>
-            {!loaded && (
-              <div
-                className={`rounded-t-xl h-72 ${
-                  !message && "w-72"
-                } pt-16 bg-gray-300 flex items-center justify-center`}
-              >
-                <DefaultLoadingModul />
-              </div>
-            )}
             <p ref={textRef} className="px-2 overflow-hidden text-lg">
               {filterMessage(message)}
             </p>

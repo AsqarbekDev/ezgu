@@ -173,7 +173,6 @@ function AddNewHome() {
         userImage: user.image,
         userEmail: user.email,
         userPhoneNumber: phoneNumber,
-        userRegion: user.region,
         country,
         region,
         uploadedTime: dayjs().unix(),

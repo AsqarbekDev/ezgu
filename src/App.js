@@ -46,9 +46,11 @@ import HomesHistory from "./screens/HomesHistory";
 import dayjs from "dayjs";
 import ChatRoom from "./screens/ChatRoom";
 import {
+  checkChat,
   deleteChat,
   selectChatRooms,
   selectChats,
+  selectCheckingChat,
   selectDeletingChat,
   setChatRooms,
   setChats,
@@ -69,6 +71,7 @@ function App() {
   const chatRooms = useSelector(selectChatRooms);
   const waiting = useSelector(selectWaiting);
   const deletingChat = useSelector(selectDeletingChat);
+  const checkingChat = useSelector(selectCheckingChat);
   const chats = useSelector(selectChats);
   const dispatch = useDispatch();
   const UserCurrent = auth?.currentUser;
@@ -78,6 +81,28 @@ function App() {
   const allChats = chats[deletingChat]?.messages;
 
   document.body.style = `background: ${theme.backgroundBody};`;
+
+  useEffect(() => {
+    //Deleting chatroom if no messages
+    const deleteMessages = async () => {
+      await updateDoc(doc(db, "chats", checkingChat), {
+        deleted: true,
+      });
+
+      dispatch(deleteChat(checkingChat));
+    };
+
+    if (
+      checkingChat &&
+      !deletingChat &&
+      chats[checkingChat]?.messages.length === 0
+    ) {
+      dispatch(checkChat(null));
+      deleteMessages();
+    } else if (checkingChat) {
+      dispatch(checkChat(null));
+    }
+  }, [checkingChat, chats, dispatch, deletingChat]);
 
   useEffect(() => {
     // Delete Chat
@@ -95,6 +120,7 @@ function App() {
     // Setting theme
     if (user && !cookies.theme && user.theme !== theme.type) {
       dispatch(setTheme(user.theme));
+      setCookie("theme", user.theme, { path: "/" });
     } else if (
       cookies.theme &&
       cookies.theme === "dark" &&
@@ -124,12 +150,13 @@ function App() {
         updateTheme();
       }
     }
-  }, [cookies, dispatch, theme.type, user]);
+  }, [cookies, dispatch, theme.type, user, setCookie]);
 
   useEffect(() => {
     // Setting language
     if (user && !cookies.language && user.language !== language.type) {
       dispatch(setLanguage(user.language));
+      setCookie("language", user.language, { path: "/" });
     } else if (
       cookies.language &&
       cookies.language === "eng" &&
@@ -173,7 +200,7 @@ function App() {
         updateLanguage();
       }
     }
-  }, [cookies, dispatch, language.type, user]);
+  }, [cookies, dispatch, language.type, user, setCookie]);
 
   useEffect(() => {
     // Getting user from cookies
@@ -345,7 +372,6 @@ function App() {
             userImage: doc.data().userImage,
             userEmail: doc.data().userEmail,
             userPhoneNumber: doc.data().userPhoneNumber,
-            userRegion: doc.data().userRegion,
             country: doc.data().country,
             region: doc.data().region,
             uploadedTime: doc.data().uploadedTime,
@@ -409,7 +435,6 @@ function App() {
             userImage: doc.data().userImage,
             userEmail: doc.data().userEmail,
             userPhoneNumber: doc.data().userPhoneNumber,
-            userRegion: doc.data().userRegion,
             country: doc.data().country,
             region: doc.data().region,
             uploadedTime: doc.data().uploadedTime,
