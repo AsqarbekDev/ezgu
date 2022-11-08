@@ -252,7 +252,7 @@ function HomeCard({
           ) : null}
         </div>
         <div
-          style={{ scrollSnapType: "x mandatory" }}
+          style={{ scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}
           className={`imageContainer ${
             images.length < 2 && "imageContainer2"
           } flex items-center overflow-x-scroll`}
