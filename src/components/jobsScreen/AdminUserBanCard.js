@@ -46,12 +46,13 @@ function AdminUserBanCard({
 
   return (
     <>
-      {loading && <LoadingModul />}
+      {loading && <LoadingModul inner />}
       {showUnbanUserModul && (
         <ActionModul
           text={language.jobs.unbanModul}
           cancelFunction={(value) => setShowUnbanUserModul(value)}
           confirmFunction={unbanWorker}
+          inner
         />
       )}
       <div

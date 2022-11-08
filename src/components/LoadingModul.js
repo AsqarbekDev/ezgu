@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { selectLanguage } from "../features/languageSlice";
 import { selectTheme } from "../features/themeSlice";
 
-function LoadingModul() {
+function LoadingModul({ inner }) {
   const language = useSelector(selectLanguage);
   const theme = useSelector(selectTheme);
 
@@ -11,7 +11,9 @@ function LoadingModul() {
     <>
       <div
         role="status"
-        className="fixed z-[100] flex max-w-2xl items-center -mt-11 justify-center w-full h-screen"
+        className={`${
+          inner && "-ml-4"
+        } fixed z-[100] flex max-w-2xl items-center -mt-11 justify-center w-full top-0 bottom-0`}
       >
         <div
           className={`${
@@ -39,7 +41,11 @@ function LoadingModul() {
           </p>
         </div>
       </div>
-      <div className="fixed max-w-2xl z-[99] flex items-center top-0 justify-center w-full h-screen bg-black opacity-20"></div>
+      <div
+        className={`${
+          inner && "-ml-4 -top-2"
+        } fixed max-w-2xl z-[99] flex items-center top-0 justify-center w-full h-screen bg-black opacity-20`}
+      ></div>
     </>
   );
 }

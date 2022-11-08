@@ -12,12 +12,17 @@ function ActionModul({
   errorModulExit,
   exitFunction,
   buttonName,
+  inner,
 }) {
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
 
   return (
-    <div className="fixed z-[98] max-w-2xl flex items-center top-0 bottom-0 justify-center w-full">
+    <div
+      className={`${
+        inner && "-ml-4"
+      } fixed z-[98] max-w-2xl flex items-center top-0 bottom-0 justify-center w-full`}
+    >
       <div
         style={{ borderColor: theme.border }}
         className={`${

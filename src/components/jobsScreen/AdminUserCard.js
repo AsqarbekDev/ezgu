@@ -86,9 +86,9 @@ function AdminUserCard({
 
   return (
     <>
-      {loading && <LoadingModul />}
+      {loading && <LoadingModul inner />}
       {showRemoveUserModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center -mt-[41px] justify-center top-0 bottom-0 w-full">
+        <div className="fixed z-[98] max-w-2xl flex items-center -mt-[41px] justify-center top-0 bottom-0 -ml-4 w-full">
           <div
             style={{ borderColor: theme.border }}
             className={`${
