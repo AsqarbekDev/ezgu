@@ -279,7 +279,7 @@ function Profile() {
               color: theme.textColor,
               borderColor: theme.border,
             }}
-            className="rounded-md border-2 text-lg p-6"
+            className="rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
           >
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.username}
@@ -340,7 +340,7 @@ function Profile() {
               borderColor: theme.border,
               color: "black",
             }}
-            className="rounded-md border-2 text-lg p-6"
+            className="rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
           >
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.number}
@@ -403,7 +403,7 @@ function Profile() {
               borderColor: theme.border,
               color: theme.textColor,
             }}
-            className="rounded-md border-2 text-lg p-6"
+            className="rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
           >
             <p className="text-red-600 font-[700] text-xs ml-1">
               {formErrors.country}
@@ -413,7 +413,7 @@ function Profile() {
                 <p>{language.profile.country}</p>
                 <p>{language.profile.region}</p>
               </div>
-              <div className="flex text-black flex-col ml-[11px] space-y-4 w-60">
+              <div className="flex text-black flex-col ml-[11px] space-y-4 w-[70%]">
                 <CountryDropdown
                   value={country}
                   onChange={(val) => {

@@ -22,7 +22,7 @@ function ActionModul({
         style={{ borderColor: theme.border }}
         className={`${
           theme.type === "dark" && "border-2"
-        } rounded-xl bg-black text-white text-lg p-6 mx-10 text-center`}
+        } rounded-xl bg-black text-white text-lg p-6 w-[90%] max-w-xs text-center`}
       >
         <p>{text}</p>
         <div className="flex items-center justify-around mt-6 space-x-4">

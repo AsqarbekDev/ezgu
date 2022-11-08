@@ -658,7 +658,7 @@ function AddNewHome() {
             <PhoneAndroidIcon style={{ fontSize: 18 }} />
             <PhoneInput
               defaultCountry="UZ"
-              className="ml-2 border border-black p-2 rounded-lg w-full"
+              className="ml-2 border border-black p-2 rounded-lg min-w-[10%] max-w-[100%] flex-1"
               value={phoneNumber}
               onChange={setPhoneNumber}
               international
@@ -675,7 +675,7 @@ function AddNewHome() {
               <p>{language.addNewHome.country}</p>
               <p>{language.addNewHome.region}</p>
             </div>
-            <div className="flex flex-col ml-[11px] space-y-4 w-60">
+            <div className="flex flex-col ml-[11px] space-y-4 min-w-[10%] max-w-[100%] flex-1">
               <CountryDropdown
                 value={country}
                 onChange={(val) => {
