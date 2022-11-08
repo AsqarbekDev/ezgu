@@ -122,25 +122,30 @@ function HomeCard({
 
     const element = target.current;
     const windowScroll = element.scrollLeft;
-    const totalWidth = element.scrollWidth - element.clientWidth;
-    if (windowScroll >= 0 && windowScroll <= totalWidth / images.length) {
+    const totalWidth = element.scrollWidth - 16;
+    if (windowScroll >= 0 && windowScroll <= totalWidth / images.length / 2) {
       setCurrent(0);
     }
     if (
-      windowScroll > totalWidth / images.length &&
-      windowScroll <= (totalWidth / images.length) * 2
+      windowScroll > totalWidth / images.length / 2 &&
+      windowScroll <=
+        (totalWidth / images.length) * 2 - totalWidth / images.length / 2
     ) {
       setCurrent(1);
     }
     if (
-      windowScroll > (totalWidth / images.length) * 2 &&
-      windowScroll <= (totalWidth / images.length) * 3
+      windowScroll >
+        (totalWidth / images.length) * 2 - totalWidth / images.length / 2 &&
+      windowScroll <=
+        (totalWidth / images.length) * 3 - totalWidth / images.length / 2
     ) {
       setCurrent(2);
     }
     if (
-      windowScroll > (totalWidth / images.length) * 3 &&
-      windowScroll <= (totalWidth / images.length) * 4
+      windowScroll >
+        (totalWidth / images.length) * 3 - totalWidth / images.length / 2 &&
+      windowScroll <=
+        (totalWidth / images.length) * 4 - totalWidth / images.length / 2
     ) {
       setCurrent(3);
     }
