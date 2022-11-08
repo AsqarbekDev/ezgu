@@ -10,7 +10,7 @@
     @apply h-[0.1px] w-full bg-gray-400;
   }
   .homeImage {
-    @apply min-h-[260px] max-h-[260px] min-w-full object-cover;
+    @apply min-h-[260px] max-h-[260px] min-w-full max-w-full object-cover;
   }
 }
 
