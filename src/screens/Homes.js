@@ -25,7 +25,7 @@ function Homes() {
           </p>
         </div>
       ) : (
-        <div className="pb-14 xl:pb-1">
+        <div className="pb-12 xl:pb-1">
           {homes?.map(
             (
               {

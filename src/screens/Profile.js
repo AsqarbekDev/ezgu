@@ -261,7 +261,7 @@ function Profile() {
   return (
     <div
       style={{ backgroundColor: theme.background, color: theme.textColor }}
-      className="pb-14 xl:pb-1"
+      className="pb-12 xl:pb-1"
     >
       {loading && <LoadingModul />}
       {showErrorModul && (

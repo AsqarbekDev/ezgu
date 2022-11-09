@@ -31,6 +31,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -260,7 +261,8 @@ function App() {
         const q = query(
           collection(db, "jobs"),
           where("disabled", "==", false),
-          where("startingTime", ">", dayjs().unix() + 3600)
+          where("startingTime", ">", dayjs().unix() + 3600),
+          limit(50)
         );
 
         const querySnapshot = await getDocs(q);
@@ -299,7 +301,8 @@ function App() {
           where("country", "==", user.country),
           where("region", "==", user.region),
           where("startingTime", ">", dayjs().unix() + 3600),
-          where("disabled", "==", false)
+          where("disabled", "==", false),
+          limit(50)
         );
         const querySnapshot = await getDocs(q);
         const allJobs = [];
@@ -349,7 +352,8 @@ function App() {
         const q = query(
           collection(db, "homes"),
           where("disabled", "==", false),
-          where("uploadedTime", ">", dayjs().unix() - 2592000)
+          where("uploadedTime", ">", dayjs().unix() - 2592000),
+          limit(50)
         );
         const querySnapshot = await getDocs(q);
         let allHomes = [];
@@ -412,7 +416,8 @@ function App() {
           where("country", "==", user.country),
           where("region", "==", user.region),
           where("disabled", "==", false),
-          where("uploadedTime", ">", dayjs().unix() - 2592000)
+          where("uploadedTime", ">", dayjs().unix() - 2592000),
+          limit(50)
         );
         const querySnapshot = await getDocs(q);
         let allHomes = [];

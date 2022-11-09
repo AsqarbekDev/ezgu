@@ -118,7 +118,7 @@ function NotifyCard({
       ></div>
       <div>
         <div className="flex items-start">
-          <h2 className="font-bold text-lg flex-1 overflow-hidden">
+          <h2 className="font-bold text-lg leading-6 flex-1 overflow-hidden">
             {notifyName}
           </h2>
           <p

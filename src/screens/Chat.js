@@ -43,7 +43,7 @@ function Chat() {
   }, [chats]);
 
   return (
-    <div className="pb-14 xl:pb-1">
+    <div className="pb-12 xl:pb-1">
       {chatsArray.length === 0 ? (
         <div
           style={{ color: theme.textColor }}

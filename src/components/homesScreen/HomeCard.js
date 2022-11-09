@@ -122,7 +122,7 @@ function HomeCard({
 
     const element = target.current;
     const windowScroll = element.scrollLeft;
-    const totalWidth = element.scrollWidth - 16;
+    const totalWidth = element.scrollWidth;
     if (windowScroll >= 0 && windowScroll <= totalWidth / images.length / 2) {
       setCurrent(0);
     }

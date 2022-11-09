@@ -158,7 +158,10 @@ function Header() {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={() => navigate("/chats/blockedUsers")}>
+            <MenuItem
+              className="overflow-hidden"
+              onClick={() => navigate("/chats/blockedUsers")}
+            >
               <ListItemIcon>
                 <BlockIcon fontSize="small" />
               </ListItemIcon>

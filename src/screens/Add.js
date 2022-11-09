@@ -11,7 +11,7 @@ function Add() {
   const language = useSelector(selectLanguage);
 
   return (
-    <div className="pb-14 xl:pb-1">
+    <div className="pb-12 xl:pb-1">
       <div className="mb-2">
         <AddNewWidget
           logo={addjobicon}

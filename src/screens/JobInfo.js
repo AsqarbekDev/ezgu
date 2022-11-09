@@ -284,7 +284,7 @@ function JobInfo() {
   };
 
   return (
-    <div className="pb-14 xl:pb-1">
+    <div className="pb-12 xl:pb-1">
       <ExitHeader
         myjob={user?.currentJob ? true : false}
         screenName={language.jobs.headerText}
@@ -359,7 +359,7 @@ function JobInfo() {
               )}
             </div>
             <div className="space-y-1 text-lg">
-              <h4 className="font-bold leading-5 mt-3 pb-1 overflow-hidden">
+              <h4 className="font-bold leading-6 mt-3 pb-1 overflow-hidden">
                 {job?.jobName}
               </h4>
               <div className="flex items-center font-bold">
