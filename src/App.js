@@ -88,11 +88,11 @@ function App() {
   useEffect(() => {
     //Disabling scroll when modal opened
     if (disableScroll) {
-      document.body.style = `overflow-y: hidden;`;
+      document.body.style = `overflow-y: hidden; background: ${theme.backgroundBody};`;
     } else {
-      document.body.style = `overflow-y: scroll;`;
+      document.body.style = `overflow-y: scroll; background: ${theme.backgroundBody};`;
     }
-  }, [disableScroll]);
+  }, [disableScroll, theme.backgroundBody]);
 
   useEffect(() => {
     //Deleting chatroom if no messages

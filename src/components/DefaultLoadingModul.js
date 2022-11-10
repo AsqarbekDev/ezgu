@@ -1,10 +1,20 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setDisableScroll } from "../features/disableScrollSlice";
 import { selectTheme } from "../features/themeSlice";
 
 function DefaultLoadingModul() {
   const theme = useSelector(selectTheme);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setDisableScroll(true));
+    return () => {
+      dispatch(setDisableScroll(false));
+    };
+  }, [dispatch]);
 
   return (
     <div
