@@ -6,14 +6,17 @@ import dayjs from "dayjs";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import WorkIcon from "@mui/icons-material/Work";
 import BlockIcon from "@mui/icons-material/Block";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { selectTheme } from "../features/themeSlice";
 import { selectLanguage } from "../features/languageSlice";
+import ActionModul from "./ActionModul";
+import { useState } from "react";
 
 function NotifyCard({
   id,
@@ -21,7 +24,6 @@ function NotifyCard({
   userImage,
   userName,
   notifyName,
-  message,
   messageType,
   timestamp,
   from,
@@ -32,6 +34,8 @@ function NotifyCard({
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
+
+  const [showDeleteModul, setShowDeleteModul] = useState(false);
 
   useEffect(() => {
     const updateSeen = () => {
@@ -46,11 +50,24 @@ function NotifyCard({
     }
   }, [id, seen]);
 
+  const deleteNotification = async () => {
+    setShowDeleteModul(false);
+    await deleteDoc(doc(db, "notifications", id));
+  };
+
   return (
     <div
       style={{ backgroundColor: theme.background, color: theme.textColor }}
       className="bg-white m-1 p-3 rounded-lg shadow-lg"
     >
+      {showDeleteModul && (
+        <ActionModul
+          inner
+          text={language.notifications.deleteModulText}
+          cancelFunction={(value) => setShowDeleteModul(value)}
+          confirmFunction={deleteNotification}
+        />
+      )}
       <div className="flex items-center">
         <Avatar
           style={{ width: 30, height: 30 }}
@@ -58,6 +75,13 @@ function NotifyCard({
           src={userImage}
         />
         <h5 className="font-[600] text-lg truncate flex-1 ml-2">{userName}</h5>
+        <div className="-mb-1 mr-[2px]">
+          <IconButton onClick={() => setShowDeleteModul(true)} size="small">
+            <DeleteForeverIcon
+              style={{ fontSize: 26, color: theme.textColor }}
+            />
+          </IconButton>
+        </div>
         {userID !== user.uid && (
           <IconButton onClick={() => navigate(`/chats/${userID}`)} size="small">
             <SendIcon

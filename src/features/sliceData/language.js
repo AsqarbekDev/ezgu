@@ -143,6 +143,7 @@ export const eng = {
   notifications: {
     noItem: "No notifications",
     headerText: "Notifications",
+    deleteModulText: "Do you want to delete the notification?",
   },
   jobsHistory: {
     headerText: "Jobs history",
@@ -399,6 +400,7 @@ export const ru = {
   notifications: {
     noItem: "Нет уведомлений",
     headerText: "Уведомления",
+    deleteModulText: "Вы хотите удалить уведомление?",
   },
   jobsHistory: {
     headerText: "История вакансий",
@@ -656,6 +658,7 @@ export const uz = {
   notifications: {
     noItem: "Bildirishnomalar yo'q",
     headerText: "Bildirishnomalar",
+    deleteModulText: "Bildirishnomani o'chirishni xoxlaysizmi?",
   },
   jobsHistory: {
     headerText: "Ishlar tarixi",

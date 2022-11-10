@@ -32,7 +32,6 @@ function Notifications() {
             userImage={item.userImage}
             userName={item.userName}
             notifyName={item.notifyName}
-            message={item.message}
             messageType={item.messageType}
             timestamp={item.timestamp}
             from={item.from}
