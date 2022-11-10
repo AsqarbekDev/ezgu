@@ -1,8 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectTheme } from "../features/themeSlice";
 import { selectLanguage } from "../features/languageSlice";
 import { ListItemButton } from "@mui/material";
+import { useEffect } from "react";
+import { setDisableScroll } from "../features/disableScrollSlice";
 
 function ActionModul({
   text,
@@ -16,18 +18,22 @@ function ActionModul({
 }) {
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setDisableScroll(true));
+    return () => {
+      dispatch(setDisableScroll(false));
+    };
+  }, [dispatch]);
 
   return (
-    <div
-      className={`${
-        inner && "-ml-4"
-      } fixed z-[98] max-w-2xl flex items-center top-0 bottom-0 justify-center w-full`}
-    >
+    <>
       <div
         style={{ borderColor: theme.border }}
         className={`${
           theme.type === "dark" && "border-2"
-        } rounded-xl bg-black text-white text-lg p-6 w-[90%] max-w-xs text-center`}
+        } fixed z-[100] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl bg-black text-white text-lg p-6 w-[90%] max-w-xs text-center`}
       >
         <p>{text}</p>
         <div className="flex items-center justify-around mt-6 space-x-4">
@@ -71,7 +77,13 @@ function ActionModul({
           )}
         </div>
       </div>
-    </div>
+      <div
+        onClick={() => cancelFunction(false)}
+        className={`${
+          inner && "-ml-4"
+        } fixed z-[98] max-w-2xl top-0 bottom-0 w-full`}
+      ></div>
+    </>
   );
 }
 

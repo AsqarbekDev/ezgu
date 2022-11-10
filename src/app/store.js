@@ -6,6 +6,7 @@ import chatsReducer from "../features/chatsSlice";
 import notificationsReducer from "../features/notificationsSlice";
 import themeReducer from "../features/themeSlice";
 import languageReducer from "../features/languageSlice";
+import disableScrollReducer from "../features/disableScrollSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     notifications: notificationsReducer,
     theme: themeReducer,
     language: languageReducer,
+    disableScroll: disableScrollReducer,
   },
 });

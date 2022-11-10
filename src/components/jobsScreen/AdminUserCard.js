@@ -13,11 +13,12 @@ import {
 import { db } from "../../firebase";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { selectTheme } from "../../features/themeSlice";
 import { selectLanguage } from "../../features/languageSlice";
 import LoadingModul from "../LoadingModul";
+import { setDisableScroll } from "../../features/disableScrollSlice";
 
 function AdminUserCard({
   image,
@@ -35,9 +36,11 @@ function AdminUserCard({
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
+  const dispatch = useDispatch();
 
   const removeWorker = async () => {
     setShowRemoveUserModul(false);
+    dispatch(setDisableScroll(false));
     setLoading(true);
     await updateDoc(doc(db, "jobs", jobId), {
       currentWorkers: arrayRemove(uid),
@@ -60,6 +63,7 @@ function AdminUserCard({
 
   const banWorker = async () => {
     setShowRemoveUserModul(false);
+    dispatch(setDisableScroll(false));
     setLoading(true);
     await setDoc(doc(db, "jobs", jobId, "bannedWorkers", uid), {
       image,
@@ -88,12 +92,12 @@ function AdminUserCard({
     <>
       {loading && <LoadingModul inner />}
       {showRemoveUserModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center -mt-[41px] justify-center top-0 bottom-0 -ml-4 w-full">
+        <div>
           <div
             style={{ borderColor: theme.border }}
             className={`${
               theme.type === "dark" && "border-2"
-            } rounded-xl bg-black text-white text-lg p-6 flex flex-col items-center`}
+            } fixed z-[100] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-xl bg-black text-white text-lg p-6 flex flex-col items-center`}
           >
             <div
               onClick={removeWorker}
@@ -116,7 +120,10 @@ function AdminUserCard({
               </ListItemButton>
             </div>
             <div
-              onClick={() => setShowRemoveUserModul(false)}
+              onClick={() => {
+                setShowRemoveUserModul(false);
+                dispatch(setDisableScroll(false));
+              }}
               className="bg-white text-black font-bold text-base rounded-lg w-[140px] mt-6 overflow-hidden"
             >
               <ListItemButton>
@@ -126,6 +133,13 @@ function AdminUserCard({
               </ListItemButton>
             </div>
           </div>
+          <div
+            onClick={() => {
+              setShowRemoveUserModul(false);
+              dispatch(setDisableScroll(false));
+            }}
+            className="fixed z-[98] max-w-2xl -mt-[41px] top-0 bottom-0 -ml-4 w-full"
+          ></div>
         </div>
       )}
       <div
@@ -150,7 +164,10 @@ function AdminUserCard({
         {jobEndingTime > dayjs().unix() && (
           <div
             style={{ borderColor: theme.border }}
-            onClick={() => setShowRemoveUserModul(true)}
+            onClick={() => {
+              setShowRemoveUserModul(true);
+              dispatch(setDisableScroll(true));
+            }}
             className={`${
               theme.type === "dark" && "border"
             } bg-black text-white text-xs rounded-lg overflow-hidden`}

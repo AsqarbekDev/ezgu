@@ -66,6 +66,7 @@ import { selectTheme, setTheme } from "./features/themeSlice";
 import { useCookies } from "react-cookie";
 import ChangeLanguage from "./screens/ChangeLanguage";
 import { selectLanguage, setLanguage } from "./features/languageSlice";
+import { selectDisableScroll } from "./features/disableScrollSlice";
 
 function App() {
   const user = useSelector(selectUser);
@@ -78,10 +79,20 @@ function App() {
   const UserCurrent = auth?.currentUser;
   const [cookies, setCookie] = useCookies(["theme", "user", "language"]);
   const theme = useSelector(selectTheme);
+  const disableScroll = useSelector(selectDisableScroll);
   const language = useSelector(selectLanguage);
   const allChats = chats[deletingChat]?.messages;
 
   document.body.style = `background: ${theme.backgroundBody};`;
+
+  useEffect(() => {
+    //Disabling scroll when modal opened
+    if (disableScroll) {
+      document.body.style = `overflow-y: hidden;`;
+    } else {
+      document.body.style = `overflow-y: scroll;`;
+    }
+  }, [disableScroll]);
 
   useEffect(() => {
     //Deleting chatroom if no messages

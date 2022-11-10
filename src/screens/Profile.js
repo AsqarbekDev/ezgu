@@ -32,6 +32,7 @@ import { useCookies } from "react-cookie";
 import { selectTheme } from "../features/themeSlice";
 import { selectLanguage } from "../features/languageSlice";
 import ActionModul from "../components/ActionModul";
+import { setDisableScroll } from "../features/disableScrollSlice";
 
 function Profile() {
   const user = useSelector(selectUser);
@@ -78,6 +79,7 @@ function Profile() {
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setShowUsernameModul(false);
+      dispatch(setDisableScroll(false));
       setLoading(true);
       await updateDoc(doc(db, "users", user.uid), {
         username,
@@ -94,6 +96,7 @@ function Profile() {
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setShowNumberModul(false);
+      dispatch(setDisableScroll(false));
       setLoading(true);
       await updateDoc(doc(db, "users", user.uid), {
         phoneNumber,
@@ -110,6 +113,7 @@ function Profile() {
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setShowRegionModul(false);
+      dispatch(setDisableScroll(false));
       setLoading(true);
       await updateDoc(doc(db, "users", user.uid), {
         country,
@@ -272,14 +276,14 @@ function Profile() {
         />
       )}
       {showUsernameModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
+        <div>
           <div
             style={{
               backgroundColor: theme.background,
               color: theme.textColor,
               borderColor: theme.border,
             }}
-            className="rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
+            className="fixed z-[100] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
           >
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.username}
@@ -302,12 +306,13 @@ function Profile() {
                 style={{ borderColor: theme.border }}
                 onClick={() => {
                   setShowUsernameModul(false);
+                  dispatch(setDisableScroll(false));
                   setUsername(user.username);
                   setFormErrors({});
                 }}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm bg-black text-white w-20 rounded-lg overflow-hidden`}
+                } text-sm bg-black text-white w-24 rounded-lg overflow-hidden`}
               >
                 <ListItemButton>
                   <p className="w-full text-center -my-1">
@@ -320,7 +325,7 @@ function Profile() {
                 onClick={changeUsername}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm bg-black text-white w-20 rounded-lg overflow-hidden`}
+                } text-sm bg-black text-white w-24 rounded-lg overflow-hidden`}
               >
                 <ListItemButton>
                   <p className="w-full text-center -my-1">
@@ -330,17 +335,26 @@ function Profile() {
               </div>
             </div>
           </div>
+          <div
+            onClick={() => {
+              setShowUsernameModul(false);
+              dispatch(setDisableScroll(false));
+              setUsername(user.username);
+              setFormErrors({});
+            }}
+            className="fixed z-[98] max-w-2xl top-0 w-full h-screen"
+          ></div>
         </div>
       )}
       {showNumberModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
+        <div>
           <div
             style={{
               backgroundColor: theme.background,
               borderColor: theme.border,
               color: "black",
             }}
-            className="rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
+            className="fixed z-[100] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
           >
             <p className="text-red-600 font-[700] text-xs ml-2">
               {formErrors.number}
@@ -365,12 +379,13 @@ function Profile() {
                 style={{ borderColor: theme.border }}
                 onClick={() => {
                   setShowNumberModul(false);
+                  dispatch(setDisableScroll(false));
                   setPhoneNumber(user.phoneNumber || "");
                   setFormErrors({});
                 }}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm text-white w-20 bg-black rounded-lg overflow-hidden`}
+                } text-sm text-white w-24 bg-black rounded-lg overflow-hidden`}
               >
                 <ListItemButton>
                   <p className="w-full text-center -my-1">
@@ -383,7 +398,7 @@ function Profile() {
                 onClick={changePhoneNumber}
                 className={`${
                   theme.type === "dark" && "border"
-                } text-sm text-white bg-black w-20 rounded-lg overflow-hidden`}
+                } text-sm text-white bg-black w-24 rounded-lg overflow-hidden`}
               >
                 <ListItemButton>
                   <p className="w-full text-center -my-1">
@@ -393,17 +408,26 @@ function Profile() {
               </div>
             </div>
           </div>
+          <div
+            onClick={() => {
+              setShowNumberModul(false);
+              dispatch(setDisableScroll(false));
+              setPhoneNumber(user.phoneNumber || "");
+              setFormErrors({});
+            }}
+            className="fixed z-[98] max-w-2xl top-0 w-full h-screen"
+          ></div>
         </div>
       )}
       {showRegionModul && (
-        <div className="fixed z-[98] max-w-2xl flex items-center top-0 justify-center w-full h-screen">
+        <div>
           <div
             style={{
               backgroundColor: theme.background,
               borderColor: theme.border,
               color: theme.textColor,
             }}
-            className="rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
+            className="fixed z-[100] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-md border-2 text-lg p-6 w-[90%] max-w-xs"
           >
             <p className="text-red-600 font-[700] text-xs ml-1">
               {formErrors.country}
@@ -434,11 +458,12 @@ function Profile() {
               <div
                 onClick={() => {
                   setShowRegionModul(false);
+                  dispatch(setDisableScroll(false));
                   setCountry(user.country || "");
                   setRegion(user.region || "");
                   setFormErrors({});
                 }}
-                className="border text-sm text-white w-20 bg-black rounded-lg overflow-hidden"
+                className="border text-sm text-white w-24 bg-black rounded-lg overflow-hidden"
               >
                 <ListItemButton>
                   <p className="w-full text-center -my-1">
@@ -448,7 +473,7 @@ function Profile() {
               </div>
               <div
                 onClick={changeRegion}
-                className="border text-sm text-white bg-black w-20 rounded-lg overflow-hidden"
+                className="border text-sm text-white bg-black w-24 rounded-lg overflow-hidden"
               >
                 <ListItemButton>
                   <p className="w-full text-center -my-1">
@@ -458,6 +483,16 @@ function Profile() {
               </div>
             </div>
           </div>
+          <div
+            onClick={() => {
+              setShowRegionModul(false);
+              dispatch(setDisableScroll(false));
+              setCountry(user.country || "");
+              setRegion(user.region || "");
+              setFormErrors({});
+            }}
+            className="fixed z-[98] max-w-2xl top-0 w-full h-screen"
+          ></div>
         </div>
       )}
       {showLogOutModul && (
@@ -531,7 +566,10 @@ function Profile() {
       </div>
       <div>
         <ListItemButton
-          onClick={() => setShowUsernameModul(true)}
+          onClick={() => {
+            setShowUsernameModul(true);
+            dispatch(setDisableScroll(true));
+          }}
           component="a"
         >
           <div className="px-1">
@@ -556,7 +594,13 @@ function Profile() {
             bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
           }}
         />
-        <ListItemButton onClick={() => setShowNumberModul(true)} component="a">
+        <ListItemButton
+          onClick={() => {
+            setShowNumberModul(true);
+            dispatch(setDisableScroll(true));
+          }}
+          component="a"
+        >
           <div className="px-1">
             <h4 className="text-lg font-[600]">
               {user.phoneNumber || "Raqamingizni kiriting!"}{" "}
@@ -579,7 +623,13 @@ function Profile() {
             bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
           }}
         />
-        <ListItemButton onClick={() => setShowRegionModul(true)} component="a">
+        <ListItemButton
+          onClick={() => {
+            setShowRegionModul(true);
+            dispatch(setDisableScroll(true));
+          }}
+          component="a"
+        >
           <div className="px-1">
             <h4 className="text-lg font-[600] truncate">
               {user.country || "Davlat va Regioningizni belgilang!"}{" "}
