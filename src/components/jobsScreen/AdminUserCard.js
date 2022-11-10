@@ -134,9 +134,9 @@ function AdminUserCard({
       >
         <Avatar src={image} alt="Avatar" style={{ height: 36, width: 36 }} />
         <div className="ml-2 flex-1 overflow-hidden">
-          <p className="text-sm font-[700] -mt-1 truncate">{username}</p>
+          <p className="text-sm font-[700] truncate">{username}</p>
           {jobEndingTime > dayjs().unix() && (
-            <p className="text-xs -mt-[1px]">{phoneNumber}</p>
+            <p className="text-xs">{phoneNumber}</p>
           )}
         </div>
         <div className="-mt-[6px] mr-1">
