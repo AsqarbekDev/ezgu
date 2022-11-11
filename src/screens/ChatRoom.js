@@ -387,7 +387,7 @@ function ChatRoom() {
               </IconButton>
             </div>
             <div className="h-14 flex items-center justify-center">
-              <p className="text-lg font-[600] -mt-[1px]">{messagesLength}</p>
+              <p className="text-lg font-[600]">{messagesLength}</p>
             </div>
           </div>
         ) : (
