@@ -56,6 +56,7 @@ import {
   setChatRooms,
   setChats,
   setMessagingUsers,
+  setWaitingChat,
 } from "./features/chatsSlice";
 import BottomNavigation from "./components/BottomNavigation";
 import { setJobs, setMyAddedJobs } from "./features/jobsSlice";
@@ -77,7 +78,7 @@ function App() {
   const chats = useSelector(selectChats);
   const dispatch = useDispatch();
   const UserCurrent = auth?.currentUser;
-  const [cookies, setCookie] = useCookies(["theme", "user", "language"]);
+  const [cookies, setCookie] = useCookies(["theme", "language"]);
   const theme = useSelector(selectTheme);
   const disableScroll = useSelector(selectDisableScroll);
   const language = useSelector(selectLanguage);
@@ -213,33 +214,6 @@ function App() {
       }
     }
   }, [cookies, dispatch, language.type, user, setCookie]);
-
-  useEffect(() => {
-    // Getting user from cookies
-    if (cookies.user && !user) {
-      dispatch(
-        login({
-          uid: cookies.user.uid,
-          email: cookies.user.email,
-          image: cookies.user.image,
-          username: cookies.user.username,
-          phoneNumber: cookies.user.phoneNumber,
-          country: cookies.user.country,
-          region: cookies.user.region,
-          emailVerified: cookies.user.emailVerified,
-          workedWith: cookies.user.workedWith,
-          currentJob: cookies.user.currentJob,
-          homeAdds: cookies.user.homeAdds,
-          jobAdds: cookies.user.jobAdds,
-          workedJobs: cookies.user.workedJobs,
-          bgImage: cookies.user.bgImage,
-          blockedUsers: cookies.user.blockedUsers,
-          theme: cookies.user.theme,
-          language: cookies.user.language,
-        })
-      );
-    }
-  }, [cookies.user, user, dispatch]);
 
   useEffect(() => {
     //Updating User LastSeen
@@ -650,6 +624,7 @@ function App() {
               messages: allMessages,
             })
           );
+          dispatch(setWaitingChat(false));
         });
 
         return () => {
@@ -716,11 +691,6 @@ function App() {
             })
           );
           dispatch(setWaiting(false));
-          setCookie(
-            "user",
-            { emailVerified: userInfo.emailVerified, ...docSnap.data() },
-            { path: "/" }
-          );
         });
 
         return () => {

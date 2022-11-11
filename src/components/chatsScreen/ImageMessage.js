@@ -1,4 +1,4 @@
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, Checkbox } from "@mui/material";
 import dayjs from "dayjs";
 import { doc, updateDoc } from "firebase/firestore";
 import React from "react";
@@ -29,11 +29,14 @@ function ImageMessage({
   showDate,
   setTimestampDate,
   showAvatar,
+  addCheckedMessage,
+  checkable,
 }) {
   const [showImage, setShowImage] = useState(false);
   const textRef = useRef(null);
   const mRef = useRef(null);
   const theme = useSelector(selectTheme);
+  const [checked, setChecked] = useState(false);
 
   const filterMessage = (messageString) => {
     const filteredString = [];
@@ -109,8 +112,33 @@ function ImageMessage({
     setTimestampDate,
   ]);
 
+  const checkMessage = () => {
+    if (checkable) {
+      setChecked(!checked);
+      if (checked) {
+        addCheckedMessage({ id: messageID, type: "remove" });
+      } else {
+        addCheckedMessage({ id: messageID, type: "add" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!checkable) {
+      setChecked(false);
+    }
+  }, [checkable]);
+
   return (
-    <>
+    <div onClick={checkMessage} className="my-1 relative">
+      {checkable && (
+        <div className="absolute z-20 -bottom-1 -left-1">
+          <Checkbox checked={checked} />
+        </div>
+      )}
+      {checkable && (
+        <div className="absolute z-10 bottom-[9px] left-[9px] rounded-sm bg-white w-4 h-4"></div>
+      )}
       {showImage && (
         <div className="fixed max-w-2xl z-[100] top-0 w-full h-screen bg-black">
           <div className="relative flex items-center justify-center h-full w-full">
@@ -125,7 +153,9 @@ function ImageMessage({
       )}
       <div
         ref={mRef}
-        className={`flex items-end mx-1 my-2 ${mine && "justify-end"}`}
+        className={`${checked && "bg-cyan-400 opacity-80"} ${
+          checkable && "pl-10"
+        } flex items-end px-1 py-1 ${mine && "justify-end"}`}
       >
         {currentShowingDate &&
           !showAgain &&
@@ -167,7 +197,7 @@ function ImageMessage({
           />
         )}
         <div
-          onClick={() => setShowImage(true)}
+          onClick={() => !checkable && setShowImage(true)}
           className={`${
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
           } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl`}
@@ -200,7 +230,7 @@ function ImageMessage({
           </span>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

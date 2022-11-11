@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import ExitHeader from "../components/ExitHeader";
 import JobCard from "../components/jobsScreen/JobCard";
+import DefaultLoadingModul from "../components/DefaultLoadingModul";
 import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
 import Box from "@mui/material/Box";
@@ -18,8 +19,8 @@ function JobsHistory() {
   const user = useSelector(selectUser);
   const language = useSelector(selectLanguage);
   const [showMyAdds, setShowMyAdds] = useState(false);
-  const [iWorkedJobs, setIWorkedJobs] = useState([]);
-  const [iAddedJobs, setIAddedJobs] = useState([]);
+  const [iWorkedJobs, setIWorkedJobs] = useState(null);
+  const [iAddedJobs, setIAddedJobs] = useState(null);
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -174,12 +175,14 @@ function JobsHistory() {
         </Box>
       </div>
       <div className="pt-[50px]">
-        {showMyAdds && iAddedJobs?.length === 0 ? (
+        {showMyAdds && !iAddedJobs ? (
+          <DefaultLoadingModul />
+        ) : showMyAdds && iAddedJobs?.length === 0 ? (
           <div
             style={{ color: theme.textColor }}
             className="flex items-center justify-center w-full h-screen -mt-28"
           >
-            <p className="font-[600] text-xl text-center">
+            <p className="font-[600] text-xl text-center mx-6">
               {language.jobsHistory.noItemAdded}
             </p>
           </div>
@@ -219,12 +222,14 @@ function JobsHistory() {
               />
             )
           )
-        ) : iWorkedJobs?.length === 0 ? (
+        ) : !showMyAdds && !iWorkedJobs ? (
+          <DefaultLoadingModul />
+        ) : !showMyAdds && iWorkedJobs?.length === 0 ? (
           <div
             style={{ color: theme.textColor }}
             className="flex items-center justify-center w-full h-screen -mt-28"
           >
-            <p className="font-[600] text-xl text-center">
+            <p className="font-[600] text-xl text-center mx-6">
               {language.jobsHistory.noItemWorked}
             </p>
           </div>

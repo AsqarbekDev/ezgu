@@ -46,7 +46,7 @@ function Profile() {
   const usernameRef = useRef(null);
   const phoneNumberRef = useRef(null);
 
-  const [, setCookie, removeCookie] = useCookies(["theme", "user"]);
+  const [, setCookie] = useCookies(["theme"]);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [uImage, setUImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -251,7 +251,6 @@ function Profile() {
     setLoading(true);
     signOut(auth)
       .then(() => {
-        removeCookie("user", { path: "/" });
         dispatch(logout());
         setLoading(false);
         window.location.href = "/";

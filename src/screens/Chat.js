@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import ChatCard from "../components/chatsScreen/ChatCard";
-import { selectChats } from "../features/chatsSlice";
+import DefaultLoadingModul from "../components/DefaultLoadingModul";
+import { selectChats, selectWaitingChat } from "../features/chatsSlice";
 import { selectLanguage } from "../features/languageSlice";
 import { selectTheme } from "../features/themeSlice";
 import { selectUser } from "../features/userSlice";
 
 function Chat() {
   const chats = useSelector(selectChats);
+  const waitingChat = useSelector(selectWaitingChat);
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
   const user = useSelector(selectUser);
@@ -44,12 +46,14 @@ function Chat() {
 
   return (
     <div className="pb-12 xl:pb-1">
-      {chatsArray.length === 0 ? (
+      {waitingChat ? (
+        <DefaultLoadingModul />
+      ) : chatsArray.length === 0 ? (
         <div
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-14 -mb-14"
         >
-          <p className="font-[600] text-xl text-center">
+          <p className="font-[600] text-xl text-center mx-6">
             {language.chats.noItem}
           </p>
         </div>

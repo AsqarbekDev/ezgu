@@ -17,6 +17,7 @@ import Message from "../components/chatsScreen/Message";
 import BlockIcon from "@mui/icons-material/Block";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ImageMessage from "../components/chatsScreen/ImageMessage";
 import { useRef } from "react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   serverTimestamp,
   updateDoc,
@@ -73,6 +75,9 @@ function ChatRoom() {
   const [timestampDate, setTimestampDate] = useState(null);
   const [dateShowingMessages, setDateShowingMessages] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [checkable, setCheckable] = useState(false);
+  const [messagesLength, setMessagesLength] = useState(0);
+  const [checkedMessages, setCheckedMessages] = useState({});
 
   const disabledSecond =
     chats[chatRoomID] &&
@@ -90,6 +95,34 @@ function ChatRoom() {
   };
   const handleClose = (event) => {
     setAnchorEl(null);
+  };
+
+  const addCheckedMessage = (message) => {
+    if (message.type === "add") {
+      checkedMessages[message.id] = message.id;
+      setMessagesLength((prevValue) => prevValue + 1);
+    } else if (message.type === "remove") {
+      delete checkedMessages[message.id];
+      setMessagesLength((prevValue) => prevValue - 1);
+    }
+  };
+
+  const closeCheck = () => {
+    setCheckedMessages({});
+    setMessagesLength(0);
+    setCheckable(false);
+  };
+
+  const deleteCheckedMessages = () => {
+    if (messagesLength === messages.length) {
+      deleteMessages();
+    } else {
+      setShowModul("");
+      Object.keys(checkedMessages).map(async (item) => {
+        await deleteDoc(doc(db, "chats", chatRoomID, "messages", item));
+      });
+      closeCheck();
+    }
   };
 
   const blockUser = async () => {
@@ -314,7 +347,9 @@ function ChatRoom() {
       {showModul && (
         <ActionModul
           text={
-            showModul === "deleteAll"
+            showModul === "deleteChecked"
+              ? language.chats.modulTextSelected
+              : showModul === "deleteAll"
               ? language.chats.modulTextDelete
               : showModul === "block"
               ? language.chats.modulTextBlock
@@ -324,7 +359,9 @@ function ChatRoom() {
           }
           cancelFunction={() => setShowModul("")}
           confirmFunction={
-            showModul === "deleteAll"
+            showModul === "deleteChecked"
+              ? deleteCheckedMessages
+              : showModul === "deleteAll"
               ? deleteMessages
               : showModul === "block"
               ? blockUser
@@ -342,171 +379,208 @@ function ChatRoom() {
         }}
         className="fixed max-w-2xl top-0 z-50 flex items-center justify-between w-full border-b shadow-sm"
       >
-        <div
-          onClick={() => navigate(-1)}
-          className="w-14 h-14 flex items-center justify-center"
-        >
-          <IconButton size="medium">
-            <WestIcon style={{ color: theme.textColor }} />
-          </IconButton>
-        </div>
-        <div>
-          {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 &&
-          !chats[chatRoomID]?.messagingUser.blockedUsers.includes(user.uid) &&
-          !user.blockedUsers.includes(chats[chatRoomID]?.messagingUser.uid) ? (
-            <StyledBadge
-              className="mr-2"
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant="dot"
-            >
-              <Avatar
-                alt={chats[chatRoomID]?.messagingUser.username}
-                src={chats[chatRoomID]?.messagingUser.image}
-              />
-            </StyledBadge>
-          ) : (
-            <Avatar
-              src={
-                !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
-                  user.uid
-                ) &&
-                !user.blockedUsers?.includes(
-                  chats[chatRoomID]?.messagingUser.uid
-                )
-                  ? chats[chatRoomID]?.messagingUser.image
-                  : null
-              }
-              className="mr-2"
-              alt={chats[chatRoomID]?.messagingUser.username}
-            />
-          )}
-        </div>
-        <div className="flex-1 truncate">
-          <p className="font-[600] text-lg -mt-[2px] truncate">
-            {chats[chatRoomID]?.messagingUser.username}
-          </p>
-          {chats[chatRoomID]?.messagingUser.lastSeen && (
-            <p
-              style={{
-                color: theme.chatTimeColor,
-              }}
-              className="text-xs -mt-[2px]"
-            >
-              {user.blockedUsers?.includes(
-                chats[chatRoomID]?.messagingUser?.uid
-              )
-                ? "bloklangan!"
-                : chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
-                    user.uid
-                  )
-                ? "Foydalanuvchi sizni bloklagan!"
-                : dayjs
-                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                    .format("DD/MM/YYYY") !==
-                  dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
-                ? dayjs
-                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                    .format("DD/MM/YYYY")
-                : chats[chatRoomID]?.messagingUser.lastSeen >
-                  dayjs().unix() - 70
-                ? "online"
-                : dayjs
-                    .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                    .format("HH:mm")}
-              {dayjs
-                .unix(chats[chatRoomID]?.messagingUser.lastSeen)
-                .format("DD/MM/YYYY") !==
-                dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
-                !user.blockedUsers?.includes(
-                  chats[chatRoomID]?.messagingUser?.uid
-                ) &&
-                !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
-                  user.uid
-                ) && (
-                  <span className="ml-2">
-                    {dayjs
-                      .unix(chats[chatRoomID]?.messagingUser?.lastSeen)
-                      .format("HH:mm")}
-                  </span>
-                )}
-            </p>
-          )}
-        </div>
-        <div className="w-14 h-14 flex items-center justify-center">
-          <Tooltip title={language.chats.iconInfo}>
-            <IconButton
-              onClick={handleClick}
-              size="medium"
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <MoreVertIcon style={{ color: theme.textColor }} />
+        {checkable ? (
+          <div className="flex">
+            <div className="w-14 h-14 flex items-center justify-center">
+              <IconButton onClick={closeCheck} size="medium">
+                <CloseIcon style={{ color: theme.textColor }} />
+              </IconButton>
+            </div>
+            <div className="h-14 flex items-center justify-center">
+              <p className="text-lg font-[600] -mt-[1px]">{messagesLength}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="w-14 h-14 flex items-center justify-center">
+            <IconButton onClick={() => navigate(-1)} size="medium">
+              <WestIcon style={{ color: theme.textColor }} />
             </IconButton>
-          </Tooltip>
-          <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                mt: 1.5,
-                "& .MuiAvatar-root": {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                "&:before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: "background.paper",
-                  transform: "translateY(-50%) rotate(45deg)",
-                  zIndex: 0,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          >
-            {chats[chatRoomID]?.messages?.length > 0 && (
-              <MenuItem onClick={() => setShowModul("deleteAll")}>
-                <ListItemIcon>
-                  <DeleteForeverIcon fontSize="small" />
-                </ListItemIcon>
-                {language.chats.deleteAllText}
-              </MenuItem>
-            )}
-            {user.blockedUsers.includes(
+          </div>
+        )}
+        {!checkable && (
+          <div>
+            {chats[chatRoomID]?.messagingUser.lastSeen > dayjs().unix() - 70 &&
+            !chats[chatRoomID]?.messagingUser.blockedUsers.includes(user.uid) &&
+            !user.blockedUsers.includes(
               chats[chatRoomID]?.messagingUser.uid
             ) ? (
-              <MenuItem onClick={() => setShowModul("unBlock")}>
-                <ListItemIcon>
-                  <RemoveCircleOutlineIcon fontSize="small" />
-                </ListItemIcon>
-                {language.chats.unblockText}
-              </MenuItem>
+              <StyledBadge
+                className="mr-2"
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+              >
+                <Avatar
+                  alt={chats[chatRoomID]?.messagingUser.username}
+                  src={chats[chatRoomID]?.messagingUser.image}
+                />
+              </StyledBadge>
             ) : (
-              <MenuItem onClick={() => setShowModul("block")}>
-                <ListItemIcon>
-                  <BlockIcon fontSize="small" />
-                </ListItemIcon>
-                {language.chats.blockText}
-              </MenuItem>
+              <Avatar
+                src={
+                  !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
+                    user.uid
+                  ) &&
+                  !user.blockedUsers?.includes(
+                    chats[chatRoomID]?.messagingUser.uid
+                  )
+                    ? chats[chatRoomID]?.messagingUser.image
+                    : null
+                }
+                className="mr-2"
+                alt={chats[chatRoomID]?.messagingUser.username}
+              />
             )}
-          </Menu>
-        </div>
+          </div>
+        )}
+        {!checkable && (
+          <div className="flex-1 truncate">
+            <p className="font-[600] text-lg -mt-[2px] truncate">
+              {chats[chatRoomID]?.messagingUser.username}
+            </p>
+            {chats[chatRoomID]?.messagingUser.lastSeen && (
+              <p
+                style={{
+                  color: theme.chatTimeColor,
+                }}
+                className="text-xs -mt-[2px]"
+              >
+                {user.blockedUsers?.includes(
+                  chats[chatRoomID]?.messagingUser?.uid
+                )
+                  ? "bloklangan!"
+                  : chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
+                      user.uid
+                    )
+                  ? "Foydalanuvchi sizni bloklagan!"
+                  : dayjs
+                      .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                      .format("DD/MM/YYYY") !==
+                    dayjs.unix(dayjs().unix()).format("DD/MM/YYYY")
+                  ? dayjs
+                      .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                      .format("DD/MM/YYYY")
+                  : chats[chatRoomID]?.messagingUser.lastSeen >
+                    dayjs().unix() - 70
+                  ? "online"
+                  : dayjs
+                      .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                      .format("HH:mm")}
+                {dayjs
+                  .unix(chats[chatRoomID]?.messagingUser.lastSeen)
+                  .format("DD/MM/YYYY") !==
+                  dayjs.unix(dayjs().unix()).format("DD/MM/YYYY") &&
+                  !user.blockedUsers?.includes(
+                    chats[chatRoomID]?.messagingUser?.uid
+                  ) &&
+                  !chats[chatRoomID]?.messagingUser?.blockedUsers?.includes(
+                    user.uid
+                  ) && (
+                    <span className="ml-2">
+                      {dayjs
+                        .unix(chats[chatRoomID]?.messagingUser?.lastSeen)
+                        .format("HH:mm")}
+                    </span>
+                  )}
+              </p>
+            )}
+          </div>
+        )}
+        {checkable ? (
+          <div className="w-14 h-14 flex items-center justify-center">
+            {messagesLength > 0 && (
+              <IconButton
+                onClick={() => setShowModul("deleteChecked")}
+                size="medium"
+              >
+                <DeleteForeverIcon style={{ color: theme.textColor }} />
+              </IconButton>
+            )}
+          </div>
+        ) : (
+          <div className="w-14 h-14 flex items-center justify-center">
+            <Tooltip title={language.chats.iconInfo}>
+              <IconButton
+                onClick={handleClick}
+                size="medium"
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <MoreVertIcon style={{ color: theme.textColor }} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&:before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              {chats[chatRoomID]?.messages?.length > 0 && (
+                <MenuItem onClick={() => setCheckable(true)}>
+                  <ListItemIcon>
+                    <CheckBoxIcon fontSize="small" />
+                  </ListItemIcon>
+                  {language.chats.chooseText}
+                </MenuItem>
+              )}
+              {chats[chatRoomID]?.messages?.length > 0 && (
+                <MenuItem onClick={() => setShowModul("deleteAll")}>
+                  <ListItemIcon>
+                    <DeleteForeverIcon fontSize="small" />
+                  </ListItemIcon>
+                  {language.chats.deleteAllText}
+                </MenuItem>
+              )}
+              {user.blockedUsers.includes(
+                chats[chatRoomID]?.messagingUser.uid
+              ) ? (
+                <MenuItem onClick={() => setShowModul("unBlock")}>
+                  <ListItemIcon>
+                    <RemoveCircleOutlineIcon fontSize="small" />
+                  </ListItemIcon>
+                  {language.chats.unblockText}
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={() => setShowModul("block")}>
+                  <ListItemIcon>
+                    <BlockIcon fontSize="small" />
+                  </ListItemIcon>
+                  {language.chats.blockText}
+                </MenuItem>
+              )}
+            </Menu>
+          </div>
+        )}
       </div>
       <div>
         {messages.map((item, index) =>
@@ -559,6 +633,8 @@ function ChatRoom() {
                     ? true
                     : false
                 }
+                addCheckedMessage={addCheckedMessage}
+                checkable={checkable}
               />
             </div>
           ) : (
@@ -609,6 +685,8 @@ function ChatRoom() {
                     ? true
                     : false
                 }
+                addCheckedMessage={addCheckedMessage}
+                checkable={checkable}
               />
             </div>
           )

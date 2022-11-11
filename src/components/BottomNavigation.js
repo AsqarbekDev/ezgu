@@ -11,7 +11,7 @@ import AddHomeWorkOutlinedIcon from "@mui/icons-material/AddHomeWorkOutlined";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "../features/userSlice";
+import { selectUser, selectWaiting } from "../features/userSlice";
 import { selectChats } from "../features/chatsSlice";
 import { ListItemButton } from "@mui/material";
 import { selectTheme } from "../features/themeSlice";
@@ -24,6 +24,7 @@ function BottomNavigation({ jobId }) {
   const chats = useSelector(selectChats);
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
+  const waiting = useSelector(selectWaiting);
 
   useEffect(() => {
     const newMessagesArray = [];
@@ -60,7 +61,7 @@ function BottomNavigation({ jobId }) {
         currentScreen === "/loading/profile"
           ? ""
           : "hidden"
-      } fixed bottom-0 z-50 max-w-2xl w-full xl:hidden`}
+      } ${waiting && "hidden"} fixed bottom-0 z-50 max-w-2xl w-full xl:hidden`}
     >
       <div
         style={{

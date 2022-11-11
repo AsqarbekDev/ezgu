@@ -63,11 +63,11 @@ function ExitHeader({ screenName, path, myjob }) {
           {screenName}
         </h1>
         {!myjob && (
-          <div
-            onClick={() => (path ? navigate(path) : navigate(-1))}
-            className="absolute left-0 z-10 w-14 h-14 flex items-center justify-center"
-          >
-            <IconButton size="medium">
+          <div className="absolute left-0 z-10 w-14 h-14 flex items-center justify-center">
+            <IconButton
+              onClick={() => (path ? navigate(path) : navigate(-1))}
+              size="medium"
+            >
               <WestIcon style={{ color: theme.textColor }} />
             </IconButton>
           </div>

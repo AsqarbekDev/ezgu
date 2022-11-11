@@ -19,7 +19,7 @@ function Notifications() {
           style={{ color: theme.textColor }}
           className="flex items-center justify-center w-full h-screen -mt-16"
         >
-          <p className="font-[600] text-xl text-center">
+          <p className="font-[600] text-xl text-center mx-6">
             {language.notifications.noItem}
           </p>
         </div>

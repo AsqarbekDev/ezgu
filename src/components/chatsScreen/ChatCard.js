@@ -79,15 +79,18 @@ function ChatCard({
         <p className="font-[700] -mt-[5px] text-lg truncate flex-1">
           {username}
         </p>
-        {lastImage ? (
-          <img
-            src={lastImage}
-            className="h-5 w-5 object-cover rounded-md"
-            alt=""
-          />
-        ) : (
-          <p className="text-xs truncate flex-1">{lastMessage}</p>
-        )}
+        <div className="flex items-center">
+          {lastImage && (
+            <img
+              src={lastImage}
+              className="h-5 w-5 object-cover rounded-md mr-2"
+              alt=""
+            />
+          )}
+          {lastMessage && (
+            <p className="text-xs truncate flex-1">{lastMessage}</p>
+          )}
+        </div>
       </div>
       <div className="flex flex-col items-end">
         <p
