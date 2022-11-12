@@ -80,8 +80,8 @@ function ImageMessage({
     const handleScroll = (e) => {
       setTimestampDate(dayjs().unix());
       if (
-        mRef.current.getBoundingClientRect().bottom < 56 ||
-        mRef.current.getBoundingClientRect().top > 104
+        mRef?.current?.getBoundingClientRect().bottom < 60 ||
+        mRef?.current?.getBoundingClientRect().top > 102
       ) {
       } else {
         if (currentShowingDate !== dayjs.unix(timestamp).format("DD/MM/YYYY")) {
