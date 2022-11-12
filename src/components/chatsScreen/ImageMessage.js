@@ -168,8 +168,8 @@ function ImageMessage({
                 className={`${
                   theme.type === "dark" && "border"
                 } bg-black opacity-80 text-white rounded-lg ${
-                  mine ? "ml-2" : "mr-2"
-                }`}
+                  !mine && checkable && "mr-20"
+                } ${mine ? "ml-2" : "mr-2"}`}
               >
                 <p className="px-2 py-1">{currentShowingDate}</p>
               </div>
@@ -183,8 +183,8 @@ function ImageMessage({
                 className={`${
                   theme.type === "dark" && "border"
                 } bg-black opacity-80 text-white rounded-lg ${
-                  mine ? "ml-2" : "mr-2"
-                }`}
+                  !mine && checkable && "mr-20"
+                } ${mine ? "ml-2" : "mr-2"}`}
               >
                 <p className="px-2 py-1">{currentShowingDate}</p>
               </div>
