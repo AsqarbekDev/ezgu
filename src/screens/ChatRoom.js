@@ -86,6 +86,8 @@ function ChatRoom() {
       : chats[chatRoomID] &&
         user.blockedUsers?.includes(chats[chatRoomID]?.messagingUser?.uid)
       ? true
+      : checkable
+      ? true
       : false;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -694,7 +696,11 @@ function ChatRoom() {
       </div>
       <div className="fixed max-w-2xl overflow-hidden bottom-2 right-2 xl:right-auto left-2 xl:left-auto xl:w-full sm:mx-auto bg-gray-300 flex items-center rounded-2xl">
         {image ? (
-          <button onClick={deleteImage} className="relative h-12 w-[70px] pr-1">
+          <button
+            disabled={disabledSecond}
+            onClick={deleteImage}
+            className="relative h-12 w-[70px] pr-1"
+          >
             <img className="object-cover h-12 w-[70px]" src={image} alt="" />
             <CloseIcon
               style={{ fontSize: 16, color: "white" }}
@@ -703,6 +709,7 @@ function ChatRoom() {
           </button>
         ) : (
           <button
+            disabled={disabledSecond}
             onClick={() => imageRef.current.click()}
             className="px-3 h-12 outline-none"
           >
@@ -719,7 +726,11 @@ function ChatRoom() {
           onFocus={scrollToBottom}
           disabled={disabledSecond}
         />
-        <button onClick={sendMessage} className="px-3 h-12 outline-none">
+        <button
+          disabled={disabledSecond}
+          onClick={sendMessage}
+          className="px-3 h-12 outline-none"
+        >
           <SendIcon style={{ fontSize: 26 }} />
         </button>
         <input
