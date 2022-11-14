@@ -643,6 +643,9 @@ function App() {
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+          dispatch(setWaitingChat(false));
+        }
         const allChats = [];
 
         snapshot.forEach((doc) => {

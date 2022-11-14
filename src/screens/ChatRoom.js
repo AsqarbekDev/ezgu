@@ -224,6 +224,7 @@ function ChatRoom() {
           timestamp: dayjs().unix(),
           uploadedTime: serverTimestamp(),
           uid: user.uid,
+          users: [auth.currentUser.uid, uid],
           image: "",
           seen: false,
         })
