@@ -6,6 +6,7 @@ import MyJobAddsCard from "../components/addScreen/MyJobAddsCard";
 import MyHomeAddsCard from "../components/addScreen/MyHomeAddsCard";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "../features/languageSlice";
+import GoogleAds from "../components/GoogleAds";
 
 function Add() {
   const language = useSelector(selectLanguage);
@@ -26,6 +27,10 @@ function Add() {
       </div>
       <MyJobAddsCard />
       <MyHomeAddsCard />
+      <div className="ad-class">
+        {/* add your slot id  */}
+        <GoogleAds slot="3356464079809699" />
+      </div>
     </div>
   );
 }
