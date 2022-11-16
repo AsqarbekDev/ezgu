@@ -23,7 +23,7 @@ import {
 import SignUpwithEmail from "./screens/SignUpwithEmail";
 import { useEffect } from "react";
 import { setNotifications } from "./features/notificationsSlice";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./firebase";
 import {
   addDoc,
@@ -68,6 +68,7 @@ import { useCookies } from "react-cookie";
 import ChangeLanguage from "./screens/ChangeLanguage";
 import { selectLanguage, setLanguage } from "./features/languageSlice";
 import { selectDisableScroll } from "./features/disableScrollSlice";
+import PrivacyAndPolicy from "./screens/PrivacyAndPolicy";
 
 function App() {
   const user = useSelector(selectUser);
@@ -700,6 +701,11 @@ function App() {
           unsub();
         };
       } else {
+        //should be deleted!
+        signInWithEmailAndPassword(auth, "oscarjohnsan1@gmail.com", "1111111")
+          .then((userCredential) => {})
+          .catch((error) => {});
+        //should be deleted!
         dispatch(setWaiting(false));
       }
     });
@@ -828,6 +834,12 @@ function App() {
             <Route path="/chats/blockedUsers" element={<BlockedUsersChat />} />
           )}
           {user && <Route path="/profile" element={<Profile />} />}
+          {user && (
+            <Route
+              path="/profile/privacyAndPolicy"
+              element={<PrivacyAndPolicy />}
+            />
+          )}
           {user && (
             <Route path="/profile/jobsHistory" element={<JobsHistory />} />
           )}

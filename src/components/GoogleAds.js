@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 
-function GoogleAds({ slot }) {
+function GoogleAds({ slot, style }) {
   useEffect(() => {
     (window.adsbygoogle = window.adsbygoogle || []).push({});
   }, []);
@@ -10,7 +10,7 @@ function GoogleAds({ slot }) {
     <ins
       className="adsbygoogle"
       style={{ display: "block" }}
-      data-ad-client="add-your-client-id"
+      data-ad-client="ca-pub-3356464079809699"
       data-ad-slot={slot}
       data-ad-format="auto"
       data-full-width-responsive="true"

@@ -27,8 +27,7 @@ function Add() {
       </div>
       <MyJobAddsCard />
       <MyHomeAddsCard />
-      <div className="ad-class">
-        {/* add your slot id  */}
+      <div className="ad-class my-2">
         <GoogleAds slot="3356464079809699" />
       </div>
     </div>

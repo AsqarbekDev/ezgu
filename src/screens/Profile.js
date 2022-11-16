@@ -777,7 +777,10 @@ function Profile() {
             bgcolor: theme.type === "light" ? "whitesmoke" : "darkgray",
           }}
         />
-        <ListItemButton component="a">
+        <ListItemButton
+          onClick={() => navigate("/profile/privacyAndPolicy")}
+          component="a"
+        >
           <PrivacyTipIcon
             style={{ fontSize: 24, marginTop: 1, marginLeft: 4 }}
           />

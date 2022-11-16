@@ -255,6 +255,9 @@ export const eng = {
   loadingModul: {
     text: "Loading...",
   },
+  privacyAndPolicy: {
+    headerText: "Privacy and policy",
+  },
 };
 
 export const ru = {
@@ -515,6 +518,9 @@ export const ru = {
   loadingModul: {
     text: "Загрузка...",
   },
+  privacyAndPolicy: {
+    headerText: "Конфиденциальность и политика",
+  },
 };
 
 export const uz = {
@@ -773,5 +779,8 @@ export const uz = {
   },
   loadingModul: {
     text: "Yuklanyabdi...",
+  },
+  privacyAndPolicy: {
+    headerText: "Ilova qoidalari",
   },
 };
