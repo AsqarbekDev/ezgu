@@ -226,6 +226,10 @@ function ChatRoom() {
     messageRef.current.focus();
     if (messageRef.current.value.replace(/\s/g, "").length > 0 || image) {
       const sendingMessage = messageRef.current.value;
+      const height = imageHeight;
+      const width = imageWidth;
+      setImageHeight(null);
+      setImageWidth(null);
       messageRef.current.value = "";
       setImage(null);
       if (isChatRoomExists) {
@@ -238,8 +242,8 @@ function ChatRoom() {
           users: [auth.currentUser.uid, uid],
           image: "",
           seen: false,
-          imageHeight: imageHeight || 0,
-          imageWidth: imageWidth || 0,
+          imageHeight: height || 0,
+          imageWidth: width || 0,
         })
           .then(async (snapDoc) => {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
