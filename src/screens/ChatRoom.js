@@ -78,6 +78,8 @@ function ChatRoom() {
   const [checkable, setCheckable] = useState(false);
   const [messagesLength, setMessagesLength] = useState(0);
   const [checkedMessages, setCheckedMessages] = useState({});
+  const [imageHeight, setImageHeight] = useState(null);
+  const [imageWidth, setImageWidth] = useState(null);
 
   const disabledSecond =
     chats[chatRoomID] &&
@@ -203,6 +205,15 @@ function ChatRoom() {
     }
 
     reader.onload = (readerEvent) => {
+      const newImage = new Image();
+      newImage.src = readerEvent.target.result;
+      newImage.onload = () => {
+        const height = newImage.height;
+        const width = newImage.width;
+        setImageHeight(height);
+        setImageWidth(width);
+      };
+
       setImage(readerEvent.target.result);
     };
   };
@@ -227,6 +238,8 @@ function ChatRoom() {
           users: [auth.currentUser.uid, uid],
           image: "",
           seen: false,
+          imageHeight: imageHeight || 0,
+          imageWidth: imageWidth || 0,
         })
           .then(async (snapDoc) => {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
@@ -587,7 +600,7 @@ function ChatRoom() {
       </div>
       <div>
         {messages.map((item, index) =>
-          item.image ? (
+          item.imageHeight > 0 ? (
             <div key={index}>
               {item.id === newMessageID && (
                 <div
@@ -613,6 +626,8 @@ function ChatRoom() {
               <ImageMessage
                 messageID={item.id}
                 image={item.image}
+                imageHeight={item.imageHeight}
+                imageWidth={item.imageWidth}
                 message={item.message}
                 mine={item.uid === user.uid ? true : false}
                 timestamp={item.timestamp}

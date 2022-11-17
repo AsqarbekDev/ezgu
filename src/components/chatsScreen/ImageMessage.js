@@ -14,6 +14,8 @@ import { selectTheme } from "../../features/themeSlice";
 
 function ImageMessage({
   image,
+  imageHeight,
+  imageWidth,
   message,
   mine,
   timestamp,
@@ -200,13 +202,21 @@ function ImageMessage({
           onClick={() => !checkable && setShowImage(true)}
           className={`${
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
-          } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl`}
+          } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl overflow-hidden`}
         >
-          <img
-            className="rounded-t-xl object-cover max-h-72"
-            src={image}
-            alt=""
-          />
+          <div
+            style={{
+              height: imageHeight,
+              width: imageWidth / (imageHeight / 288),
+            }}
+            className="max-h-72"
+          >
+            <img
+              className="rounded-t-xl object-cover max-h-72"
+              src={image}
+              alt=""
+            />
+          </div>
           <div>
             <p ref={textRef} className="px-2 overflow-hidden text-lg">
               {filterMessage(message)}

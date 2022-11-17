@@ -615,6 +615,8 @@ function App() {
               timestamp: doc.data().timestamp,
               uid: doc.data().uid,
               image: doc.data().image,
+              imageHeight: doc.data().imageHeight,
+              imageWidth: doc.data().imageWidth,
               seen: doc.data().seen,
             });
           });
