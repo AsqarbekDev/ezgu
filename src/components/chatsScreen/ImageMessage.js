@@ -200,14 +200,14 @@ function ImageMessage({
         )}
         <div
           onClick={() => !checkable && setShowImage(true)}
+          style={{ width: imageWidth / (imageHeight / 288) }}
           className={`${
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
           } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] pb-[4px] rounded-2xl overflow-hidden`}
         >
           <div
             style={{
-              height: imageHeight,
-              width: imageWidth / (imageHeight / 288),
+              height: imageHeight / (imageWidth / (window.innerWidth * 0.69)),
             }}
             className="max-h-72"
           >
