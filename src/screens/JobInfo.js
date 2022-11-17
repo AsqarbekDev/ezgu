@@ -24,7 +24,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { useState } from "react";
 import ExitHeader from "../components/ExitHeader";
 import BottomNavigation from "../components/BottomNavigation";
@@ -164,7 +164,7 @@ function JobInfo() {
   }, [job]);
 
   useEffect(() => {
-    if (job) {
+    if (job && auth?.currentUser) {
       const unsubscribe = onSnapshot(
         collection(db, "jobs", job.id, "bannedWorkers"),
         (snapshot) => {
