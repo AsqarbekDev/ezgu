@@ -23,7 +23,7 @@ import {
 import SignUpwithEmail from "./screens/SignUpwithEmail";
 import { useEffect } from "react";
 import { setNotifications } from "./features/notificationsSlice";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
 import {
   addDoc,
@@ -701,11 +701,6 @@ function App() {
           unsub();
         };
       } else {
-        //should be deleted!
-        signInWithEmailAndPassword(auth, "oscarjohnsan1@gmail.com", "1111111")
-          .then((userCredential) => {})
-          .catch((error) => {});
-        //should be deleted!
         dispatch(setWaiting(false));
       }
     });
