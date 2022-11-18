@@ -66,7 +66,7 @@ function ExitHeader({
   const [showDeleteModul, setShowDeleteModul] = useState(false);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
-  const shareUrl = `https://ezgu.netlify.app/${location.pathname}`;
+  const shareUrl = `https://ezgu.netlify.app${location.pathname}`;
   const drawerBleeding = 56;
   const StyledBox = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "light" ? "#fff" : grey[800],

@@ -53,7 +53,6 @@ function JobInfo() {
 
   useEffect(() => {
     if (getNavigate) {
-      console.log("getnavigate");
       if (user?.currentJob) {
         if (jobDone) {
           const updateUserDone = async () => {
@@ -85,7 +84,6 @@ function JobInfo() {
 
   useEffect(() => {
     if (!waiting) {
-      console.log("working");
       const unsubscribe = onSnapshot(
         doc(db, "jobs", jobId),
         async (snapshot) => {
