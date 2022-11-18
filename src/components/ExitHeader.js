@@ -200,7 +200,7 @@ function ExitHeader({
                     <div className="flex items-center justify-around space-x-2">
                       <WhatsappShareButton
                         url={shareUrl}
-                        separator
+                        separator="\n"
                         title={`${jobName}\n${salary}\n${workersCount}\n${
                           phoneNumber !== "" ? `${phoneNumber}\n` : ""
                         }${Time}\n${country}\n${region}\n${
@@ -298,6 +298,7 @@ function ExitHeader({
                       </TwitterShareButton>
                       <ViberShareButton
                         url={shareUrl}
+                        separator="\n"
                         title={`${jobName}\n${salary}\n${workersCount}\n${
                           phoneNumber !== "" ? `${phoneNumber}\n` : ""
                         }${Time}\n${country}\n${region}\n${
