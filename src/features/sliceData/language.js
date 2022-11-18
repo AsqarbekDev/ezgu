@@ -247,6 +247,7 @@ export const eng = {
     deleteModulText: "Do you want to delete all notifications?",
     iconInfo: "Settings",
     deleteAllText: "delete all",
+    shareText: "Share",
   },
   header: {
     iconInfo: "Settings",
@@ -510,6 +511,7 @@ export const ru = {
     deleteModulText: "Удалить все уведомления?",
     iconInfo: "Настройки",
     deleteAllText: "удалить все",
+    shareText: "Поделиться",
   },
   header: {
     iconInfo: "Настройки",
@@ -772,6 +774,7 @@ export const uz = {
     deleteModulText: "Bildirishnomalarni o'chirishni xoxlaysizmi?",
     iconInfo: "Sozlamalar",
     deleteAllText: "hammasini o'chirish",
+    shareText: "Tarqatish",
   },
   header: {
     iconInfo: "Sozlamalar",

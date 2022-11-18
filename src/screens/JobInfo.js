@@ -53,6 +53,7 @@ function JobInfo() {
 
   useEffect(() => {
     if (getNavigate) {
+      console.log("getnavigate");
       if (user?.currentJob) {
         if (jobDone) {
           const updateUserDone = async () => {
@@ -84,6 +85,7 @@ function JobInfo() {
 
   useEffect(() => {
     if (!waiting) {
+      console.log("working");
       const unsubscribe = onSnapshot(
         doc(db, "jobs", jobId),
         async (snapshot) => {
@@ -286,8 +288,23 @@ function JobInfo() {
   return (
     <div className="pb-12 xl:pb-1">
       <ExitHeader
-        myjob={user?.currentJob ? true : false}
         screenName={language.jobs.headerText}
+        myjob={user?.currentJob ? true : false}
+        jobScreen
+        jobName={job?.jobName}
+        salary={`${language.jobs.salary} ${job?.salary}`}
+        workersCount={`${language.jobs.numOfWorkers} ${job?.workersCount}`}
+        phoneNumber={`${language.jobs.phone} ${job?.userPhoneNumber}`}
+        Time={`${language.jobs.time} ${dayjs
+          .unix(job?.startingTime)
+          .format("D/M/YYYY")} ${dayjs
+          .unix(job?.startingTime)
+          .format("HH:mm")} - ${dayjs.unix(job?.endingTime).format("HH:mm")}`}
+        country={`${language.jobs.country} ${job?.country}`}
+        region={`${language.jobs.region} ${job?.region}`}
+        metro={`${language.jobs.metro} ${job?.line} ${job?.station}`}
+        workingPlace={`${language.jobs.address} ${job?.workingPlace}`}
+        comment={`${language.jobs.comment} ${job?.comment}`}
       />
       {loading && <LoadingModul />}
       {showModul && (
