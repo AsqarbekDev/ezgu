@@ -200,14 +200,13 @@ function ExitHeader({
                     <div className="flex items-center justify-around space-x-2">
                       <WhatsappShareButton
                         url={shareUrl}
-                        separator="\n"
                         title={`${jobName}\n${salary}\n${workersCount}\n${
                           phoneNumber !== "" ? `${phoneNumber}\n` : ""
                         }${Time}\n${country}\n${region}\n${
                           metro !== "" ? `${metro}\n` : ""
                         }${workingPlace}\n${
                           comment !== "" ? `${comment}` : ""
-                        }`}
+                        }\n`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <WhatsappIcon size={40} round={true} />
@@ -298,14 +297,13 @@ function ExitHeader({
                       </TwitterShareButton>
                       <ViberShareButton
                         url={shareUrl}
-                        separator="\n"
                         title={`${jobName}\n${salary}\n${workersCount}\n${
                           phoneNumber !== "" ? `${phoneNumber}\n` : ""
                         }${Time}\n${country}\n${region}\n${
                           metro !== "" ? `${metro}\n` : ""
                         }${workingPlace}\n${
                           comment !== "" ? `${comment}` : ""
-                        }`}
+                        }\n`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <ViberIcon size={40} round={true} />

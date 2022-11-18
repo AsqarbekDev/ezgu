@@ -367,7 +367,6 @@ function HomeCard({
               <div className="flex items-center justify-around space-x-2">
                 <WhatsappShareButton
                   url={shareUrl}
-                  separator="\n"
                   title={`💵 ${rent}\n⏰ ${dayjs
                     .unix(uploadedTime)
                     .format("HH:mm")} ${dayjs
@@ -376,7 +375,7 @@ function HomeCard({
                       "D/M/YYYY"
                     )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
                     line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
+                  }📝 ${comment}\n`}
                 >
                   <div className="flex flex-col items-center w-10">
                     <WhatsappIcon size={40} round={true} />
@@ -475,7 +474,6 @@ function HomeCard({
                 </TwitterShareButton>
                 <ViberShareButton
                   url={shareUrl}
-                  separator="\n"
                   title={`💵 ${rent}\n⏰ ${dayjs
                     .unix(uploadedTime)
                     .format("HH:mm")} ${dayjs
@@ -484,7 +482,7 @@ function HomeCard({
                       "D/M/YYYY"
                     )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
                     line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
+                  }📝 ${comment}\n`}
                 >
                   <div className="flex flex-col items-center w-10">
                     <ViberIcon size={40} round={true} />
