@@ -157,7 +157,7 @@ function ExitHeader({
                   onClose={toggleDrawer(false)}
                   onOpen={toggleDrawer(true)}
                   swipeAreaWidth={drawerBleeding}
-                  disableSwipeToOpen={false}
+                  disableSwipeToOpen={true}
                   ModalProps={{
                     keepMounted: false,
                   }}
@@ -200,7 +200,14 @@ function ExitHeader({
                     <div className="flex items-center justify-around space-x-2">
                       <WhatsappShareButton
                         url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        separator
+                        title={`${jobName}\n${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <WhatsappIcon size={40} round={true} />
@@ -209,7 +216,13 @@ function ExitHeader({
                       </WhatsappShareButton>
                       <TelegramShareButton
                         url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        title={`${jobName}\n${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <TelegramIcon size={40} round={true} />
@@ -219,7 +232,13 @@ function ExitHeader({
                       <OKShareButton
                         url={shareUrl}
                         title={jobName}
-                        description={`${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        description={`${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                         image="https://firebasestorage.googleapis.com/v0/b/ezgu-95ab1.appspot.com/o/users%2Fvqd01tM0yxQZrtck92vHNafMvgg1%2Fimage?alt=media&token=89ef4371-91c3-46d9-952e-8fb365c76c5d"
                       >
                         <div className="flex flex-col items-center w-10">
@@ -249,7 +268,13 @@ function ExitHeader({
                     <div className="flex items-center justify-around space-x-2">
                       <FacebookShareButton
                         url={shareUrl}
-                        quote={`${jobName}\n${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        quote={`${jobName}\n${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <FacebookIcon size={40} round={true} />
@@ -258,7 +283,13 @@ function ExitHeader({
                       </FacebookShareButton>
                       <TwitterShareButton
                         url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        title={`${jobName}\n${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <TwitterIcon size={40} round={true} />
@@ -267,7 +298,13 @@ function ExitHeader({
                       </TwitterShareButton>
                       <ViberShareButton
                         url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        title={`${jobName}\n${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                       >
                         <div className="flex flex-col items-center w-10">
                           <ViberIcon size={40} round={true} />
@@ -276,7 +313,13 @@ function ExitHeader({
                       </ViberShareButton>
                       <VKShareButton
                         url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${phoneNumber}\n${Time}\n${country}\n${region}\n${metro}\n${workingPlace}\n${comment}`}
+                        title={`${jobName}\n${salary}\n${workersCount}\n${
+                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                        }${Time}\n${country}\n${region}\n${
+                          metro !== "" ? `${metro}\n` : ""
+                        }${workingPlace}\n${
+                          comment !== "" ? `${comment}` : ""
+                        }`}
                         image="https://firebasestorage.googleapis.com/v0/b/ezgu-95ab1.appspot.com/o/users%2Fvqd01tM0yxQZrtck92vHNafMvgg1%2Fimage?alt=media&token=89ef4371-91c3-46d9-952e-8fb365c76c5d"
                       >
                         <div className="flex flex-col items-center w-10">

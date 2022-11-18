@@ -37,6 +37,7 @@ export const eng = {
     noItem: "There are no ads for rent",
     deleteModul: "Do you want to delete this ad?",
     deleteBtn: "delete",
+    shareBtn: "share",
   },
   add: {
     addJobText: "Post a new job ad",
@@ -300,6 +301,7 @@ export const ru = {
     noItem: "Объявлений об аренде нет",
     deleteModul: "Вы хотите удалить это объявление?",
     deleteBtn: "удалить",
+    shareBtn: "поделиться",
   },
   add: {
     addJobText: "Разместить новую вакансию",
@@ -564,6 +566,7 @@ export const uz = {
     noItem: "Xozircha uy ijarasi uchun e'lonlar yo'q",
     deleteModul: "E'lonni o'chirishni xoxlaysizmi?",
     deleteBtn: "o'chirish",
+    shareBtn: "tarqatish",
   },
   add: {
     addJobText: "Ish berish uchun e'lon qo'shish",

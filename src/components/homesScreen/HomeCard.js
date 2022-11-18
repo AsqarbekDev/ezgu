@@ -8,13 +8,13 @@ import React from "react";
 import { useEffect, useRef, useState } from "react";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PlaceIcon from "@mui/icons-material/Place";
-import EmailIcon from "@mui/icons-material/Email";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import MessageIcon from "@mui/icons-material/Message";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
+import ShareIcon from "@mui/icons-material/Share";
 import "./HomeCard.css";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
@@ -28,6 +28,29 @@ import LoadingModul from "../LoadingModul";
 import { selectTheme } from "../../features/themeSlice";
 import ActionModul from "../ActionModul";
 import { selectLanguage } from "../../features/languageSlice";
+import { Global } from "@emotion/react";
+import { styled } from "@mui/material/styles";
+import { grey } from "@mui/material/colors";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import ezgu from "../../assets/ezgu.jpg";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import {
+  TelegramShareButton,
+  TelegramIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+  FacebookShareButton,
+  FacebookIcon,
+  OKShareButton,
+  OKIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  ViberShareButton,
+  ViberIcon,
+  VKShareButton,
+  VKIcon,
+} from "react-share";
 
 function HomeCard({
   id,
@@ -58,11 +81,30 @@ function HomeCard({
   const [isCopied, setIsCopied] = useState(false);
   const [showRemoveHomeModul, setShowRemoveHomeModul] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
   const user = useSelector(selectUser);
   const language = useSelector(selectLanguage);
   const navigate = useNavigate();
   const locationPath = useLocation();
+
+  const shareUrl = `https://ezgu.netlify.app/homes`;
+  const drawerBleeding = 56;
+  const StyledBox = styled(Box)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "light" ? "#fff" : grey[800],
+  }));
+  const Puller = styled(Box)(({ theme }) => ({
+    width: 30,
+    height: 6,
+    backgroundColor: theme.palette.mode === "light" ? grey[300] : grey[900],
+    borderRadius: 3,
+    position: "absolute",
+    top: 8,
+    left: "calc(50% - 15px)",
+  }));
+  const toggleDrawer = (newOpen) => () => {
+    setOpenBottomSheet(newOpen);
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -204,52 +246,270 @@ function HomeCard({
         className="relative m-2 rounded-lg shadow-lg pb-3"
       >
         <div className="flex items-center p-2">
-          <Avatar
-            style={{ height: 32, width: 32 }}
-            alt={userName}
-            src={userImage}
-          />
-          <h2 className="font-bold mx-2 flex-1 truncate">{userName}</h2>
-          {userID === user?.uid &&
-          !history &&
-          locationPath.pathname !== "/homes" ? (
-            <div>
-              <IconButton
-                onClick={handleClick}
-                size="medium"
-                aria-controls={open ? "account-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-              >
-                <MoreVertIcon style={{ color: theme.iconColor }} />
-              </IconButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
+          <div
+            onClick={() =>
+              userID !== user?.uid
+                ? user
+                  ? navigate(`/chats/${userID}`)
+                  : navigate("/signUp")
+                : null
+            }
+            className="flex items-center flex-1"
+          >
+            <Avatar
+              style={{ height: 32, width: 32 }}
+              alt={userName}
+              src={userImage}
+            />
+            <h2 className="font-bold mx-2 flex-1 truncate">{userName}</h2>
+          </div>
+          <div>
+            <IconButton
+              onClick={handleClick}
+              size="medium"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <MoreVertIcon style={{ color: theme.iconColor }} />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              {userID === user?.uid &&
+                !history &&
+                locationPath.pathname !== "/homes" && (
+                  <MenuItem onClick={() => handleDelete()}>
+                    <ListItemIcon>
+                      <DeleteForeverIcon fontSize="small" />
+                    </ListItemIcon>
+                    {language.homes.deleteBtn}
+                  </MenuItem>
+                )}
+              <MenuItem
+                onClick={() => {
+                  setOpenBottomSheet(!openBottomSheet);
+                  setAnchorEl(null);
                 }}
               >
-                <MenuItem onClick={() => handleDelete()}>
-                  <ListItemIcon>
-                    <DeleteForeverIcon fontSize="small" />
-                  </ListItemIcon>
-                  {language.homes.deleteBtn}
-                </MenuItem>
-              </Menu>
-            </div>
-          ) : userID !== user?.uid && !history ? (
-            <IconButton
-              onClick={() =>
-                user ? navigate(`/chats/${userID}`) : navigate("/signUp")
-              }
-              size="small"
+                <ListItemIcon>
+                  <ShareIcon fontSize="small" />
+                </ListItemIcon>
+                {language.homes.shareBtn}
+              </MenuItem>
+            </Menu>
+          </div>
+        </div>
+        <div>
+          <Global
+            styles={{
+              ".MuiDrawer-root > .MuiPaper-root": {
+                height: `calc(40% - ${drawerBleeding}px)`,
+                width: "100%",
+                maxWidth: "672px",
+                marginLeft: "auto",
+                marginRight: "auto",
+                overflow: "visible",
+              },
+            }}
+          />
+          <SwipeableDrawer
+            anchor="bottom"
+            open={openBottomSheet}
+            onClose={toggleDrawer(false)}
+            onOpen={toggleDrawer(true)}
+            disableSwipeToOpen={true}
+            ModalProps={{
+              keepMounted: false,
+            }}
+          >
+            <StyledBox
+              sx={{
+                position: "absolute",
+                top: -drawerBleeding,
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                visibility: "visible",
+                width: "100%",
+              }}
             >
-              <EmailIcon style={{ fontSize: 26, color: theme.iconColor }} />
-            </IconButton>
-          ) : null}
+              <Puller />
+              <div className="flex items-center justify-center pt-3">
+                <Typography
+                  sx={{
+                    p: 2,
+                    color: "#000",
+                    fontSize: 24,
+                    fontWeight: 500,
+                  }}
+                >
+                  {language.exitHeader.shareText}
+                </Typography>
+              </div>
+            </StyledBox>
+            <StyledBox
+              sx={{
+                px: 2,
+                pb: 2,
+                pt: 3,
+                width: "100%",
+                overflowX: "scroll",
+                overflowY: "hidden",
+              }}
+              className="scrollbar-hide"
+            >
+              <div className="flex items-center justify-around space-x-2">
+                <WhatsappShareButton
+                  url={shareUrl}
+                  title={`💵 ${rent}\n⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <WhatsappIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">WhatsApp</p>
+                  </div>
+                </WhatsappShareButton>
+                <TelegramShareButton
+                  url={shareUrl}
+                  title={`💵 ${rent}\n⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <TelegramIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">Telegram</p>
+                  </div>
+                </TelegramShareButton>
+                <OKShareButton
+                  url={shareUrl}
+                  title={`💵 ${rent}`}
+                  description={`⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                  image={images[0]}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <OKIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">OK</p>
+                  </div>
+                </OKShareButton>
+                <button>
+                  <div className="flex flex-col items-center w-10">
+                    <Avatar src={ezgu} />
+                    <p className="font-[600] text-sm">Chats</p>
+                  </div>
+                </button>
+              </div>
+            </StyledBox>
+            <StyledBox
+              sx={{
+                px: 2,
+                pb: 2,
+                pt: 3,
+                width: "100%",
+                overflowX: "scroll",
+                overflowY: "hidden",
+              }}
+              className="scrollbar-hide"
+            >
+              <div className="flex items-center justify-around space-x-2">
+                <FacebookShareButton
+                  url={shareUrl}
+                  quote={`💵 ${rent}\n⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <FacebookIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">Facebook</p>
+                  </div>
+                </FacebookShareButton>
+                <TwitterShareButton
+                  url={shareUrl}
+                  title={`💵 ${rent}\n⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <TwitterIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">Twitter</p>
+                  </div>
+                </TwitterShareButton>
+                <ViberShareButton
+                  url={shareUrl}
+                  title={`💵 ${rent}\n⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <ViberIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">Viber</p>
+                  </div>
+                </ViberShareButton>
+                <VKShareButton
+                  url={shareUrl}
+                  title={`💵 ${rent}\n⏰ ${dayjs
+                    .unix(uploadedTime)
+                    .format("HH:mm")} ${dayjs
+                    .unix(uploadedTime)
+                    .format(
+                      "D/M/YYYY"
+                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+                  }📝 ${comment}`}
+                  image={images[0]}
+                >
+                  <div className="flex flex-col items-center w-10">
+                    <VKIcon size={40} round={true} />
+                    <p className="font-[600] text-sm">VK</p>
+                  </div>
+                </VKShareButton>
+              </div>
+            </StyledBox>
+          </SwipeableDrawer>
         </div>
         <div
           style={{ scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}

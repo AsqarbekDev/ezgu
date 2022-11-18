@@ -292,7 +292,13 @@ function JobInfo() {
         jobName={job?.jobName}
         salary={`${language.jobs.salary} ${job?.salary}`}
         workersCount={`${language.jobs.numOfWorkers} ${job?.workersCount}`}
-        phoneNumber={`${language.jobs.phone} ${job?.userPhoneNumber}`}
+        phoneNumber={
+          user?.currentJob === job?.id && job?.endingTime > dayjs().unix()
+            ? `${language.jobs.phone} ${job?.userPhoneNumber}`
+            : job?.userID === user?.uid
+            ? `${language.jobs.phone} ${job?.userPhoneNumber}`
+            : ""
+        }
         Time={`${language.jobs.time} ${dayjs
           .unix(job?.startingTime)
           .format("D/M/YYYY")} ${dayjs
@@ -300,9 +306,17 @@ function JobInfo() {
           .format("HH:mm")} - ${dayjs.unix(job?.endingTime).format("HH:mm")}`}
         country={`${language.jobs.country} ${job?.country}`}
         region={`${language.jobs.region} ${job?.region}`}
-        metro={`${language.jobs.metro} ${job?.line} ${job?.station}`}
+        metro={
+          job?.line !== "Неизвестный"
+            ? `${language.jobs.metro} ${job?.line} ${job?.station}`
+            : ""
+        }
         workingPlace={`${language.jobs.address} ${job?.workingPlace}`}
-        comment={`${language.jobs.comment} ${job?.comment}`}
+        comment={
+          user?.currentJob === job?.id || job?.userID === user?.uid
+            ? `${language.jobs.comment} ${job?.comment}`
+            : ""
+        }
       />
       {loading && <LoadingModul />}
       {showModul && (
