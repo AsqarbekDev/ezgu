@@ -7,6 +7,7 @@ import notificationsReducer from "../features/notificationsSlice";
 import themeReducer from "../features/themeSlice";
 import languageReducer from "../features/languageSlice";
 import disableScrollReducer from "../features/disableScrollSlice";
+import shareReducer from "../features/shareSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     theme: themeReducer,
     language: languageReducer,
     disableScroll: disableScrollReducer,
+    share: shareReducer,
   },
 });

@@ -17,7 +17,7 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ShareIcon from "@mui/icons-material/Share";
 import "./HomeCard.css";
 import dayjs from "dayjs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -51,6 +51,7 @@ import {
   VKShareButton,
   VKIcon,
 } from "react-share";
+import { setShare } from "../../features/shareSlice";
 
 function HomeCard({
   id,
@@ -86,6 +87,7 @@ function HomeCard({
   const user = useSelector(selectUser);
   const language = useSelector(selectLanguage);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const locationPath = useLocation();
 
   const shareUrl = `https://ezgu.netlify.app/homes`;
@@ -418,7 +420,26 @@ function HomeCard({
                     <p className="font-[600] text-sm">OK</p>
                   </div>
                 </OKShareButton>
-                <button>
+                <button
+                  onClick={() => {
+                    dispatch(
+                      setShare(
+                        `💵 ${rent}\n⏰ ${dayjs
+                          .unix(uploadedTime)
+                          .format("HH:mm")} ${dayjs
+                          .unix(uploadedTime)
+                          .format(
+                            "D/M/YYYY"
+                          )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+                          line !== "Неизвестный"
+                            ? `🚇 ${line} ${station}\n`
+                            : ""
+                        }📝 ${comment}\n${shareUrl}`
+                      )
+                    );
+                    navigate("/chats");
+                  }}
+                >
                   <div className="flex flex-col items-center w-10">
                     <Avatar src={ezgu} />
                     <p className="font-[600] text-sm">Chats</p>

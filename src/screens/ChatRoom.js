@@ -48,6 +48,7 @@ import { StyledBadge } from "../components/StyledBadge";
 import { selectTheme } from "../features/themeSlice";
 import { selectLanguage } from "../features/languageSlice";
 import ActionModul from "../components/ActionModul";
+import { selectShare, setShare } from "../features/shareSlice";
 
 function ChatRoom() {
   const imageRef = useRef(null);
@@ -61,6 +62,7 @@ function ChatRoom() {
   const navigate = useNavigate();
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
+  const share = useSelector(selectShare);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState(null);
@@ -100,6 +102,13 @@ function ChatRoom() {
   const handleClose = (event) => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (share) {
+      messageRef.current.value = share;
+      dispatch(setShare(null));
+    }
+  }, [share, dispatch]);
 
   const addCheckedMessage = (message) => {
     if (message.type === "add") {

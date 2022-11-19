@@ -9,7 +9,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import Tooltip from "@mui/material/Tooltip";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectNotifications } from "../features/notificationsSlice";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -41,6 +41,7 @@ import {
   VKIcon,
 } from "react-share";
 import { Avatar } from "@mui/material";
+import { setShare } from "../features/shareSlice";
 
 function ExitHeader({
   screenName,
@@ -59,6 +60,7 @@ function ExitHeader({
   comment,
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
@@ -245,7 +247,22 @@ function ExitHeader({
                           <p className="font-[600] text-sm">OK</p>
                         </div>
                       </OKShareButton>
-                      <button>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            setShare(
+                              `${jobName}\n${salary}\n${workersCount}\n${
+                                phoneNumber !== "" ? `${phoneNumber}\n` : ""
+                              }${Time}\n${country}\n${region}\n${
+                                metro !== "" ? `${metro}\n` : ""
+                              }${workingPlace}\n${
+                                comment !== "" ? `${comment}` : ""
+                              }\n${shareUrl}`
+                            )
+                          );
+                          navigate("/chats");
+                        }}
+                      >
                         <div className="flex flex-col items-center w-10">
                           <Avatar src={ezgu} />
                           <p className="font-[600] text-sm">Chats</p>
