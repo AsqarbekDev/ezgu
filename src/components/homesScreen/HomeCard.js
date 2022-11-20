@@ -90,6 +90,23 @@ function HomeCard({
   const dispatch = useDispatch();
   const locationPath = useLocation();
 
+  const fullMesssage = `💵 ${rent}\n⏰ ${dayjs
+    .unix(uploadedTime)
+    .format("HH:mm")} ${dayjs
+    .unix(uploadedTime)
+    .format(
+      "D/M/YYYY"
+    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+  }📝 ${comment}\n`;
+  const lessMessage = `⏰ ${dayjs.unix(uploadedTime).format("HH:mm")} ${dayjs
+    .unix(uploadedTime)
+    .format(
+      "D/M/YYYY"
+    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
+    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
+  }📝 ${comment}\n`;
+
   const shareUrl = `https://ezgu.netlify.app/homes`;
   const drawerBleeding = 56;
   const StyledBox = styled(Box)(({ theme }) => ({
@@ -367,35 +384,13 @@ function HomeCard({
               className="scrollbar-hide"
             >
               <div className="flex items-center justify-around space-x-2">
-                <WhatsappShareButton
-                  url={shareUrl}
-                  title={`💵 ${rent}\n⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}\n`}
-                >
+                <WhatsappShareButton url={shareUrl} title={fullMesssage}>
                   <div className="flex flex-col items-center w-10">
                     <WhatsappIcon size={40} round={true} />
                     <p className="font-[600] text-sm">WhatsApp</p>
                   </div>
                 </WhatsappShareButton>
-                <TelegramShareButton
-                  url={shareUrl}
-                  title={`💵 ${rent}\n⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
-                >
+                <TelegramShareButton url={shareUrl} title={fullMesssage}>
                   <div className="flex flex-col items-center w-10">
                     <TelegramIcon size={40} round={true} />
                     <p className="font-[600] text-sm">Telegram</p>
@@ -404,15 +399,7 @@ function HomeCard({
                 <OKShareButton
                   url={shareUrl}
                   title={`💵 ${rent}`}
-                  description={`⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
+                  description={lessMessage}
                   image={images[0]}
                 >
                   <div className="flex flex-col items-center w-10">
@@ -423,19 +410,10 @@ function HomeCard({
                 <button
                   onClick={() => {
                     dispatch(
-                      setShare(
-                        `💵 ${rent}\n⏰ ${dayjs
-                          .unix(uploadedTime)
-                          .format("HH:mm")} ${dayjs
-                          .unix(uploadedTime)
-                          .format(
-                            "D/M/YYYY"
-                          )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                          line !== "Неизвестный"
-                            ? `🚇 ${line} ${station}\n`
-                            : ""
-                        }📝 ${comment}\n${shareUrl}`
-                      )
+                      setShare({
+                        message: `${fullMesssage}\n${shareUrl}`,
+                        image: images[0],
+                      })
                     );
                     navigate("/chats");
                   }}
@@ -459,52 +437,19 @@ function HomeCard({
               className="scrollbar-hide"
             >
               <div className="flex items-center justify-around space-x-2">
-                <FacebookShareButton
-                  url={shareUrl}
-                  quote={`💵 ${rent}\n⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
-                >
+                <FacebookShareButton url={shareUrl} quote={fullMesssage}>
                   <div className="flex flex-col items-center w-10">
                     <FacebookIcon size={40} round={true} />
                     <p className="font-[600] text-sm">Facebook</p>
                   </div>
                 </FacebookShareButton>
-                <TwitterShareButton
-                  url={shareUrl}
-                  title={`💵 ${rent}\n⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
-                >
+                <TwitterShareButton url={shareUrl} title={fullMesssage}>
                   <div className="flex flex-col items-center w-10">
                     <TwitterIcon size={40} round={true} />
                     <p className="font-[600] text-sm">Twitter</p>
                   </div>
                 </TwitterShareButton>
-                <ViberShareButton
-                  url={shareUrl}
-                  title={`💵 ${rent}\n⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}\n`}
-                >
+                <ViberShareButton url={shareUrl} title={fullMesssage}>
                   <div className="flex flex-col items-center w-10">
                     <ViberIcon size={40} round={true} />
                     <p className="font-[600] text-sm">Viber</p>
@@ -512,15 +457,7 @@ function HomeCard({
                 </ViberShareButton>
                 <VKShareButton
                   url={shareUrl}
-                  title={`💵 ${rent}\n⏰ ${dayjs
-                    .unix(uploadedTime)
-                    .format("HH:mm")} ${dayjs
-                    .unix(uploadedTime)
-                    .format(
-                      "D/M/YYYY"
-                    )}\n📱 ${userPhoneNumber}\n🌆 ${region}\n📌 ${location}\n${
-                    line !== "Неизвестный" ? `🚇 ${line} ${station}\n` : ""
-                  }📝 ${comment}`}
+                  title={fullMesssage}
                   image={images[0]}
                 >
                   <div className="flex flex-col items-center w-10">

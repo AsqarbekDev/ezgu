@@ -1,20 +1,33 @@
-import { Avatar, Checkbox } from "@mui/material";
+import {
+  Avatar,
+  Checkbox,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import dayjs from "dayjs";
 import { doc, updateDoc } from "firebase/firestore";
 import React from "react";
 import { useEffect } from "react";
 import { db } from "../../firebase";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectTheme } from "../../features/themeSlice";
 import { useState } from "react";
+import { setEditingChat } from "../../features/chatsSlice";
+import { selectLanguage } from "../../features/languageSlice";
 
 function Message({
   message,
   mine,
   seen,
+  edited,
   timestamp,
   userImage,
   chatRoomID,
@@ -29,10 +42,29 @@ function Message({
   showAvatar,
   addCheckedMessage,
   checkable,
+  editing,
+  setShowModul,
+  setDeletingMessageID,
 }) {
   const mRef = useRef(null);
+  const modulRef = useRef(null);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
+  const dispatch = useDispatch();
   const [checked, setChecked] = useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const filterMessage = (messageString) => {
     const filteredString = [];
@@ -180,27 +212,82 @@ function Message({
             style={{ width: 34, height: 34 }}
           />
         )}
-        <p
+        <div
+          onClick={() => modulRef.current.click()}
           className={`${
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
           } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] px-3 pt-1 pb-[4px] rounded-2xl`}
         >
-          <span className="overflow-hidden text-lg">
-            {filterMessage(message)}
-          </span>
-          <span
-            className={`${
-              mine ? "text-gray-600" : "text-gray-300"
-            } text-xs text-right font-[600]`}
-          >
-            {dayjs.unix(timestamp).format("HH:mm")}{" "}
-            {seen && mine ? (
-              <DoneAllIcon style={{ fontSize: 14, marginTop: -3 }} />
-            ) : mine ? (
-              <DoneIcon style={{ fontSize: 14, marginTop: -3 }} />
-            ) : null}
-          </span>
-        </p>
+          <p className="overflow-hidden text-lg">{filterMessage(message)}</p>
+          <div className="flex items-center justify-end">
+            <p
+              className={`${
+                mine ? "text-gray-600" : "text-gray-300"
+              } text-xs text-right font-[600]`}
+            >
+              {edited && language.chats.editedText}{" "}
+              {dayjs.unix(timestamp).format("HH:mm")}{" "}
+              {seen && mine ? (
+                <DoneAllIcon style={{ fontSize: 14, marginTop: -3 }} />
+              ) : mine ? (
+                <DoneIcon style={{ fontSize: 14, marginTop: -3 }} />
+              ) : null}
+            </p>
+            <div className="-mt-2 -mb-[5.8px] -mr-2">
+              <IconButton
+                ref={modulRef}
+                onClick={!editing ? handleClick : undefined}
+                size="small"
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <MoreVertIcon
+                  style={{ fontSize: 12, color: mine ? "#4B5563" : "#d1d5db" }}
+                />
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                {mine && (
+                  <MenuItem
+                    onClick={() =>
+                      dispatch(
+                        setEditingChat({
+                          message,
+                          messageID,
+                          isImage: false,
+                        })
+                      )
+                    }
+                  >
+                    <ListItemIcon>
+                      <EditIcon fontSize="small" />
+                    </ListItemIcon>
+                    {language.chats.editText}
+                  </MenuItem>
+                )}
+                <MenuItem
+                  onClick={() => {
+                    setShowModul("deleteOne");
+                    setDeletingMessageID(messageID);
+                  }}
+                >
+                  <ListItemIcon>
+                    <DeleteForeverIcon fontSize="small" />
+                  </ListItemIcon>
+                  {language.chats.deleteText}
+                </MenuItem>
+              </Menu>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

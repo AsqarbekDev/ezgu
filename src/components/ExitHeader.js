@@ -68,6 +68,17 @@ function ExitHeader({
   const [showDeleteModul, setShowDeleteModul] = useState(false);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
+  const fullMesssage = `${jobName}\n${salary}\n${workersCount}\n${
+    phoneNumber !== "" ? `${phoneNumber}\n` : ""
+  }${Time}\n${country}\n${region}\n${
+    metro !== "" ? `${metro}\n` : ""
+  }${workingPlace}\n${comment !== "" ? `${comment}` : ""}\n`;
+  const lessMessage = `${salary}\n${workersCount}\n${
+    phoneNumber !== "" ? `${phoneNumber}\n` : ""
+  }${Time}\n${country}\n${region}\n${
+    metro !== "" ? `${metro}\n` : ""
+  }${workingPlace}\n${comment !== "" ? `${comment}` : ""}\n`;
+
   const shareUrl = `https://ezgu.netlify.app${location.pathname}`;
   const drawerBleeding = 56;
   const StyledBox = styled(Box)(({ theme }) => ({
@@ -200,31 +211,13 @@ function ExitHeader({
                     className="scrollbar-hide"
                   >
                     <div className="flex items-center justify-around space-x-2">
-                      <WhatsappShareButton
-                        url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }\n`}
-                      >
+                      <WhatsappShareButton url={shareUrl} title={fullMesssage}>
                         <div className="flex flex-col items-center w-10">
                           <WhatsappIcon size={40} round={true} />
                           <p className="font-[600] text-sm">WhatsApp</p>
                         </div>
                       </WhatsappShareButton>
-                      <TelegramShareButton
-                        url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }`}
-                      >
+                      <TelegramShareButton url={shareUrl} title={fullMesssage}>
                         <div className="flex flex-col items-center w-10">
                           <TelegramIcon size={40} round={true} />
                           <p className="font-[600] text-sm">Telegram</p>
@@ -233,13 +226,7 @@ function ExitHeader({
                       <OKShareButton
                         url={shareUrl}
                         title={jobName}
-                        description={`${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }`}
+                        description={lessMessage}
                         image="https://firebasestorage.googleapis.com/v0/b/ezgu-95ab1.appspot.com/o/users%2Fvqd01tM0yxQZrtck92vHNafMvgg1%2Fimage?alt=media&token=89ef4371-91c3-46d9-952e-8fb365c76c5d"
                       >
                         <div className="flex flex-col items-center w-10">
@@ -250,15 +237,10 @@ function ExitHeader({
                       <button
                         onClick={() => {
                           dispatch(
-                            setShare(
-                              `${jobName}\n${salary}\n${workersCount}\n${
-                                phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                              }${Time}\n${country}\n${region}\n${
-                                metro !== "" ? `${metro}\n` : ""
-                              }${workingPlace}\n${
-                                comment !== "" ? `${comment}` : ""
-                              }\n${shareUrl}`
-                            )
+                            setShare({
+                              message: `${fullMesssage}\n${shareUrl}`,
+                              image: null,
+                            })
                           );
                           navigate("/chats");
                         }}
@@ -282,46 +264,19 @@ function ExitHeader({
                     className="scrollbar-hide"
                   >
                     <div className="flex items-center justify-around space-x-2">
-                      <FacebookShareButton
-                        url={shareUrl}
-                        quote={`${jobName}\n${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }`}
-                      >
+                      <FacebookShareButton url={shareUrl} quote={fullMesssage}>
                         <div className="flex flex-col items-center w-10">
                           <FacebookIcon size={40} round={true} />
                           <p className="font-[600] text-sm">Facebook</p>
                         </div>
                       </FacebookShareButton>
-                      <TwitterShareButton
-                        url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }`}
-                      >
+                      <TwitterShareButton url={shareUrl} title={fullMesssage}>
                         <div className="flex flex-col items-center w-10">
                           <TwitterIcon size={40} round={true} />
                           <p className="font-[600] text-sm">Twitter</p>
                         </div>
                       </TwitterShareButton>
-                      <ViberShareButton
-                        url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }\n`}
-                      >
+                      <ViberShareButton url={shareUrl} title={fullMesssage}>
                         <div className="flex flex-col items-center w-10">
                           <ViberIcon size={40} round={true} />
                           <p className="font-[600] text-sm">Viber</p>
@@ -329,13 +284,7 @@ function ExitHeader({
                       </ViberShareButton>
                       <VKShareButton
                         url={shareUrl}
-                        title={`${jobName}\n${salary}\n${workersCount}\n${
-                          phoneNumber !== "" ? `${phoneNumber}\n` : ""
-                        }${Time}\n${country}\n${region}\n${
-                          metro !== "" ? `${metro}\n` : ""
-                        }${workingPlace}\n${
-                          comment !== "" ? `${comment}` : ""
-                        }`}
+                        title={fullMesssage}
                         image="https://firebasestorage.googleapis.com/v0/b/ezgu-95ab1.appspot.com/o/users%2Fvqd01tM0yxQZrtck92vHNafMvgg1%2Fimage?alt=media&token=89ef4371-91c3-46d9-952e-8fb365c76c5d"
                       >
                         <div className="flex flex-col items-center w-10">

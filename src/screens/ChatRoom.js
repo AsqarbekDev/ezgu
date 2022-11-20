@@ -42,6 +42,8 @@ import {
   deleteChat,
   selectChatRooms,
   selectChats,
+  selectEditingChat,
+  setEditingChat,
 } from "../features/chatsSlice";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { StyledBadge } from "../components/StyledBadge";
@@ -63,6 +65,7 @@ function ChatRoom() {
   const theme = useSelector(selectTheme);
   const language = useSelector(selectLanguage);
   const share = useSelector(selectShare);
+  const editingChat = useSelector(selectEditingChat);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState(null);
@@ -82,6 +85,10 @@ function ChatRoom() {
   const [checkedMessages, setCheckedMessages] = useState({});
   const [imageHeight, setImageHeight] = useState(null);
   const [imageWidth, setImageWidth] = useState(null);
+  const [editingMessageID, setEditingMessageID] = useState(null);
+  const [editingIsImage, setEditingIsImage] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [deletingMessageID, setDeletingMessageID] = useState(null);
 
   const disabledSecond =
     chats[chatRoomID] &&
@@ -103,12 +110,73 @@ function ChatRoom() {
     setAnchorEl(null);
   };
 
+  const updateEditedMessage = async () => {
+    if (messageRef.current.value.length > 0 || editingIsImage) {
+      const sendingMessage = messageRef.current.value;
+      const editedmessageID = editingMessageID;
+      messageRef.current.value = "";
+      messageRef.current.focus();
+      setEditingMessageID(null);
+      setEditing(false);
+      await updateDoc(
+        doc(db, "chats", chatRoomID, "messages", editedmessageID),
+        {
+          message: sendingMessage,
+          edited: true,
+        }
+      );
+    } else {
+      messageRef.current.focus();
+    }
+  };
+
+  const cancelEdit = () => {
+    messageRef.current.value = "";
+    setEditingMessageID(null);
+    setEditing(false);
+    messageRef.current.focus();
+  };
+
+  const deleteOneMessage = async () => {
+    setShowModul("");
+    await deleteDoc(
+      doc(db, "chats", chatRoomID, "messages", deletingMessageID)
+    );
+  };
+
   useEffect(() => {
     if (share) {
-      messageRef.current.value = share;
+      messageRef.current.value = share.message;
+      if (share.image) {
+        setImage(share.image.image);
+      }
       dispatch(setShare(null));
+      messageRef.current.focus();
     }
-  }, [share, dispatch]);
+    if (editingChat) {
+      setEditing(true);
+      messageRef.current.value = editingChat.message;
+      setEditingMessageID(editingChat.messageID);
+      setEditingIsImage(editingChat.isImage);
+      dispatch(setEditingChat(null));
+      setTimeout(() => {
+        messageRef.current.focus();
+      }, [100]);
+    }
+  }, [share, dispatch, editingChat]);
+
+  useEffect(() => {
+    if (image?.startsWith("http")) {
+      const newImage = new Image();
+      newImage.src = image;
+      newImage.onload = () => {
+        const height = newImage.height;
+        const width = newImage.width;
+        setImageHeight(height);
+        setImageWidth(width);
+      };
+    }
+  }, [image]);
 
   const addCheckedMessage = (message) => {
     if (message.type === "add") {
@@ -242,21 +310,20 @@ function ChatRoom() {
       messageRef.current.value = "";
       setImage(null);
       if (isChatRoomExists) {
-        bottomRef.current.scrollIntoView();
         addDoc(collection(db, "chats", chatRoomID, "messages"), {
           message: sendingMessage,
           timestamp: dayjs().unix(),
           uploadedTime: serverTimestamp(),
           uid: user.uid,
           users: [auth.currentUser.uid, uid],
-          image: "",
+          image: image?.startsWith("http") ? image : "",
           seen: false,
+          edited: false,
           imageHeight: height || 0,
           imageWidth: width || 0,
         })
           .then(async (snapDoc) => {
-            bottomRef.current.scrollIntoView({ behavior: "smooth" });
-            if (image) {
+            if (image && !image.startsWith("http")) {
               const storageRef = ref(
                 storage,
                 `chats/${chatRoomID}/${snapDoc.id}`
@@ -341,17 +408,20 @@ function ChatRoom() {
       setTimeout(() => {
         if (bottomRef?.current) {
           bottomRef.current.scrollIntoView();
+          messageRef.current.focus();
         }
       }, 10);
     }
   }, [newMessageID]);
 
   const scrollToBottom = () => {
-    setTimeout(() => {
-      if (bottomRef?.current) {
-        bottomRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 400);
+    if (!editing) {
+      setTimeout(() => {
+        if (bottomRef?.current) {
+          bottomRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 200);
+    }
   };
 
   useEffect(() => {
@@ -376,7 +446,9 @@ function ChatRoom() {
       {showModul && (
         <ActionModul
           text={
-            showModul === "deleteChecked"
+            showModul === "deleteOne"
+              ? language.chats.modulTextDeleteOne
+              : showModul === "deleteChecked"
               ? language.chats.modulTextSelected
               : showModul === "deleteAll"
               ? language.chats.modulTextDelete
@@ -388,7 +460,9 @@ function ChatRoom() {
           }
           cancelFunction={() => setShowModul("")}
           confirmFunction={
-            showModul === "deleteChecked"
+            showModul === "deleteOne"
+              ? deleteOneMessage
+              : showModul === "deleteChecked"
               ? deleteCheckedMessages
               : showModul === "deleteAll"
               ? deleteMessages
@@ -530,7 +604,7 @@ function ChatRoom() {
           <div className="w-14 h-14 flex items-center justify-center">
             <Tooltip title={language.chats.iconInfo}>
               <IconButton
-                onClick={handleClick}
+                onClick={!editing ? handleClick : undefined}
                 size="medium"
                 aria-controls={open ? "account-menu" : undefined}
                 aria-haspopup="true"
@@ -647,6 +721,7 @@ function ChatRoom() {
                 userImage={chats[chatRoomID]?.messagingUser.image}
                 chatRoomID={chatRoomID}
                 seen={item.seen}
+                edited={item.edited}
                 setCurrentShowingDate={(date) => setCurrentShowingDate(date)}
                 currentShowingDate={currentShowingDate}
                 setShowAgain={(value) => setShowAgain(value)}
@@ -666,6 +741,9 @@ function ChatRoom() {
                 }
                 addCheckedMessage={addCheckedMessage}
                 checkable={checkable}
+                editing={editing}
+                setShowModul={(value) => setShowModul(value)}
+                setDeletingMessageID={(value) => setDeletingMessageID(value)}
               />
             </div>
           ) : (
@@ -699,6 +777,7 @@ function ChatRoom() {
                 userImage={chats[chatRoomID]?.messagingUser.image}
                 chatRoomID={chatRoomID}
                 seen={item.seen}
+                edited={item.edited}
                 setCurrentShowingDate={(date) => setCurrentShowingDate(date)}
                 currentShowingDate={currentShowingDate}
                 setShowAgain={(value) => setShowAgain(value)}
@@ -718,13 +797,16 @@ function ChatRoom() {
                 }
                 addCheckedMessage={addCheckedMessage}
                 checkable={checkable}
+                editing={editing}
+                setShowModul={(value) => setShowModul(value)}
+                setDeletingMessageID={(value) => setDeletingMessageID(value)}
               />
             </div>
           )
         )}
       </div>
       <div className="fixed max-w-2xl overflow-hidden bottom-2 right-2 xl:right-auto left-2 xl:left-auto xl:w-full sm:mx-auto bg-gray-300 flex items-center rounded-2xl">
-        {image ? (
+        {image && !editing ? (
           <button
             disabled={disabledSecond}
             onClick={deleteImage}
@@ -735,6 +817,10 @@ function ChatRoom() {
               style={{ fontSize: 16, color: "white" }}
               className="absolute z-10 right-1 top-0"
             />
+          </button>
+        ) : editing ? (
+          <button onClick={cancelEdit} className="px-3 h-12 outline-none">
+            <CloseIcon style={{ fontSize: 28 }} />
           </button>
         ) : (
           <button
@@ -751,13 +837,12 @@ function ChatRoom() {
           maxRows={4}
           variant="standard"
           className="w-full"
-          autoFocus
           onFocus={scrollToBottom}
           disabled={disabledSecond}
         />
         <button
           disabled={disabledSecond}
-          onClick={sendMessage}
+          onClick={editingMessageID ? updateEditedMessage : sendMessage}
           className="px-3 h-12 outline-none"
         >
           <SendIcon style={{ fontSize: 26 }} />

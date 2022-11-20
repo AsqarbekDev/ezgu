@@ -1,4 +1,11 @@
-import { Avatar, IconButton, Checkbox } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  Checkbox,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+} from "@mui/material";
 import dayjs from "dayjs";
 import { doc, updateDoc } from "firebase/firestore";
 import React from "react";
@@ -7,10 +14,15 @@ import { useState } from "react";
 import { db } from "../../firebase";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DoneIcon from "@mui/icons-material/Done";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRef } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectTheme } from "../../features/themeSlice";
+import { setEditingChat } from "../../features/chatsSlice";
+import { selectLanguage } from "../../features/languageSlice";
 
 function ImageMessage({
   image,
@@ -23,6 +35,7 @@ function ImageMessage({
   chatRoomID,
   messageID,
   seen,
+  edited,
   setCurrentShowingDate,
   currentShowingDate,
   setShowAgain,
@@ -33,12 +46,31 @@ function ImageMessage({
   showAvatar,
   addCheckedMessage,
   checkable,
+  editing,
+  setShowModul,
+  setDeletingMessageID,
 }) {
   const [showImage, setShowImage] = useState(false);
   const textRef = useRef(null);
   const mRef = useRef(null);
+  const modulRef = useRef(null);
   const theme = useSelector(selectTheme);
+  const language = useSelector(selectLanguage);
+  const dispatch = useDispatch();
   const [checked, setChecked] = useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const filterMessage = (messageString) => {
     const filteredString = [];
@@ -199,7 +231,6 @@ function ImageMessage({
           />
         )}
         <div
-          onClick={() => !checkable && setShowImage(true)}
           style={{ width: imageWidth / (imageHeight / 288) }}
           className={`${
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
@@ -212,32 +243,92 @@ function ImageMessage({
             className="max-h-72"
           >
             <img
+              onClick={() => !checkable && setShowImage(true)}
               className="rounded-t-xl object-cover max-h-72"
               src={image}
               alt=""
             />
           </div>
-          <div>
+          <div onClick={() => modulRef.current.click()}>
             <p ref={textRef} className="px-2 overflow-hidden text-lg">
               {filterMessage(message)}
             </p>
+            <div className="flex items-center justify-end">
+              <p
+                className={`${
+                  mine ? "text-gray-600" : "text-gray-300"
+                } text-xs text-right font-[600]`}
+              >
+                {edited && language.chats.editedText}{" "}
+                {dayjs.unix(timestamp).format("HH:mm")}
+                {seen && mine ? (
+                  <DoneAllIcon
+                    style={{ fontSize: 14, marginTop: -3, marginLeft: 4 }}
+                  />
+                ) : mine ? (
+                  <DoneIcon
+                    style={{ fontSize: 14, marginTop: -3, marginLeft: 4 }}
+                  />
+                ) : null}
+              </p>
+              <div className="-mt-2 -mb-[5.8px] mr-1">
+                <IconButton
+                  ref={modulRef}
+                  onClick={!editing ? handleClick : undefined}
+                  size="small"
+                  aria-controls={open ? "account-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                >
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 12,
+                      color: mine ? "#4B5563" : "#d1d5db",
+                    }}
+                  />
+                </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  {mine && (
+                    <MenuItem
+                      onClick={() =>
+                        dispatch(
+                          setEditingChat({
+                            message,
+                            messageID,
+                            isImage: true,
+                          })
+                        )
+                      }
+                    >
+                      <ListItemIcon>
+                        <EditIcon fontSize="small" />
+                      </ListItemIcon>
+                      {language.chats.editText}
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    onClick={() => {
+                      setShowModul("deleteOne");
+                      setDeletingMessageID(messageID);
+                    }}
+                  >
+                    <ListItemIcon>
+                      <DeleteForeverIcon fontSize="small" />
+                    </ListItemIcon>
+                    {language.chats.deleteText}
+                  </MenuItem>
+                </Menu>
+              </div>
+            </div>
           </div>
-          <span
-            className={`${
-              mine ? "text-gray-600" : "text-gray-300"
-            } text-xs text-right mr-3 font-[600]`}
-          >
-            {dayjs.unix(timestamp).format("HH:mm")}
-            {seen && mine ? (
-              <DoneAllIcon
-                style={{ fontSize: 14, marginTop: -3, marginLeft: 4 }}
-              />
-            ) : mine ? (
-              <DoneIcon
-                style={{ fontSize: 14, marginTop: -3, marginLeft: 4 }}
-              />
-            ) : null}
-          </span>
         </div>
       </div>
     </div>

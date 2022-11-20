@@ -618,6 +618,7 @@ function App() {
               imageHeight: doc.data().imageHeight,
               imageWidth: doc.data().imageWidth,
               seen: doc.data().seen,
+              edited: doc.data().edited,
             });
           });
 

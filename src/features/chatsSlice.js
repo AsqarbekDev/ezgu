@@ -6,6 +6,7 @@ const initialState = {
   deletingChat: null,
   checkingChat: null,
   waiting: true,
+  editingChat: null,
 };
 
 export const chatsSlice = createSlice({
@@ -49,6 +50,9 @@ export const chatsSlice = createSlice({
     setWaitingChat: (state, action) => {
       state.waiting = action.payload;
     },
+    setEditingChat: (state, action) => {
+      state.editingChat = action.payload;
+    },
   },
 });
 
@@ -59,6 +63,7 @@ export const {
   deleteChat,
   checkChat,
   setWaitingChat,
+  setEditingChat,
 } = chatsSlice.actions;
 
 export const selectChatRooms = (state) => state.chats.chatRooms;
@@ -67,5 +72,6 @@ export const selectChats = (state) => state.chats.value;
 export const selectDeletingChat = (state) => state.chats.deletingChat;
 export const selectCheckingChat = (state) => state.chats.checkingChat;
 export const selectWaitingChat = (state) => state.chats.waiting;
+export const selectEditingChat = (state) => state.chats.editingChat;
 
 export default chatsSlice.reducer;
