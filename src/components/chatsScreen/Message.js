@@ -142,12 +142,12 @@ function Message({
 
   const checkMessage = () => {
     if (checkable) {
-      setChecked(!checked);
       if (checked) {
         addCheckedMessage({ id: messageID, type: "remove" });
       } else {
         addCheckedMessage({ id: messageID, type: "add" });
       }
+      setChecked(!checked);
     }
   };
 
@@ -158,7 +158,13 @@ function Message({
   }, [checkable]);
 
   return (
-    <div onClick={checkMessage} className="my-1 relative">
+    <div className="my-1 relative">
+      {checkable && (
+        <div
+          onClick={checkMessage}
+          className="absolute z-30 left-0 right-0 bottom-0 top-0"
+        ></div>
+      )}
       {checkable && (
         <div className="absolute z-20 -bottom-1 -left-1">
           <Checkbox checked={checked} />
@@ -244,7 +250,7 @@ function Message({
             <div className="-mt-2 -mb-[5px] -mr-2">
               <IconButton
                 ref={modulRef}
-                onClick={!editing ? handleClick : undefined}
+                onClick={!editing && !checkable ? handleClick : undefined}
                 size="small"
                 aria-controls={open ? "account-menu" : undefined}
                 aria-haspopup="true"
