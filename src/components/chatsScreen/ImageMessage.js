@@ -72,31 +72,6 @@ function ImageMessage({
     setAnchorEl(null);
   };
 
-  const filterMessage = (messageString) => {
-    const filteredString = [];
-    let string = messageString;
-    const limitNumber = Math.round(window.innerWidth / 19);
-
-    while (string !== "") {
-      if (string.indexOf(" ") > limitNumber) {
-        filteredString.push(string.slice(0, limitNumber));
-        string = string.slice(limitNumber, string.length);
-      } else if (string.length > limitNumber && string.indexOf(" ") === -1) {
-        filteredString.push(string.slice(0, limitNumber));
-        string = string.slice(limitNumber, string.length);
-      } else if (string.indexOf(" ") === -1) {
-        filteredString.push(string.slice(0, string.length));
-        string = "";
-      } else {
-        filteredString.push(string.slice(0, string.indexOf(" ")));
-        string = string.slice(string.indexOf(" ") + 1, string.length);
-      }
-    }
-    const newString = filteredString.join(" ");
-
-    return newString;
-  };
-
   useEffect(() => {
     const updateSeen = () => {
       setTimeout(async () => {
@@ -250,8 +225,15 @@ function ImageMessage({
             />
           </div>
           <div onClick={() => modulRef.current.click()}>
-            <p ref={textRef} className="px-2 overflow-hidden text-lg">
-              {filterMessage(message)}
+            <p
+              ref={textRef}
+              style={{
+                whiteSpace: "pre-line",
+                wordWrap: "break-word",
+              }}
+              className="px-2 text-lg"
+            >
+              {message}
             </p>
             <div className="flex items-center justify-end">
               <p

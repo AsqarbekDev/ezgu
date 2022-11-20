@@ -66,30 +66,30 @@ function Message({
     setAnchorEl(null);
   };
 
-  const filterMessage = (messageString) => {
-    const filteredString = [];
-    let string = messageString;
-    const limitNumber = Math.round(window.innerWidth / 19);
+  // const filterMessage = (messageString) => {
+  //   const filteredString = [];
+  //   let string = messageString;
+  //   const limitNumber = Math.round(window.innerWidth / 19);
 
-    while (string !== "") {
-      if (string.indexOf(" ") > limitNumber) {
-        filteredString.push(string.slice(0, limitNumber));
-        string = string.slice(limitNumber, string.length);
-      } else if (string.length > limitNumber && string.indexOf(" ") === -1) {
-        filteredString.push(string.slice(0, limitNumber));
-        string = string.slice(limitNumber, string.length);
-      } else if (string.indexOf(" ") === -1) {
-        filteredString.push(string.slice(0, string.length));
-        string = "";
-      } else {
-        filteredString.push(string.slice(0, string.indexOf(" ")));
-        string = string.slice(string.indexOf(" ") + 1, string.length);
-      }
-    }
-    const newString = filteredString.join(" ");
+  //   while (string !== "") {
+  //     if (string.indexOf(" ") > limitNumber) {
+  //       filteredString.push(string.slice(0, limitNumber));
+  //       string = string.slice(limitNumber, string.length);
+  //     } else if (string.length > limitNumber && string.indexOf(" ") === -1) {
+  //       filteredString.push(string.slice(0, limitNumber));
+  //       string = string.slice(limitNumber, string.length);
+  //     } else if (string.indexOf(" ") === -1) {
+  //       filteredString.push(string.slice(0, string.length));
+  //       string = "";
+  //     } else {
+  //       filteredString.push(string.slice(0, string.indexOf(" ")));
+  //       string = string.slice(string.indexOf(" ") + 1, string.length);
+  //     }
+  //   }
+  //   const newString = filteredString.join(" ");
 
-    return newString;
-  };
+  //   return newString;
+  // };
 
   useEffect(() => {
     const updateSeen = () => {
@@ -218,7 +218,15 @@ function Message({
             mine ? "bg-gray-300 text-black mr-1" : "bg-blue-500 text-white"
           } w-max ml-1 mb-[2px] flex flex-col max-w-[70%] px-3 pt-1 pb-[4px] rounded-2xl`}
         >
-          <p className="overflow-hidden text-lg">{filterMessage(message)}</p>
+          <p
+            style={{
+              whiteSpace: "pre-line",
+              wordWrap: "break-word",
+            }}
+            className="text-lg"
+          >
+            {message}
+          </p>
           <div className="flex items-center justify-end">
             <p
               className={`${
