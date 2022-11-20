@@ -271,7 +271,7 @@ function ImageMessage({
                   />
                 ) : null}
               </p>
-              <div className="-mt-2 -mb-[5.8px] mr-1">
+              <div className="-mt-2 -mb-[5px] mr-1">
                 <IconButton
                   ref={modulRef}
                   onClick={!editing ? handleClick : undefined}
