@@ -233,7 +233,7 @@ function Message({
                 <DoneIcon style={{ fontSize: 14, marginTop: -3 }} />
               ) : null}
             </p>
-            <div className="-mt-2 -mb-[5.6px] -mr-2">
+            <div className="-mt-2 -mb-[5px] -mr-2">
               <IconButton
                 ref={modulRef}
                 onClick={!editing ? handleClick : undefined}
