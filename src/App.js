@@ -83,7 +83,6 @@ function App() {
   const theme = useSelector(selectTheme);
   const disableScroll = useSelector(selectDisableScroll);
   const language = useSelector(selectLanguage);
-  const allChats = chats[deletingChat]?.messages;
 
   document.body.style = `background: ${theme.backgroundBody};`;
 
@@ -121,14 +120,34 @@ function App() {
   useEffect(() => {
     // Delete Chat
     if (deletingChat) {
-      deleteDoc(doc(db, "chats", deletingChat)).then(() => {
-        allChats.map(async (item) => {
-          await deleteDoc(doc(db, "chats", deletingChat, "messages", item.id));
+      const deleteTHEChat = async () => {
+        const getAllMessages = async () => {
+          const querySnapshot = await getDocs(
+            collection(db, "chats", deletingChat, "messages")
+          );
+          let allMessages = [];
+
+          querySnapshot.forEach((doc) => {
+            allMessages.push({
+              id: doc.id,
+            });
+          });
+
+          return allMessages;
+        };
+        const deletingMessages = await getAllMessages();
+        deleteDoc(doc(db, "chats", deletingChat)).then(() => {
+          deletingMessages.map(async (item) => {
+            await deleteDoc(
+              doc(db, "chats", deletingChat, "messages", item.id)
+            );
+          });
         });
-      });
-      dispatch(deleteChat(null));
+        dispatch(deleteChat(null));
+      };
+      deleteTHEChat();
     }
-  }, [deletingChat, chats, allChats, dispatch]);
+  }, [deletingChat, dispatch]);
 
   useEffect(() => {
     // Setting theme
