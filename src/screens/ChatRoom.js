@@ -161,7 +161,7 @@ function ChatRoom() {
       dispatch(setEditingChat(null));
       setTimeout(() => {
         messageRef.current.focus();
-      }, [100]);
+      }, 100);
     }
   }, [share, dispatch, editingChat]);
 
@@ -417,6 +417,7 @@ function ChatRoom() {
   const scrollToBottom = () => {
     if (!editing) {
       setTimeout(() => {
+        console.log("working");
         if (bottomRef?.current) {
           bottomRef.current.scrollIntoView({ behavior: "smooth" });
         }

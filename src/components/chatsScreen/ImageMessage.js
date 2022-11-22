@@ -73,6 +73,49 @@ function ImageMessage({
   };
 
   useEffect(() => {
+    const filterUrl = (str) => {
+      const urlRE = new RegExp(
+        "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?([^ ])+"
+      );
+      const pTag = document.createElement("p");
+
+      if (str.match(urlRE)) {
+        let string = str;
+
+        while (string !== "") {
+          if (string.match(urlRE)) {
+            pTag.appendChild(
+              document.createTextNode(
+                string.slice(0, string.match(urlRE).index)
+              )
+            );
+            const a = document.createElement("a");
+            const link = document.createTextNode(string.match(urlRE)[0]);
+            a.appendChild(link);
+            a.href = string.match(urlRE)[0];
+            a.className = "underline text-blue-800";
+            pTag.appendChild(a);
+
+            string = string.slice(
+              string.match(urlRE).index + string.match(urlRE)[0].length,
+              string.length
+            );
+          } else {
+            pTag.appendChild(document.createTextNode(string));
+            string = "";
+          }
+        }
+      } else {
+        pTag.appendChild(document.createTextNode(str));
+      }
+
+      document.getElementById(messageID).innerHTML = pTag.innerHTML;
+    };
+
+    filterUrl(message);
+  }, [message, messageID]);
+
+  useEffect(() => {
     const updateSeen = () => {
       setTimeout(async () => {
         await updateDoc(doc(db, "chats", chatRoomID, "messages", messageID), {
@@ -238,9 +281,8 @@ function ImageMessage({
                 wordWrap: "break-word",
               }}
               className="px-2 text-lg"
-            >
-              {message}
-            </p>
+              id={messageID}
+            ></p>
             <div className="flex items-center justify-end">
               <p
                 className={`${

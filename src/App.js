@@ -603,7 +603,8 @@ function App() {
       chatRooms.map((chatRoom) => {
         const q = query(
           collection(db, "chats", chatRoom.id, "messages"),
-          orderBy("uploadedTime", "asc")
+          orderBy("uploadedTime", "desc"),
+          limit(25)
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const allMessages = [];
@@ -625,7 +626,7 @@ function App() {
           dispatch(
             setChats({
               id: chatRoom.id,
-              messages: allMessages,
+              messages: [...allMessages].reverse(),
             })
           );
           dispatch(setWaitingChat(false));
