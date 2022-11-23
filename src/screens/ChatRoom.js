@@ -450,7 +450,13 @@ function ChatRoom() {
   }, [showAgain, showDate, timestampDate]);
 
   return (
-    <div className="pb-14 pt-[120px] sm:pt-16">
+    <div
+      className={`pb-14 ${
+        messagesLengthChat[chatRoomID] === paginationChat
+          ? "pt-16"
+          : "pt-[120px]"
+      } sm:pt-16`}
+    >
       {showModul && (
         <ActionModul
           text={
