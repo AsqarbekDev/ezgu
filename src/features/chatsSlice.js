@@ -43,7 +43,9 @@ export const chatsSlice = createSlice({
         state.value[action.payload.id].messages = action.payload.messages;
         state.messagesLength[action.payload.id] =
           action.payload.messages.length;
-        state.pagination[action.payload.id] = 40;
+        if (!state.pagination[action.payload.id]) {
+          state.pagination[action.payload.id] = 40;
+        }
       }
     },
     deleteChat: (state, action) => {

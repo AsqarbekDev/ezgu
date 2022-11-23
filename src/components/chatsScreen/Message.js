@@ -46,6 +46,7 @@ function Message({
   setShowModul,
   setDeletingMessageID,
   firstMessage,
+  loading,
 }) {
   const mRef = useRef(null);
   const modulRef = useRef(null);
@@ -68,10 +69,10 @@ function Message({
   };
 
   useEffect(() => {
-    if (firstMessage) {
+    if (firstMessage && loading) {
       mRef.current.scrollIntoView();
     }
-  }, [firstMessage]);
+  }, [firstMessage, loading]);
 
   useEffect(() => {
     const filterUrl = (str) => {

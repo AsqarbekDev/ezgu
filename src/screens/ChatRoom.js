@@ -789,6 +789,7 @@ function ChatRoom() {
                 setShowModul={(value) => setShowModul(value)}
                 setDeletingMessageID={(value) => setDeletingMessageID(value)}
                 firstMessage={item.id === firstMessage ? true : false}
+                loading={loading}
               />
             </div>
           ) : (
@@ -846,6 +847,7 @@ function ChatRoom() {
                 setShowModul={(value) => setShowModul(value)}
                 setDeletingMessageID={(value) => setDeletingMessageID(value)}
                 firstMessage={item.id === firstMessage ? true : false}
+                loading={loading}
               />
             </div>
           )
