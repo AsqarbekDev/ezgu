@@ -693,8 +693,9 @@ function ChatRoom() {
         )}
       </div>
       <div>
-        {messagesLengthChat[chatRoomID] === paginationChat[chatRoomID] ||
-        loading ? (
+        {messagesLengthChat[chatRoomID] ===
+        undefined ? null : messagesLengthChat[chatRoomID] ===
+            paginationChat[chatRoomID] || loading ? (
           <div className="flex justify-center items-center mb-2">
             <div
               onClick={() => {
@@ -718,9 +719,9 @@ function ChatRoom() {
             </div>
           </div>
         ) : null}
-        {messages.map((item, index) =>
+        {messages.map((item) =>
           item.imageHeight > 0 ? (
-            <div key={index}>
+            <div key={item.id}>
               {item.id === newMessageID && (
                 <div
                   ref={newMessageRef}
@@ -779,7 +780,7 @@ function ChatRoom() {
               />
             </div>
           ) : (
-            <div key={index}>
+            <div key={item.id}>
               {item.id === newMessageID && (
                 <div
                   ref={newMessageRef}
