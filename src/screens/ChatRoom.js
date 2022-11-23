@@ -425,13 +425,11 @@ function ChatRoom() {
   }, [newMessageID]);
 
   const scrollToBottom = () => {
-    if (!editing) {
-      setTimeout(() => {
-        if (bottomRef?.current) {
-          bottomRef.current.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 200);
-    }
+    setTimeout(() => {
+      if (bottomRef?.current) {
+        bottomRef.current.scrollIntoView();
+      }
+    }, 200);
   };
 
   useEffect(() => {
@@ -878,7 +876,7 @@ function ChatRoom() {
           maxRows={4}
           variant="standard"
           className="w-full"
-          onFocus={scrollToBottom}
+          onFocus={!editing && scrollToBottom}
           disabled={disabledSecond}
         />
         <button
