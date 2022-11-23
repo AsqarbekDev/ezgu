@@ -96,7 +96,6 @@ function ChatRoom() {
   const [editing, setEditing] = useState(false);
   const [deletingMessageID, setDeletingMessageID] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [firstMessage, setFirstMessage] = useState(null);
 
   const disabledSecond =
     chats[chatRoomID] &&
@@ -419,7 +418,6 @@ function ChatRoom() {
     } else {
       setTimeout(() => {
         if (bottomRef?.current) {
-          bottomRef.current.scrollIntoView();
           messageRef.current.focus();
         }
       }, 10);
@@ -456,7 +454,7 @@ function ChatRoom() {
   return (
     <div
       className={`pb-14 ${
-        messagesLengthChat[chatRoomID] === paginationChat[chatRoomID]
+        messagesLengthChat[chatRoomID] === paginationChat[chatRoomID] || loading
           ? "pt-16"
           : "pt-[120px]"
       } sm:pt-16`}
@@ -704,11 +702,11 @@ function ChatRoom() {
         )}
       </div>
       <div>
-        {messagesLengthChat[chatRoomID] === paginationChat[chatRoomID] && (
+        {messagesLengthChat[chatRoomID] === paginationChat[chatRoomID] ||
+        loading ? (
           <div className="flex justify-center items-center mb-2">
             <div
               onClick={() => {
-                setFirstMessage(messages[0].id);
                 dispatch(
                   setPaginationChat({
                     id: chatRoomID,
@@ -718,7 +716,6 @@ function ChatRoom() {
                 setLoading(true);
                 setTimeout(() => {
                   setLoading(false);
-                  setFirstMessage(messages[0].id);
                 }, 1000);
               }}
               className="flex justify-center items-center rounded-full h-[64px] w-[64px] shadow-lg bg-white"
@@ -729,7 +726,7 @@ function ChatRoom() {
               />
             </div>
           </div>
-        )}
+        ) : null}
         {messages.map((item, index) =>
           item.imageHeight > 0 ? (
             <div key={index}>
@@ -788,8 +785,6 @@ function ChatRoom() {
                 editing={editing}
                 setShowModul={(value) => setShowModul(value)}
                 setDeletingMessageID={(value) => setDeletingMessageID(value)}
-                firstMessage={item.id === firstMessage ? true : false}
-                loading={loading}
               />
             </div>
           ) : (
@@ -846,8 +841,6 @@ function ChatRoom() {
                 editing={editing}
                 setShowModul={(value) => setShowModul(value)}
                 setDeletingMessageID={(value) => setDeletingMessageID(value)}
-                firstMessage={item.id === firstMessage ? true : false}
-                loading={loading}
               />
             </div>
           )

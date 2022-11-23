@@ -45,8 +45,6 @@ function Message({
   editing,
   setShowModul,
   setDeletingMessageID,
-  firstMessage,
-  loading,
 }) {
   const mRef = useRef(null);
   const modulRef = useRef(null);
@@ -67,12 +65,6 @@ function Message({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    if (firstMessage && loading) {
-      mRef.current.scrollIntoView();
-    }
-  }, [firstMessage, loading]);
 
   useEffect(() => {
     const filterUrl = (str) => {

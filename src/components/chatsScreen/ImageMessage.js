@@ -49,8 +49,6 @@ function ImageMessage({
   editing,
   setShowModul,
   setDeletingMessageID,
-  firstMessage,
-  loading,
 }) {
   const [showImage, setShowImage] = useState(false);
   const textRef = useRef(null);
@@ -73,12 +71,6 @@ function ImageMessage({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    if (firstMessage && loading) {
-      mRef.current.scrollIntoView();
-    }
-  }, [firstMessage, loading]);
 
   useEffect(() => {
     const filterUrl = (str) => {
