@@ -18,6 +18,7 @@ import BlockIcon from "@mui/icons-material/Block";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import ImageMessage from "../components/chatsScreen/ImageMessage";
 import { useRef } from "react";
 import { useState } from "react";
@@ -43,7 +44,10 @@ import {
   selectChatRooms,
   selectChats,
   selectEditingChat,
+  selectMessagesLength,
+  selectPaginationChat,
   setEditingChat,
+  setPaginationChat,
 } from "../features/chatsSlice";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { StyledBadge } from "../components/StyledBadge";
@@ -66,6 +70,8 @@ function ChatRoom() {
   const language = useSelector(selectLanguage);
   const share = useSelector(selectShare);
   const editingChat = useSelector(selectEditingChat);
+  const paginationChat = useSelector(selectPaginationChat);
+  const messagesLengthChat = useSelector(selectMessagesLength);
   const dispatch = useDispatch();
 
   const [image, setImage] = useState(null);
@@ -89,6 +95,8 @@ function ChatRoom() {
   const [editingIsImage, setEditingIsImage] = useState(false);
   const [editing, setEditing] = useState(false);
   const [deletingMessageID, setDeletingMessageID] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [firstMessage, setFirstMessage] = useState(null);
 
   const disabledSecond =
     chats[chatRoomID] &&
@@ -686,6 +694,29 @@ function ChatRoom() {
         )}
       </div>
       <div>
+        {messagesLengthChat[chatRoomID] === paginationChat && (
+          <div className="flex justify-center items-center mb-2">
+            <div
+              onClick={() => {
+                setFirstMessage(messages[0].id);
+                dispatch(
+                  setPaginationChat(chats[chatRoomID]?.messages.length + 20)
+                );
+                setLoading(true);
+                setTimeout(() => {
+                  setLoading(false);
+                  setFirstMessage(messages[0].id);
+                }, 1000);
+              }}
+              className="flex justify-center items-center rounded-full h-[64px] w-[64px] shadow-lg bg-white"
+            >
+              <RefreshIcon
+                className={loading ? "animate-spin" : ""}
+                style={{ fontSize: 48 }}
+              />
+            </div>
+          </div>
+        )}
         {messages.map((item, index) =>
           item.imageHeight > 0 ? (
             <div key={index}>
@@ -744,6 +775,7 @@ function ChatRoom() {
                 editing={editing}
                 setShowModul={(value) => setShowModul(value)}
                 setDeletingMessageID={(value) => setDeletingMessageID(value)}
+                firstMessage={item.id === firstMessage ? true : false}
               />
             </div>
           ) : (
@@ -800,6 +832,7 @@ function ChatRoom() {
                 editing={editing}
                 setShowModul={(value) => setShowModul(value)}
                 setDeletingMessageID={(value) => setDeletingMessageID(value)}
+                firstMessage={item.id === firstMessage ? true : false}
               />
             </div>
           )

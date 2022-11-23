@@ -7,6 +7,8 @@ const initialState = {
   checkingChat: null,
   waiting: true,
   editingChat: null,
+  pagination: 40,
+  messagesLength: {},
 };
 
 export const chatsSlice = createSlice({
@@ -39,6 +41,8 @@ export const chatsSlice = createSlice({
         action.payload.messages.length > 0
       ) {
         state.value[action.payload.id].messages = action.payload.messages;
+        state.messagesLength[action.payload.id] =
+          action.payload.messages.length;
       }
     },
     deleteChat: (state, action) => {
@@ -53,6 +57,9 @@ export const chatsSlice = createSlice({
     setEditingChat: (state, action) => {
       state.editingChat = action.payload;
     },
+    setPaginationChat: (state, action) => {
+      state.pagination = action.payload;
+    },
   },
 });
 
@@ -64,6 +71,7 @@ export const {
   checkChat,
   setWaitingChat,
   setEditingChat,
+  setPaginationChat,
 } = chatsSlice.actions;
 
 export const selectChatRooms = (state) => state.chats.chatRooms;
@@ -73,5 +81,7 @@ export const selectDeletingChat = (state) => state.chats.deletingChat;
 export const selectCheckingChat = (state) => state.chats.checkingChat;
 export const selectWaitingChat = (state) => state.chats.waiting;
 export const selectEditingChat = (state) => state.chats.editingChat;
+export const selectPaginationChat = (state) => state.chats.pagination;
+export const selectMessagesLength = (state) => state.chats.messagesLength;
 
 export default chatsSlice.reducer;

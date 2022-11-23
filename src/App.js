@@ -53,6 +53,7 @@ import {
   selectChats,
   selectCheckingChat,
   selectDeletingChat,
+  selectPaginationChat,
   setChatRooms,
   setChats,
   setMessagingUsers,
@@ -83,6 +84,7 @@ function App() {
   const theme = useSelector(selectTheme);
   const disableScroll = useSelector(selectDisableScroll);
   const language = useSelector(selectLanguage);
+  const paginationChat = useSelector(selectPaginationChat);
 
   document.body.style = `background: ${theme.backgroundBody};`;
 
@@ -623,7 +625,7 @@ function App() {
         const q = query(
           collection(db, "chats", chatRoom.id, "messages"),
           orderBy("uploadedTime", "desc"),
-          limit(25)
+          limit(paginationChat)
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const allMessages = [];
@@ -656,7 +658,7 @@ function App() {
         };
       });
     }
-  }, [dispatch, chatRooms]);
+  }, [dispatch, chatRooms, paginationChat]);
 
   useEffect(() => {
     //Listening to ChatRooms
