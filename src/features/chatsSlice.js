@@ -7,7 +7,7 @@ const initialState = {
   checkingChat: null,
   waiting: true,
   editingChat: null,
-  pagination: 40,
+  pagination: {},
   messagesLength: {},
 };
 
@@ -43,6 +43,7 @@ export const chatsSlice = createSlice({
         state.value[action.payload.id].messages = action.payload.messages;
         state.messagesLength[action.payload.id] =
           action.payload.messages.length;
+        state.pagination[action.payload.id] = 40;
       }
     },
     deleteChat: (state, action) => {
@@ -58,7 +59,7 @@ export const chatsSlice = createSlice({
       state.editingChat = action.payload;
     },
     setPaginationChat: (state, action) => {
-      state.pagination = action.payload;
+      state.pagination[action.payload.id] = action.payload.length;
     },
   },
 });

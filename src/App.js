@@ -625,7 +625,7 @@ function App() {
         const q = query(
           collection(db, "chats", chatRoom.id, "messages"),
           orderBy("uploadedTime", "desc"),
-          limit(paginationChat)
+          limit(paginationChat[chatRoom.id] || 40)
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const allMessages = [];

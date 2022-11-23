@@ -456,7 +456,7 @@ function ChatRoom() {
   return (
     <div
       className={`pb-14 ${
-        messagesLengthChat[chatRoomID] === paginationChat
+        messagesLengthChat[chatRoomID] === paginationChat[chatRoomID]
           ? "pt-16"
           : "pt-[120px]"
       } sm:pt-16`}
@@ -704,13 +704,16 @@ function ChatRoom() {
         )}
       </div>
       <div>
-        {messagesLengthChat[chatRoomID] === paginationChat && (
+        {messagesLengthChat[chatRoomID] === paginationChat[chatRoomID] && (
           <div className="flex justify-center items-center mb-2">
             <div
               onClick={() => {
                 setFirstMessage(messages[0].id);
                 dispatch(
-                  setPaginationChat(chats[chatRoomID]?.messages.length + 20)
+                  setPaginationChat({
+                    id: chatRoomID,
+                    length: chats[chatRoomID]?.messages.length + 20,
+                  })
                 );
                 setLoading(true);
                 setTimeout(() => {
