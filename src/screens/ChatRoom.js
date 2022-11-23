@@ -418,19 +418,12 @@ function ChatRoom() {
     } else {
       setTimeout(() => {
         if (bottomRef?.current) {
+          bottomRef.current.scrollIntoView();
           messageRef.current.focus();
         }
       }, 10);
     }
   }, [newMessageID]);
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      if (bottomRef?.current) {
-        bottomRef.current.scrollIntoView();
-      }
-    }, 200);
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -876,7 +869,16 @@ function ChatRoom() {
           maxRows={4}
           variant="standard"
           className="w-full"
-          onFocus={!editing && scrollToBottom}
+          onFocus={() => {
+            !editing &&
+              setTimeout(() => {
+                if (bottomRef?.current) {
+                  bottomRef.current.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }
+              }, 200);
+          }}
           disabled={disabledSecond}
         />
         <button
