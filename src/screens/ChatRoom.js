@@ -146,10 +146,14 @@ function ChatRoom() {
   };
 
   const deleteOneMessage = async () => {
-    setShowModul("");
-    await deleteDoc(
-      doc(db, "chats", chatRoomID, "messages", deletingMessageID)
-    );
+    if (messages.length === 1) {
+      deleteMessages();
+    } else {
+      setShowModul("");
+      await deleteDoc(
+        doc(db, "chats", chatRoomID, "messages", deletingMessageID)
+      );
+    }
   };
 
   useEffect(() => {
